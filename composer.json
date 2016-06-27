@@ -1,0 +1,10 @@
+{
+  "name": "burdamagazinorg/module-dcx-integration",
+  "type": "drupal-module",
+  "description": "Module DC-X Integration",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "require-dev": {
+    "burdamagazinorg/thunder-dev-tools": "dev-master"
+  }
+}
