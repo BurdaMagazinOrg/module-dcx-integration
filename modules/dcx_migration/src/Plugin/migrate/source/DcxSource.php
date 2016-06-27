@@ -1,9 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dcx_migration\Plugin\migrate\source\DcxSource
- *
- */
 
 namespace Drupal\dcx_migration\Plugin\migrate\source;
 
@@ -22,7 +17,7 @@ use Drupal\migrate\Row;
 class DcxSource extends SourcePluginBase {
 
   /**
-   * The DC-X Service this source plugin is retrieving from
+   * The DC-X Service this source plugin is retrieving from.
    *
    * @var \Drupal\dcx_integration\ClientInterface
    */
@@ -36,7 +31,7 @@ class DcxSource extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration) {
-    if (! isset($configuration['dcx_service'])) {
+    if (!isset($configuration['dcx_service'])) {
       throw new MigrateException('You must declare the "dcx_service" in your source settings.');
     }
     // @TODO I'd love to inject this service. Or even a custom instance.
@@ -47,7 +42,7 @@ class DcxSource extends SourcePluginBase {
 
   protected function getDcxObject($id) {
     return $this->dcx_service->getObject($id);
-    }
+  }
 
   public function getIDs() {
     return ['id' => ['type' => 'string']];
@@ -70,7 +65,9 @@ class DcxSource extends SourcePluginBase {
     return ['id' => 'The unique dcx identifier of this ressource'];
   }
 
-  public function __toString() { return __METHOD__; }
+  public function __toString() {
+    return __METHOD__;
+  }
 
   public function getRowById($id) {
     $dcx_object = $this->getDcxObject($id);
@@ -89,8 +86,11 @@ class DcxSource extends SourcePluginBase {
    * This only works for a single valued destination id and might break badly
    * otherwise.
    *
-   * @param Row $row the row to prepare
-   * @return boolean TRUE
+   * @param Row $row
+   *   The row to prepare.
+   *
+   * @return bool
+   *   TRUE
    */
   public function prepareRow(Row $row) {
     $exisiting_row = $this->migration->getIdMap()->getRowBySource(['id' => $row->getSourceProperty('id')]);
@@ -98,9 +98,13 @@ class DcxSource extends SourcePluginBase {
       $row->isUpdate = TRUE;
       $row->destid1 = $exisiting_row['destid1'];
 
-      
-      // On Update just allow to update to rights fields
-      $updateFieldWhitlist = ['field_dcx_id', 'field_expires', 'status', 'changed'];
+      // On Update just allow to update to rights fields.
+      $updateFieldWhitlist = [
+        'field_dcx_id',
+        'field_expires',
+        'status',
+        'changed',
+      ];
 
       $process = $this->migration->getProcess();
 

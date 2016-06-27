@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_migration\Form\DcxImportForm.
- */
-
 namespace Drupal\dcx_migration\Form;
 
 use Drupal\Core\Form\FormBase;
@@ -38,7 +33,6 @@ class DcxImportForm extends FormBase {
     return new static($container->get('dcx_migration.import'));
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -52,13 +46,13 @@ class DcxImportForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['id'] = [
       '#title' => $this->t('DC-X ID'),
-      '#description' => 'Please give a DC-X image document id. Something like "document/doc6p9gtwruht4gze9boxi". You may enter multiple document ids separated by comma.',
+      '#description' => $this->t('Please give a DC-X image document id. Something like "document/doc6p9gtwruht4gze9boxi". You may enter multiple document ids separated by comma.'),
       '#type' => 'textfield',
       '#required' => TRUE,
     ];
-    $form['actions'] = array (
+    $form['actions'] = array(
       '#type' => 'actions',
-      'submit' => array (
+      'submit' => array(
         '#type' => 'submit',
         '#value' => $this->t('Import'),
         '#button_type' => 'primary',
@@ -76,9 +70,10 @@ class DcxImportForm extends FormBase {
 
     $ids = [];
     foreach (explode(',', $input) as $id) {
-      $ids[] = "dcxapi:" .  trim($id);
+      $ids[] = "dcxapi:" . trim($id);
     }
 
     $this->importService->import($ids);
   }
+
 }

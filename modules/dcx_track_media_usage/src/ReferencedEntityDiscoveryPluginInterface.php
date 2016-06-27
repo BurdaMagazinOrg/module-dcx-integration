@@ -7,6 +7,11 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 
+/**
+ * Interface ReferencedEntityDiscoveryPluginInterface.
+ *
+ * @package Drupal\dcx_track_media_usage
+ */
 interface ReferencedEntityDiscoveryPluginInterface extends PluginInspectionInterface {
 
   /**
@@ -14,7 +19,8 @@ interface ReferencedEntityDiscoveryPluginInterface extends PluginInspectionInter
    *
    * @param EntityInterface $entity
    *
-   * @return array list of referenced entities keyed by entity id
+   * @return array
+   *   List of referenced entities keyed by entity id
    */
   public function discover(EntityInterface $entity, PluginManagerInterface $plugin_manager);
 

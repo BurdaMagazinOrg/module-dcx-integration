@@ -2,7 +2,6 @@
 
 namespace Drupal\dcx_migration\Plugin\QueueWorker;
 
-use Drupal\Core\Annotation\QueueWorker;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\dcx_migration\DcxMigrateExecutable;
@@ -36,7 +35,7 @@ class ImportWorker extends QueueWorkerBase implements ContainerFactoryPluginInte
   protected $plugin_manager;
 
   /**
-   * Event dispatcher
+   * Event dispatcher.
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
@@ -92,7 +91,6 @@ class ImportWorker extends QueueWorkerBase implements ContainerFactoryPluginInte
     return $this->migration_executable;
   }
 
-
   /**
    * Works on a single queue item.
    *
@@ -124,9 +122,11 @@ class ImportWorker extends QueueWorkerBase implements ContainerFactoryPluginInte
 
     try {
       $executable->importItemWithUnknownStatus($data);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $executable->display($e->getMessage());
     }
 
   }
+
 }

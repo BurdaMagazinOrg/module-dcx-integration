@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_migration\Routing\ExampleRoutes.
- */
-
 namespace Drupal\dcx_migration\Routing;
 
-use Drupal\media_entity\Entity\MediaBundle;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -34,7 +28,7 @@ class MediaRoutes {
           // Route defaults:
           array(
             '_form' => '\Drupal\dcx_migration\Form\DcxImportForm',
-            '_title' => 'Import Image from DC-X'
+            '_title' => 'Import Image from DC-X',
           ),
           // Route requirements:
           array(
@@ -50,4 +44,5 @@ class MediaRoutes {
 
     return $routes;
   }
+
 }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_migration\Plugin\Field\FieldWidget\DcxLinkFieldWidget.
- */
-
 namespace Drupal\dcx_migration\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
@@ -38,11 +33,11 @@ class DcxLinkFieldWidget extends WidgetBase {
     $document = str_replace('dcxapi:document', 'doc', $items[$delta]->value);
 
     $element['value'] = $element + array(
-        '#title' => t('View in DCX'),
-        '#type' => 'link',
-        '#url' => Url::fromUri($baseUrl . "/documents#/" . $document),
-        '#attributes' => ['target' => '_blank'],
-      );
+      '#title' => t('View in DCX'),
+      '#type' => 'link',
+      '#url' => Url::fromUri($baseUrl . "/documents#/" . $document),
+      '#attributes' => ['target' => '_blank'],
+    );
 
     return $element;
   }

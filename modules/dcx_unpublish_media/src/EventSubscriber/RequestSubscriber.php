@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_unpublish_media\RequestSubscriber.
- */
-
 namespace Drupal\dcx_unpublish_media\EventSubscriber;
 
 use Drupal\Core\StreamWrapper\PublicStream;
@@ -30,13 +25,11 @@ class RequestSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * This method is called whenever the kernel.request event is
-   * dispatched.
+   * This method is called whenever the kernel.request event is dispatched.
    *
    * @param GetResponseEvent $event
    */
   public function kernel_request(Event $event) {
-
 
     $publicPath = PublicStream::basePath();
 
@@ -50,7 +43,6 @@ class RequestSubscriber implements EventSubscriberInterface {
       $query = \Drupal::entityQuery('file');
       $query->condition('filename', $filename);
       $fids = $query->execute();
-
 
       if ($fids) {
         foreach (MediaBundle::loadMultiple() as $bundle) {
@@ -74,4 +66,5 @@ class RequestSubscriber implements EventSubscriberInterface {
       }
     }
   }
+
 }

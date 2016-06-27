@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_migration\DcxMigrateExecutable.
- */
-
 namespace Drupal\dcx_migration;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
@@ -42,7 +37,7 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
   }
 
   /**
-   * Implements \Drupal\migrate\MigrateMessageInterface::display
+   * Implements \Drupal\migrate\MigrateMessageInterface::display.
    *
    * This also act as MigrateMessage providerer for now.
    */
@@ -57,8 +52,7 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
    *   The map event.
    */
   public function onPreImport(MigrateImportEvent $event) {
-    $migration = $event->getMigration();
-
+    $event->getMigration();
   }
 
   /**
@@ -81,6 +75,7 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
       $this->getEventDispatcher()->removeListener($event, $listener);
     }
   }
+
 
   public function importItemWithUnknownStatus($id) {
     $id_map = $this->migration->getIdMap();
@@ -150,11 +145,9 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
     unset($sourceValues, $destinationValues);
     $this->sourceRowStatus = MigrateIdMapInterface::STATUS_IMPORTED;
 
-
     $this->getEventDispatcher()->dispatch(MigrateEvents::POST_IMPORT, new MigrateImportEvent($this->migration));
 
   }
-
 
   /**
    * Mark the map entry of the given map with the given source id as ready to
@@ -172,4 +165,5 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
       ->condition('sourceid1', $id)
       ->execute();
   }
+
 }

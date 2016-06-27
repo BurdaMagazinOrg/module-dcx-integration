@@ -4,7 +4,6 @@ namespace Drupal\dcx_integration_debug;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
-use Symfony\Component\DependencyInjection\Reference;
 
 class DcxIntegrationDebugServiceProvider implements ServiceModifierInterface {
 

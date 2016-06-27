@@ -1,15 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\dcx_integration\Form\JsonClientSettings.
- */
-
 namespace Drupal\dcx_unpublish_media\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\media_entity\Entity\MediaBundle;
 
 /**
  * Class JsonClientSettings.
@@ -51,7 +45,7 @@ class UnpublishMediaSettings extends ConfigFormBase {
         $imageBundles[] = $bundle->id();
       }
     }
-    
+
     $form['default_image'] = array(
       '#type' => 'entity_autocomplete',
       '#title' => t('Default image'),

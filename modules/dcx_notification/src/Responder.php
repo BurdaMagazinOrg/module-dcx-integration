@@ -36,19 +36,21 @@ class Responder extends ControllerBase {
   protected $request;
 
   /**
-   * The router
+   * The router.
    *
    * @var \Symfony\Component\Routing\RouterInterface
    */
   protected $router;
 
   /**
-   *
    * The Constructor.
    *
    * @param \Drupal\dcx_migration\DcxImportServiceInterface $importService
+   *   The DC-X Client.
    * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
    */
   public function __construct(DcxImportServiceInterface $importService, Connection $connection, Request $request, RouterInterface $router) {
     $this->importService = $importService;
@@ -75,7 +77,9 @@ class Responder extends ControllerBase {
    * As this represents the one URL on which DC-X talks to us, it relies on
    * _GET params rather than fancy URLs.
    *
-   * @return Response an appropriate Response depending on parameters.
+   * @return Response
+   *   An appropriate Response depending on parameters.
+   *
    * @throws NotAcceptableHttpException
    */
   public function trigger() {
@@ -91,7 +95,7 @@ class Responder extends ControllerBase {
     }
 
     // If we get an ID: "Please reimport the given DC-X ID to update the
-    // respective entity, because the DC-X document has changed."
+    // respective entity, because the DC-X document has changed.".
     $id = $this->request->query->get('id', NULL);
     if (NULL !== $id) {
       return $this->reimportId($id);
@@ -100,14 +104,15 @@ class Responder extends ControllerBase {
     throw new NotAcceptableHttpException($this->t('Invalid URL parameter.'));
   }
 
-
   /**
    * Evaluates the GET parameters and acts appropriately.
    *
    * As this represents the one URL on which DC-X talks to us, it relies on
    * _GET params rather than fancy URLs.
    *
-   * @return Response an appropriate Response depending on parameters.
+   * @return Response
+   *   An appropriate Response depending on parameters.
+   *
    * @throws NotAcceptableHttpException
    */
   public function import() {
@@ -138,6 +143,7 @@ class Responder extends ControllerBase {
    *
    * @param string $id a DC-X ID to reimport.
    * @return Response an empty (204) response.
+   *
    * @throws NotFoundHttpException if Drupal does not know this ID
    * @throws NotAcceptableHttpException if The ID is ambiguous.
    */
@@ -172,6 +178,7 @@ class Responder extends ControllerBase {
    *
    * @param type $path
    * @return Response an empty (204) response.
+   *
    * @throws ResourceNotFoundException If the resource could not be found
    * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
    * @throws NotFoundHttpException if the path does not represent a valid node
@@ -188,5 +195,5 @@ class Responder extends ControllerBase {
 
     return new Response(NULL, 204);
   }
-}
 
+}

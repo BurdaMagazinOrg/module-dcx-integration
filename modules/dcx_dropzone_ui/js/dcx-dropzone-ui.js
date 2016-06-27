@@ -1,13 +1,16 @@
+/**
+ * @file
+ */
+
 (function ($, Drupal, drupalSettings) {
-  "use strict";
+  'use strict';
 
   Drupal.behaviors.dcxDropzoneUi = {
     attach: function (context, settings) {
 
-      var dropzone_id = drupalSettings.dcx_dropzone.dropzone_id,
-          dropzone = $('#' + dropzone_id),
-          counterBox = dropzone.find('.box__uploading .counter');
-
+      var dropzone_id = drupalSettings.dcx_dropzone.dropzone_id;
+      var dropzone = $('#' + dropzone_id);
+      var counterBox = dropzone.find('.box__uploading .counter');
       var counter;
 
       dropzone.on('dragover dragenter', function (event) {
@@ -25,14 +28,16 @@
 
         dropzone.trigger('dcxDropzone:dropped');
 
-        if (dropzone.hasClass('is-uploading')) return false;
+        if (dropzone.hasClass('is-uploading')) {
+          return false;
+        }
 
         dropzone.addClass('is-uploading').removeClass('is-error');
 
-        var uris = decodeURIComponent(event.originalEvent.dataTransfer.getData('text/plain')).split("\n");
+        var uris = decodeURIComponent(event.originalEvent.dataTransfer.getData('text/plain')).split('\n');
 
-        counter = uris.length
-        decreaseAndUpdateCounter()
+        counter = uris.length;
+        decreaseAndUpdateCounter();
 
         for (var index = 0; index < uris.length; ++index) {
 
@@ -41,25 +46,28 @@
             uri = uri.split('?')[0];
 
             $.ajax({
-              url: "/dcx-migration/upload",
+              url: '/dcx-migration/upload',
               method: 'POST',
               data: JSON.stringify([{'documenttype-image': uri.substr(uri.indexOf('document'))}])
-            }).complete(function() {
-              decreaseAndUpdateCounter()
-              if(counter <= 0) dropzone.removeClass('is-uploading');
-            }).success(function(data) {
-              if(counter <= 0) dropzone.addClass( data.success == true ? 'is-success' : 'is-error' );
-              dropzone.trigger('dcxDropzone:success')
+            }).complete(function () {
+              decreaseAndUpdateCounter();
+              if (counter <= 0) {
+                dropzone.removeClass('is-uploading');
+              }
+            }).success(function (data) {
+              if (counter <= 0) {
+                dropzone.addClass(!data.success ? 'is-error' : 'is-success');
+              }
+              dropzone.trigger('dcxDropzone:success');
             });
           }
         }
 
-
       });
 
       function decreaseAndUpdateCounter() {
-        counter --;
-        counterBox.html(' '+counter+' ')
+        counter--;
+        counterBox.html(' ' + counter + ' ');
       }
     }
   };

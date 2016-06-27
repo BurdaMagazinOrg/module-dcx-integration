@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_integration_debug\MockClient.
- */
-
 namespace Drupal\dcx_integration_debug;
 
 use Drupal\dcx_integration\Asset\Image;
@@ -20,6 +15,7 @@ class MockClient implements ClientInterface {
 
   /**
    * The mock client extracts an int from the first argument and evaluates it.
+   *
    * If it's divisible by 3 it's an article, if it's divisible by 2 it's an
    * image.
    */
@@ -35,7 +31,7 @@ class MockClient implements ClientInterface {
       if (0 == $type%2) {
         return $this->buildImageAsset($url);
       }
-      */
+       */
     }
     else {
       throw new \Exception("No handler for URL type $url.");
@@ -72,9 +68,9 @@ class MockClient implements ClientInterface {
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
-  public function archiveArticle($url, $data , $dcx_id) {
+  public function archiveArticle($url, $data, $dcx_id) {
 
     if (!$dcx_id) {
       $dcx_id = "dcxapi:document/doc__mocked__" . rand(10000000000, 99999999999);
@@ -84,7 +80,7 @@ class MockClient implements ClientInterface {
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function pubinfoOnPath($path) {
     // This is merely here to satisfy the interface. It's of no use on a mock
@@ -93,7 +89,7 @@ class MockClient implements ClientInterface {
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function removeAllUsage($dcx_id) {
     dpm($dcx_id, __METHOD__);

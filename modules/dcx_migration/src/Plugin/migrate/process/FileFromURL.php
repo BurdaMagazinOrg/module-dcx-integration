@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_migration\Plugin\migrate\process\DefaultValue.
- */
-
 namespace Drupal\dcx_migration\Plugin\migrate\process;
 
 use Drupal\Component\Render\PlainTextOutput;
@@ -45,7 +40,6 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
    */
   protected $entity_type_manager;
 
-
   /**
    * {@inheritdoc}
    */
@@ -68,7 +62,6 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
       $container->get('entity_type.manager')
     );
   }
-
 
   /**
    * {@inheritdoc}
@@ -108,23 +101,23 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
       mkdir($destination_uri);
     }
 
-    // Obtain  filename
+    // Obtain filename.
     $name_attribute = $this->configuration['filename'];
     $file_name = $row->getSourceProperty($name_attribute);
 
-    // Obtain source url
+    // Obtain source url.
     $url_attribute = $this->configuration['url'];
     $file_url = $row->getSourceProperty($url_attribute);
 
-    // Fetch source file to tempile
+    // Fetch source file to tempile.
     $file_data = file_get_contents($file_url);
     $tmp_name = tempnam('temp://', 'dcx-');
     file_put_contents($tmp_name, $file_data);
 
-    // Copy tempfile to destination
+    // Copy tempfile to destination.
     $uri = file_unmanaged_copy($tmp_name, $destination_uri . DIRECTORY_SEPARATOR . $file_name, FILE_EXISTS_RENAME);
 
-    // Remove
+    // Remove.
     unlink($tmp_name);
 
     $file = File::create([

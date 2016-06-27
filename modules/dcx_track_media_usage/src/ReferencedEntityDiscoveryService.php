@@ -7,6 +7,11 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
+/**
+ * Class ReferencedEntityDiscoveryService.
+ *
+ * @package Drupal\dcx_track_media_usage
+ */
 class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServiceInterface {
   use StringTranslationTrait;
 
@@ -22,7 +27,7 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
 
   /**
    *
-   * @param \Drupal\Component\Plugin\PluginManagerInterface  $plugin_manager
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
    */
   public function __construct(PluginManagerInterface $plugin_manager, TranslationInterface $string_translation) {
     $this->stringTranslation = $string_translation;
@@ -30,7 +35,7 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function discover(EntityInterface $entity, $return_entities = FALSE) {
     $plugins = $this->plugin_manager->getDefinitions();
@@ -60,4 +65,5 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
 
     return $usage;
   }
+
 }

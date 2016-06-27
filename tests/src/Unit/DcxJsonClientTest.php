@@ -24,7 +24,7 @@ class DcxJsonClientTest extends UnitTestCase {
   }
 
   function testGetJson_noparams() {
-    $retval = $this->client->getJson('dcxapi:id');
+    $this->client->getJson('dcxapi:id');
     list($url, $params,) = $this->api_client->args;
     $this->assertEquals($this->api_client->method, 'getObject', 'getObject method of API client is called.');
     $this->assertEquals($url, 'id', 'Client disposes "dcxapi:" part of the id.');
@@ -33,7 +33,7 @@ class DcxJsonClientTest extends UnitTestCase {
 
   function testGetJson_custom_params() {
     $this->client->getJson('dcxapi:id', ['params']);
-    list(,$params,) = $this->api_client->args;
+    list(, $params,) = $this->api_client->args;
     $this->assertArrayEquals(['params'], $params, 'If params are given, they are passed to the API client');
   }
 
@@ -44,35 +44,35 @@ class DcxJsonClientTest extends UnitTestCase {
   }
 
   function testArchiveArticle_emptyResponse() {
-    // Expect empty response -> Exception
+    // Expect empty response -> Exception.
     $this->api_client->expected_response_body = NULL;
     $this->setExpectedException('Exception', 'Unable to archive node/1, "The operation yielded no result."');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
   function testArchiveArticle_invalidResponse() {
-    // Expect invalid response -> Exception
+    // Expect invalid response -> Exception.
     $this->api_client->expected_response_body = 'invalid';
     $this->setExpectedException('Exception', 'Unable to archive node/1, "The result operation has no type."');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
   function testArchiveArticle_noSuccess() {
-    // Expect response without _type == success -> Exception
+    // Expect response without _type == success -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'no success'];
     $this->setExpectedException('Exception', 'Unable to archive node/1, "no success"');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
   function testArchiveArticle_noLocation() {
-    // Expect response without key location -> Exception
+    // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success'];
     $this->setExpectedException('Exception', 'Unable to archive node/1, "The operation was successful, but key location was not found."');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
   function testArchiveArticle_invalidLocation() {
-    // Expect response without key location -> Exception
+    // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success', 'location' => 'invalid'];
     $this->setExpectedException('Exception', 'Unable to archive node/1, "The operation was successful, but the location was not parseable."');
     $this->client->archiveArticle('node/1', [], NULL);
@@ -85,9 +85,12 @@ class DcxJsonClientTest extends UnitTestCase {
     $this->assertEquals($dcx_id, 'document/docABC', '$dcx_id is derived from key location in response.');
   }
 
-
   function testArchiveArticle_exisitingArticle() {
-    $this->api_client->expected_response_body = ['_type' => 'dcx:success', 'location' => '/dcx/api/document/docABC', 'properties' => ['_modcount' => 1]];
+    $this->api_client->expected_response_body = [
+      '_type' => 'dcx:success',
+      'location' => '/dcx/api/document/docABC',
+      'properties' => ['_modcount' => 1],
+    ];
     $dcx_id = $this->client->archiveArticle('node/1', [], '123');
     $this->assertEquals($this->api_client->method, 'setObject', 'setObject is called if dcx_id is set');
     $this->assertEquals($dcx_id, 'document/docABC', '$dcx_id is derived from key location in response.');
@@ -105,6 +108,7 @@ class DcxJsonClientTest extends UnitTestCase {
   function testPubinfoOnPath_exception_on_non_200_response() {
     $this->api_client->expected_return_value = 23;
     $this->setExpectedException('Exception', 'Error getting object "pubinfo". Status code was 23.');
-    $pubinfos = $this->client->pubinfoOnPath('node/1');
+    $this->client->pubinfoOnPath('node/1');
   }
+
 }

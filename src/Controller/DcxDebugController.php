@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_integration\Controller\DcxDebugController.
- */
-
 namespace Drupal\dcx_integration\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
@@ -53,7 +48,7 @@ class DcxDebugController extends ControllerBase {
       }
       $data = $this->dcx_integration_client->getObject($dcxid);
     }
-    catch(\Exception $e) {
+    catch (\Exception $e) {
       dpm($e->getMessage(), "Meh :(");
     }
 
@@ -62,7 +57,7 @@ class DcxDebugController extends ControllerBase {
 
     return [
       '#type' => 'markup',
-      '#markup' => $this->t("Implement method: debug with parameter(s): $type, $id")
+      '#markup' => $this->t("Implement method: debug with parameter(s): $type, $id"),
     ];
 
   }
@@ -89,4 +84,5 @@ class DcxDebugController extends ControllerBase {
       '#markup' => __METHOD__ . " " . $dcx_id,
     ];
   }
+
 }

@@ -29,32 +29,40 @@ class ImagesOnParagraphs extends PluginBase implements ReferencedEntityDiscovery
   public function discover(EntityInterface $entity, PluginManagerInterface $plugin_manager) {
     $discovered = [];
 
-    if (! $entity instanceof FieldableEntityInterface) {
+    if (!$entity instanceof FieldableEntityInterface) {
       return $discovered;
     }
 
-    // Iterate over the field definition of the given entitiy
+    // Iterate over the field definition of the given entitiy.
     foreach ($entity->getFieldDefinitions() as $definition) {
       // Fields have FieldConfig. Let's assume our media is referenced within a
-      // field
-      if (! $definition instanceof FieldConfig) { continue; }
-      // Only care about entity reference fields
-      if ('entity_reference_revisions' !== $definition->getType()) { continue; }
+      // field.
+      if (!$definition instanceof FieldConfig) {
+        continue;
+      }
+      // Only care about entity reference fields.
+      if ('entity_reference_revisions' !== $definition->getType()) {
+        continue;
+      }
       $settings = $definition->getSettings();
 
       // We can't be sure that a target type is defined. Deal with it.
-      $target_type = isset($settings['target_type'])?$settings['target_type']:NULL;
+      $target_type = isset($settings['target_type']) ? $settings['target_type'] : NULL;
 
-      // Only care about field referencing media
-      if ('paragraph' !== $target_type) { continue; }
+      // Only care about field referencing media.
+      if ('paragraph' !== $target_type) {
+        continue;
+      }
 
       $field = $definition->getName();
 
       $referenced_entities = $entity->$field->referencedEntities();
 
-      if (empty($referenced_entities)) { continue; }
+      if (empty($referenced_entities)) {
+        continue;
+      }
 
-      // use the entity_reference_field plugin to search the paragraph entities
+      // Use the entity_reference_field plugin to search the paragraph entities.
       $images_by_reference_field_discovery = NULL;
       $images_on_galleries_discovery = NULL;
       foreach ($referenced_entities as $referenced_entity) {
@@ -76,4 +84,5 @@ class ImagesOnParagraphs extends PluginBase implements ReferencedEntityDiscovery
 
     return $discovered;
   }
+
 }

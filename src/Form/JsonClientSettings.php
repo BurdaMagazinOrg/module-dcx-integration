@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\dcx_integration\Form\JsonClientSettings.
- */
-
 namespace Drupal\dcx_integration\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
@@ -67,7 +62,7 @@ class JsonClientSettings extends ConfigFormBase {
       '#size' => 64,
       '#required' => TRUE,
       '#default_value' => $config->get('publication'),
-      '#description' => $this->t('Machine name of the publication (this website) in DC-X, e.g "publication-freundin".')
+      '#description' => $this->t('Machine name of the publication (this website) in DC-X, e.g "publication-freundin".'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -88,7 +83,7 @@ class JsonClientSettings extends ConfigFormBase {
 
     $password = $form_state->getValue('password');
     if (empty($password)) {
-      $password = $config = $this->config('dcx_integration.jsonclientsettings')->get('password');
+      $password = $this->config('dcx_integration.jsonclientsettings')->get('password');
     }
 
     $this->config('dcx_integration.jsonclientsettings')

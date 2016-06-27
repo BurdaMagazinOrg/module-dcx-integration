@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_dropzone_ui\Controller\UploadController.
- */
-
 namespace Drupal\dcx_dropzone_ui\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
@@ -15,7 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Class UploadController.
+ *
  * Handles requests that dcx dropzone issues when uploading files.
+ *
+ * @package Drupal\dcx_dropzone_ui\Controller
  */
 class UploadController extends ControllerBase {
 
@@ -62,19 +61,21 @@ class UploadController extends ControllerBase {
 
     $ids = [];
     // Data might be a simple string, which is technically not JSON ... so
-    // we need to check
+    // we need to check.
     $json = json_decode($data);
 
-    if ($json === NULL) { // decoding failed -> single item URL as string
+    // Decoding failed -> single item URL as string.
+    if ($json === NULL) {
       preg_match('|dcx/(document/doc.*)\?|', $data, $matches);
       if (!empty($matches)) {
-        $ids[] = "dcxapi:" .  $matches[1];
+        $ids[] = "dcxapi:" . $matches[1];
       }
     }
-    else { // decoding was successfull -> data is JSON -> data is multiple ids
+    // Decoding was successfull -> data is JSON -> data is multiple ids.
+    else {
       $data = $json;
-      foreach($data as $val) {
-        $ids[] = "dcxapi:" .  current($val);
+      foreach ($data as $val) {
+        $ids[] = "dcxapi:" . current($val);
       }
     }
 
@@ -86,4 +87,5 @@ class UploadController extends ControllerBase {
 
     return new JsonResponse([], 200);
   }
+
 }

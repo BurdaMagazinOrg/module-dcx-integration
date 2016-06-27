@@ -1,19 +1,11 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dcx_integration\JsonClient.
- */
-
 namespace Drupal\dcx_integration;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\dcx_integration\Asset\Article;
 use Drupal\dcx_integration\Asset\Image;
 
 /**
@@ -24,9 +16,10 @@ use Drupal\dcx_integration\Asset\Image;
 class JsonClient implements ClientInterface {
   use StringTranslationTrait;
 
-  /* Instance of the low level PHP JSON API Client provided by digicol.
+  /**
+   * Instance of the low level PHP JSON API Client provided by digicol.
    *
-   * See file api_client/dcx_api_client.class.php
+   * See file api_client/dcx_api_client.class.php.
    *
    * @var \DCX_Api_Client
    */
@@ -43,7 +36,7 @@ class JsonClient implements ClientInterface {
    */
 
   /**
-   * Publication ID from 'dcx_integration.jsonclientsettings'
+   * Publication ID from 'dcx_integration.jsonclientsettings'.
    *
    * @var string
    */
@@ -93,13 +86,13 @@ class JsonClient implements ClientInterface {
     if ($params == NULL) {
       $params = [
         's[pubinfos]' => '*',
-        // All fields
+        // All fields.
         's[fields]' => '*',
-        // All properties
+        // All properties.
         's[properties]' => '*',
-        // All files
+        // All files.
         's[files]' => '*',
-        // attribute _file_absolute_url of all referenced files in the document
+        // Attribute _file_absolute_url of all referenced files in the document.
         's[_referenced][dcx:file][s][properties]' => '_file_url_absolute',
 
         's[_referenced][dcx:pubinfo][s]' => '*',
@@ -108,14 +101,13 @@ class JsonClient implements ClientInterface {
       ];
     }
 
-
     $url = preg_replace('/^dcxapi:/', '', $id);
     $http_status = $this->api_client->getObject($url, $params, $json);
 
     if (200 !== $http_status) {
       $message = $this->t('Error getting "@url". Status code was @code.', [
         '@url' => $url,
-        '@code' => $http_status
+        '@code' => $http_status,
       ]);
       throw new \Exception($message);
     }
@@ -134,9 +126,12 @@ class JsonClient implements ClientInterface {
    *
    * @param string $id
    *   A dcx object identifier. Something like "dcxapi:document/xyz".
+   *
    * @return Drupal\dcx_integration\Asset\BaseAsset
    *   An instance of BaseAsset depending on the retrieved data.
-   * @throws \Exception Throws exceptions if anything fails.
+   *
+   * @throws \Exception
+   *   Throws exceptions if anything fails.
    */
   public function getObject($id) {
     $json = $this->getJson($id);
@@ -148,8 +143,9 @@ class JsonClient implements ClientInterface {
         case "dcxapi:tm_topic/documenttype-story":
           $asset = $this->buildStoryAsset($json);
           break;
+
         case "dcxapi:tm_topic/documenttype-image":
-          // this is the default case as well
+          // This is the default case as well.
         default:
           $asset = $this->buildImageAsset($json);
           break;
@@ -165,12 +161,13 @@ class JsonClient implements ClientInterface {
   /**
    * Builds an Image object from given json array.
    *
-   * @return Drupal\dcx_integration\Asset\Image the Image object.
+   * @return Drupal\dcx_integration\Asset\Image
+   *   The Image object.
    */
   protected function buildImageAsset($json) {
     $data = [];
 
-    /**
+    /*
      * Maps an asset attribute to
      *  - the keys of a nested array, or
      *  - to a callback (class + method) and (optional) arguments for further
@@ -204,7 +201,8 @@ class JsonClient implements ClientInterface {
   /**
    * Builds an Article object from given json array.
    *
-   * @return Drupal\dcx_integration\Asset\Article the Article object.
+   * @return Drupal\dcx_integration\Asset\Article
+   *   The Article object.
    */
   protected function buildStoryAsset($json) {
     // @TODO
@@ -212,13 +210,13 @@ class JsonClient implements ClientInterface {
   }
 
   /**
-   * Descends in the nested array $json following the path of keys given in
-   * keys.
+   * Descends in the nested array $json following the path of keys given in keys.
    *
    * Returns whatever it finds there.
    *
    * @param array $keys
    * @param array $json
+   *
    * @return mixed $value
    */
   protected function extractData($json, $keys) {
@@ -235,7 +233,9 @@ class JsonClient implements ClientInterface {
    *
    * @param array $keys
    * @param array $json
-   * @return string URL referenced by the file_id nested in $keys.
+   *
+   * @return string
+   *   URL referenced by the file_id nested in $keys.
    */
   protected function extractUrl($json, $keys) {
     $file_id = $this->extractData($json, $keys);
@@ -245,7 +245,7 @@ class JsonClient implements ClientInterface {
       'dcx:file',
       $file_id,
       'properties',
-      '_file_url_absolute'
+      '_file_url_absolute',
     ]);
     return $file_url;
   }
@@ -257,6 +257,7 @@ class JsonClient implements ClientInterface {
    * Searches for a right with the topic_id 'dcxapi:tm_topic/rightsusage-Online'.
    *
    * @param array $json
+   *
    * @return bool
    *   The status of the image. True if a right with topic_id
    *   'dcxapi:tm_topic/rightsusage-Online' is present, false otherwise
@@ -264,7 +265,7 @@ class JsonClient implements ClientInterface {
   protected function computeStatus($json) {
     $rights_ids = $this->extractData($json, [
       '_rights_effective',
-      'rightstype-UsagePermitted'
+      'rightstype-UsagePermitted',
     ]);
     foreach (current($rights_ids) as $right) {
       $right_id = $right['_id'];
@@ -276,7 +277,6 @@ class JsonClient implements ClientInterface {
     return FALSE;
   }
 
-
   /**
    * Computes the expired of the image, evaluating the key
    * '_rights_effective'.
@@ -284,13 +284,14 @@ class JsonClient implements ClientInterface {
    * Searches for a right with the topic_id 'dcxapi:tm_topic/rightsusage-Online'.
    *
    * @param array $json
+   *
    * @return string
    *   date string of expired date
    */
   protected function computeExpire($json) {
     $rights_ids = $this->extractData($json, [
       '_rights_effective',
-      'rightstype-UsagePermitted'
+      'rightstype-UsagePermitted',
     ]);
     foreach (current($rights_ids) as $right) {
       $right_id = $right['_id'];
@@ -316,7 +317,9 @@ class JsonClient implements ClientInterface {
    *
    * @param array $keys
    * @param array $json
-   * @return string the referenced values as comma separated string
+   *
+   * @return string
+   *   The referenced values as comma separated string.
    */
   protected function joinValues($json, $keys) {
     $items = $this->extractData($json, $keys);
@@ -342,10 +345,10 @@ class JsonClient implements ClientInterface {
 
     $known_publications = $this->pubinfoOnPath($path, $type);
 
-    // Delete usage for DC-X Images which are not used anymore
+    // Delete usage for DC-X Images which are not used anymore.
     foreach ($known_publications as $dcx_id => $pubinfos) {
       // If a DC-X ID with a know usage on this $path is not in the usage list
-      // anymore
+      // anymore.
       if (!in_array($dcx_id, $usage_list)) {
         $this->removePubinfos($pubinfos);
       }
@@ -363,35 +366,33 @@ class JsonClient implements ClientInterface {
         "properties" => [
           "doc_id" => [
             "_id" => $id,
-            "_type" => "dcx:document"
+            "_type" => "dcx:document",
           ],
           "uri" => $path,
           "date" => $date,
           "status_id" => [
             "_id" => "dcxapi:tm_topic/$dcx_status",
             "_type" => "dcx:tm_topic",
-            "value" => "Published"
+            "value" => "Published",
           ],
           "publication_id" => [
             "_id" => "dcxapi:tm_topic/$dcx_publication",
             "_type" => "dcx:tm_topic",
-            "value" => "Bunte"
+            "value" => "Bunte",
           ],
           "type_id" => [
             "_id" => "dcxapi:tm_topic/pubtype-$type",
             "_type" => "dcx:tm_topic",
-            "value" => ucfirst($type)
+            "value" => ucfirst($type),
           ],
-        ]
+        ],
       ];
 
-      // Pubinfo is either already known or an empty array
+      // Pubinfo is either already known or an empty array.
       $pubinfo = isset($known_publications[$id]) ? $known_publications[$id] : [];
 
       if (count($pubinfo) > 1) {
-        throw new \Exception($this->t('For document %id exists more that one '
-          . 'pubinfo refering to %url. This should not be the case and cannot '
-          . 'be resolved manually. Please fix this in DC-X.',
+        throw new \Exception($this->t('For document %id exists more that one pubinfo refering to %url. This should not be the case and cannot be resolved manually. Please fix this in DC-X.',
           ['%id' => $id, '%url' => $path]));
       }
       $response_body = NULL;
@@ -400,12 +401,13 @@ class JsonClient implements ClientInterface {
         if (201 !== $http_status) {
           $message = $this->t('Error creating object %url. Status code was %code.', [
             '%url' => $pubinfo,
-            '%code' => $http_status
+            '%code' => $http_status,
           ]);
           throw new \Exception($message);
         }
       }
-      else { // 1 == count($pubinfo)
+      // 1 == count($pubinfo)
+      else {
         $pubinfo = current($pubinfo);
         $dcx_api_url = preg_replace('/dcxapi:/', '', $pubinfo['_id']);
 
@@ -417,7 +419,7 @@ class JsonClient implements ClientInterface {
         if (200 !== $http_status) {
           $message = $this->t('Error setting object %url. Status code was %code.', [
             '%url' => $dcx_api_url,
-            '%code' => $http_status
+            '%code' => $http_status,
           ]);
           throw new \Exception($message);
         }
@@ -427,7 +429,7 @@ class JsonClient implements ClientInterface {
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function archiveArticle($url, $info, $dcx_id) {
 
@@ -454,16 +456,16 @@ class JsonClient implements ClientInterface {
           [
             "_id" => "dcxapi:tm_topic\/documenttype-story",
             "_type" => "dcx:tm_topic",
-            "value" => "Story"
+            "value" => "Story",
           ],
         ],
         'StoryType' => [
           [
             "_id" => "dcxapi:tm_topic\/storytype-online",
             "_type" => "dcx:tm_topic",
-            "value" => "Online"
-          ]
-        ]
+            "value" => "Online",
+          ],
+        ],
       ],
       'properties' => [
         'pool_id' => [
@@ -473,7 +475,9 @@ class JsonClient implements ClientInterface {
       ],
     ];
 
-    $i = 0; // We can't be 100% sure that $media has numeric keys in order.
+    // We can't be 100% sure that $media has numeric keys in order.
+    $i = 0;
+
     // Going with the good old counter.
     foreach ($media as $item) {
       $i++;
@@ -495,14 +499,14 @@ class JsonClient implements ClientInterface {
               '_type' => 'dcx:document',
               'file_variant' => 'master',
               'position' => 1,
-            ]
+            ],
           ],
           'ImageCaption' => [
             [
               '_type' => 'xhtml',
               'position' => 1,
               'value' => isset($item['caption']) ? $item['caption'] : '',
-            ]
+            ],
           ],
         ],
       ];
@@ -551,7 +555,7 @@ class JsonClient implements ClientInterface {
 
       $url = parse_url($url)['path'];
 
-      $this->trackUsage(["dcxapi:$dcx_id"], ltrim($url,'/'), $status, 'article');
+      $this->trackUsage(["dcxapi:$dcx_id"], ltrim($url, '/'), $status, 'article');
     }
     else {
       if (!$error) {
@@ -563,16 +567,15 @@ class JsonClient implements ClientInterface {
     if ($error) {
       throw new \Exception($this->t('Unable to archive @url, "@message"', [
         '@url' => $url,
-        '@message' => $message
+        '@message' => $message,
       ]));
     }
 
     return $dcx_id;
   }
 
-
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function pubinfoOnPath($path, $type) {
     $json = NULL;
@@ -589,14 +592,14 @@ class JsonClient implements ClientInterface {
     if (200 !== $http_status) {
       $message = $this->t('Error getting object "@url". Status code was @code.', [
         '@url' => 'pubinfo',
-        '@code' => $http_status
+        '@code' => $http_status,
       ]);
       throw new \Exception($message);
     }
 
     $pubinfo = [];
     foreach ($json['entries'] as $entry) {
-      // ignore entry, if the publication id of this entry does not match ours.
+      // Ignore entry, if the publication id of this entry does not match ours.
       if ("dcxapi:tm_topic/" . $this->publication_id !== $entry['properties']['publication_id']['_id']) {
         continue;
       }
@@ -609,11 +612,12 @@ class JsonClient implements ClientInterface {
   }
 
   /**
-   * Deletes the given pubinfo entries
+   * Deletes the given pubinfo entries.
    *
    * This just deletes. It does not make any sanity checks at all.
    *
-   * @param array $pubinfos list of pubinfo entries as returned by DC-X.
+   * @param array $pubinfos
+   *   List of pubinfo entries as returned by DC-X.
    *
    * @throws \Exception
    */
@@ -631,7 +635,7 @@ class JsonClient implements ClientInterface {
   }
 
   /**
-   * {{@inheritdoc}}
+   * {@inheritdoc}
    */
   public function removeAllUsage($dcx_id) {
     $document = $this->getJson($dcx_id);
@@ -641,7 +645,8 @@ class JsonClient implements ClientInterface {
     foreach ($pubinfos as $key => $pubinfo) {
       if ("dcxapi:tm_topic/" . $this->publication_id !== $pubinfo['properties']['publication_id']['_id']) {
         unset($pubinfos[$key]);
-      } else {
+      }
+      else {
         $urls = $pubinfo['properties']['uri'];
       }
     }
@@ -649,4 +654,5 @@ class JsonClient implements ClientInterface {
 
     return $urls;
   }
+
 }

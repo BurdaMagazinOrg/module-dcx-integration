@@ -3,11 +3,9 @@
 namespace Drupal\dcx_migration;
 
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Queue\QueueWorkerInterface;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\Queue\SuspendQueueException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-
 
 /**
  * Service to import documents from DC-X to Drupal.
@@ -24,7 +22,7 @@ class DcxImportService implements DcxImportServiceInterface {
   protected $queueWorkerManager;
 
   /**
-   * Queue factory
+   * Queue factory.
    *
    * @var QueueFactory
    */
@@ -34,7 +32,9 @@ class DcxImportService implements DcxImportServiceInterface {
    * The constructor.
    *
    * @param QueueWorkerManagerInterface $queueWorkerManager
+   *   The queue worker manager.
    * @param QueueFactory $queueFactory
+   *   Queue factory.
    */
   public function __construct(QueueWorkerManagerInterface $queueWorkerManager, QueueFactory $queueFactory) {
     $this->queueWorkerManager = $queueWorkerManager;
@@ -59,13 +59,16 @@ class DcxImportService implements DcxImportServiceInterface {
       try {
         $queue_worker->processItem($item->data);
         $queue->deleteItem($item);
-      } catch (SuspendQueueException $e) {
+      }
+      catch (SuspendQueueException $e) {
         $queue->releaseItem($item);
         break;
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         watchdog_exception('npq', $e);
       }
     }
 
   }
+
 }

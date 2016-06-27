@@ -11,6 +11,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Updates product categories.
  *
@@ -66,7 +67,6 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     $this->entityTypeManager = $entityTypeManager;
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -83,7 +83,6 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     );
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -98,12 +97,12 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     $data['title'] = $node->title->value;
     $data['status'] = $node->status->value;
 
-    // Todo: Should probably use a custom view mode
+    // Todo: Should probably use a custom view mode.
     $paragraphs = $node->field_paragraphs->view("default");
     $rendered = $this->renderer->renderPlain($paragraphs);
     $data['body'] = strip_tags($rendered);
 
-    // Find attached images
+    // Find attached images.
     $used_media = $this->discovery->discover($node, 'return_entities');
 
     foreach ($used_media as $dcx_id => $media_entity) {
@@ -118,7 +117,8 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
 
     try {
       $dcx_id = $this->client->archiveArticle($url, $data, $existing_dcx_id);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->logger->error($e->getMessage());
       drupal_set_message($e->getMessage(), 'error');
       return;
@@ -127,7 +127,7 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     // If a non-null id has changed while archiving something is severly wrong.
     // Yet another case of "this should never happen".
     if (NULL !== $existing_dcx_id && $existing_dcx_id != $dcx_id) {
-      $message = t('Node %url changed its DC-X ID from %from to %to while archiving to DC-X.',[
+      $message = t('Node %url changed its DC-X ID from %from to %to while archiving to DC-X.', [
         '%url' => $url,
         '%from' => $existing_dcx_id,
         '%to' => $dcx_id,
@@ -145,4 +145,5 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
       $node->save();
     }
   }
+
 }

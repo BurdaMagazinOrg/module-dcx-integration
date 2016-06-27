@@ -7,7 +7,9 @@ interface DcxImportServiceInterface {
   /**
    * Import the given DC-X IDs.
    *
-   * @param array $ids list of DC-X IDs to import.
+   * @param array $ids
+   *   List of DC-X IDs to import.
    */
   public function import($ids);
+
 }

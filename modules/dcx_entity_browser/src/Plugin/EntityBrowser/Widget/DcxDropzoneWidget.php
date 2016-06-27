@@ -1,20 +1,9 @@
 <?php
 
-/**
- * Contains \Drupal\dcx_entity_browser\Plugin\EntityBrowser\Widget\DcxDropzoneWidget.
- */
-
 namespace Drupal\dcx_entity_browser\Plugin\EntityBrowser\Widget;
 
-use Drupal\Component\Utility\Bytes;
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\entity_browser\Plugin\EntityBrowser\Widget\View;
-use Drupal\entity_browser\WidgetBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides an Entity Browser widget that imports files from dcx.
@@ -61,4 +50,5 @@ class DcxDropzoneWidget extends View {
 
     return $form;
   }
+
 }

@@ -7,8 +7,8 @@ use Drupal\Core\Render\Element\FormElement;
 use Drupal\Component\Utility\NestedArray;
 
 /**
- * Provides a Dropzone for DC-X import
-
+ * Provides a Dropzone for DC-X import.
+ *
  * @FormElement("dcxdropzone")
  */
 class DcxDropzone extends FormElement {
@@ -26,7 +26,7 @@ class DcxDropzone extends FormElement {
       '#theme' => 'dcxdropzone',
       '#theme_wrappers' => ['form_element'],
       '#attached' => [
-        'library' => ['dcx_dropzone_ui/dropzone']
+        'library' => ['dcx_dropzone_ui/dropzone'],
       ],
       '#tree' => TRUE,
     ];
@@ -61,4 +61,5 @@ class DcxDropzone extends FormElement {
     }
 
   }
+
 }
