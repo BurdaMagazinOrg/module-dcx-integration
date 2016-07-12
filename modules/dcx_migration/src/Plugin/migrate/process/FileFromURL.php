@@ -114,8 +114,12 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
     $tmp_name = tempnam('temp://', 'dcx-');
     file_put_contents($tmp_name, $file_data);
 
-    // Copy tempfile to destination.
-    $uri = file_unmanaged_copy($tmp_name, $destination_uri . DIRECTORY_SEPARATOR . $file_name, FILE_EXISTS_RENAME);
+    // Copy tempfile to destination, make sure to use canonical file uri
+    $uri = file_unmanaged_copy(
+      $tmp_name,
+      file_stream_wrapper_uri_normalize($destination_uri . DIRECTORY_SEPARATOR . $file_name),
+      FILE_EXISTS_RENAME
+    );
 
     // Remove.
     unlink($tmp_name);
