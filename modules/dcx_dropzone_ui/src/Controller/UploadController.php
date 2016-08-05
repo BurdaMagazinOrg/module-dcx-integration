@@ -3,6 +3,7 @@
 namespace Drupal\dcx_dropzone_ui\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -56,7 +57,6 @@ class UploadController extends ControllerBase {
    * Handles Dcx Dropzone uploads.
    */
   public function handleUploads() {
-
     $data = $this->request->getContent();
 
     $ids = [];
@@ -83,9 +83,30 @@ class UploadController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $this->importService->import($ids);
+    $this->importService->import($ids, TRUE);
 
-    return new JsonResponse([], 200);
+    $response = batch_process(Url::fromRoute('dcx_dropzone.batch_finish'));
+    $batch_url = $response->headers->get('location');
+
+    preg_match('/\?id=(.*)&/', $batch_url, $matches);
+    $batch_id = $matches[1];
+
+    require_once 'core/includes/batch.inc';
+
+    $GET = ['id' => $batch_id, 'op' => 'start'];
+    $request = new Request($GET);
+
+    $build = _batch_page($request);
+
+    $settings = $build['content']['#attached']['drupalSettings']['batch'];
+
+    $markup = drupal_render($build['content']);
+
+    return new JsonResponse(['markup' => $markup, 'settings' => $settings]);
   }
 
+  public function batchFinish() {
+    $messages = drupal_render(\Drupal\Core\Render\Element\StatusMessages::renderMessages(NULL));
+    return new JsonResponse(['markup' => $messages]);
+  }
 }

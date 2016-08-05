@@ -26,7 +26,7 @@ class DcxDropzone extends FormElement {
       '#theme' => 'dcxdropzone',
       '#theme_wrappers' => ['form_element'],
       '#attached' => [
-        'library' => ['dcx_dropzone_ui/dropzone'],
+        'library' => ['dcx_dropzone_ui/dropzone', 'core/drupal.batch', 'dcx_dropzone_ui/ajax.batch'],
       ],
       '#tree' => TRUE,
     ];
@@ -55,11 +55,5 @@ class DcxDropzone extends FormElement {
 
     $value = $user_input['dropvalue'];
     $form_state->setValueForElement($element, $value);
-
-    if (!empty($value)) {
-      $form_state->setSubmitted();
-    }
-
   }
-
 }

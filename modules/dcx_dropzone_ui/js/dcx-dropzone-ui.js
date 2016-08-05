@@ -44,18 +44,20 @@
         }
 
         $.ajax({
-          url: '/dcx-migration/upload',
+          url: '/dcx-dropzone/upload',
           method: 'POST',
           data: JSON.stringify(data)
         }).complete(function () {
           dropzone.removeClass('is-uploading');
           dropzone.trigger('dcxDropzone:success');
-        }).success(function (data) {
-          dropzone.addClass(!data.success ? 'is-error' : 'is-success');
-          dropzone.trigger('dcxDropzone:success');
+        }).success(function (data, success, response) {
+            drupalSettings['batch'] = data['settings'];
+            var html = dropzone.html();
+            dropzone.filter(':not(.orig-processed)').addClass('orig-processed').each(function() {
+              dropzone.data('content', html);
+            });
+            dropzone.html(data['markup']);
         });
-
-
       });
 
 

@@ -5,3 +5,7 @@ dropzone:
   css:
     theme:
       css/dcx-dropzone-ui.css: {}
+ajax.batch:
+  version: 0
+  js:
+    js/batch.js: {}
