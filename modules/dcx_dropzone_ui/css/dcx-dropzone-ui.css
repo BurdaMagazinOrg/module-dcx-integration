@@ -1,12 +1,9 @@
 .dcx-dropzone {
   width: 100%;
-  text-align: center;
-  margin: -1em 0;
   padding: 1em;
-  height: 300px;
+  min-height: 3em;
   background-color: white;
   outline: 2px dashed #0074bd;
-  outline-offset: -10px;
   color: #004f80;
   box-sizing: border-box;
 }
@@ -19,8 +16,9 @@
 }
 
 .box__input {
-  position: relative;
-  top: 35%;
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .dcx-dropzone.is-uploading .box__input {

@@ -1,10 +1,5 @@
 .dcx-dropzone-widget .dcx-dropzone {
-  height: 80px;
   transition: height 250ms;
-}
-
-.dcx-dropzone-widget .dcx-dropzone.is-dragover-widget {
-  height: 880px;
 }
 
 .dcx-dropzone-widget .view-content {
