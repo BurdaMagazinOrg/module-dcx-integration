@@ -86,6 +86,8 @@ class UploadController extends ControllerBase {
 
     $this->importService->import($ids, TRUE);
 
+    // To make this work we need to patch core.
+    // See https://www.drupal.org/node/2781993
     $batch_id = batch_process(Url::fromRoute('dcx_dropzone.batch_finish'), NULL, [__CLASS__, 'batchRedirectCallback']);
 
     require_once 'core/includes/batch.inc';
@@ -114,6 +116,12 @@ class UploadController extends ControllerBase {
     return new JsonResponse(['markup' => $messages]);
   }
 
+  /**
+   * Custom batch redirect callback as used in batch_process as third argument.
+   *
+   * In this case we do not return a redirect response (as it is the default)
+   * behaviour, but the id of the batch to be able to process it by AJAX.
+   */
   public function batchRedirectCallback($url, $query_options) {
     return $query_options['query']['id'];
   }

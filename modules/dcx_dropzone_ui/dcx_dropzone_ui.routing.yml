@@ -4,7 +4,6 @@ dcx_dropzone.import:
     _controller: '\Drupal\dcx_dropzone_ui\Controller\UploadController::handleUploads'
   requirements:
     _permission: 'import from dcx'
-    #_method: 'POST'
 
 dcx_dropzone.batch_finish:
   path: '/dcx-dropzone/batch-finish'
