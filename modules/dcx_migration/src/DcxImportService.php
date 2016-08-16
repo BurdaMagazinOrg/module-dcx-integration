@@ -97,11 +97,20 @@ class DcxImportService implements DcxImportServiceInterface {
    * The batch context array, passed by reference.
    */
   public static function batchImport($id, $executable, &$context) {
+    if (empty($context['results'])) {
+      $context['results']['count'] = 0;
+      $context['results']['success'] = 0;
+      $context['results']['fail'] = [];
+    }
+
+    $context['results']['count']++;
+
     try {
       $executable->importItemWithUnknownStatus($id);
+      $context['results']['success']++;
     }
     catch (\Exception $e) {
-      $executable->display($e->getMessage());
+      $context['results']['fail'][] = $id;
     }
   }
 
@@ -116,7 +125,12 @@ class DcxImportService implements DcxImportServiceInterface {
    *   If $success is FALSE, contains the operations that remained unprocessed.
    */
   public static function batchFinished($success, $results, $operations) {
-    // A noop for now.
+    $t = \Drupal::translation();
+    $success = $t->translate('Imported @success of @count items.', ['@success' => $results['success'], '@count' => $results['count']]);
+    drupal_set_message($success);
+    if (!empty($results['fail'])) {
+      $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => join(', ', $results['fail'])]);
+    }
+    drupal_set_message($fail);
   }
-
 }

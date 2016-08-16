@@ -7,6 +7,7 @@ use Drupal\Core\Url;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -85,11 +86,7 @@ class UploadController extends ControllerBase {
 
     $this->importService->import($ids, TRUE);
 
-    $response = batch_process(Url::fromRoute('dcx_dropzone.batch_finish'));
-    $batch_url = $response->headers->get('location');
-
-    preg_match('/\?id=(.*)&/', $batch_url, $matches);
-    $batch_id = $matches[1];
+    $batch_id = batch_process(Url::fromRoute('dcx_dropzone.batch_finish'), NULL, [__CLASS__, 'batchRedirectCallback']);
 
     require_once 'core/includes/batch.inc';
 
@@ -105,8 +102,19 @@ class UploadController extends ControllerBase {
     return new JsonResponse(['markup' => $markup, 'settings' => $settings]);
   }
 
+  /**
+   * Custom finish callback for AJAX processed batch.
+   *
+   * Renders all status messages and returns them in a JSON Response object.
+   *
+   * @return JsonResponse
+   */
   public function batchFinish() {
     $messages = drupal_render(\Drupal\Core\Render\Element\StatusMessages::renderMessages(NULL));
     return new JsonResponse(['markup' => $messages]);
+  }
+
+  public function batchRedirectCallback($url, $query_options) {
+    return $query_options['query']['id'];
   }
 }

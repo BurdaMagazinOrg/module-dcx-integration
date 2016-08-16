@@ -8,4 +8,4 @@ dropzone:
 ajax.batch:
   version: 0
   js:
-    js/batch.js: {}
+    js/dcx-batch.js: {}
