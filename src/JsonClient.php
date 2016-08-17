@@ -8,6 +8,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\dcx_integration\Asset\Image;
 
+use Drupal\dcx_integration\Exception\DcxClientException;
+
 /**
  * Class Client.
  *
@@ -112,11 +114,9 @@ class JsonClient implements ClientInterface {
     $http_status = $this->api_client->getObject($url, $params, $json);
 
     if (200 !== $http_status) {
-      $message = $this->t('Error getting "@url". Status code was @code.', [
-        '@url' => $url,
-        '@code' => $http_status,
-      ]);
-      throw new \Exception($message);
+      $exception = new DcxClientException($url, $http_status);
+      watchdog_exception(__METHOD__, $exception);
+      throw $exception;
     }
 
     return $json;
