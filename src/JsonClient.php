@@ -519,11 +519,11 @@ class JsonClient implements ClientInterface {
       $data['properties']['_modcount'] = $modcount;
       $data['_id'] = '/dcx/api/' . $dcx_id;
       $dcx_api_url = $dcx_id;
-      $this->api_client->setObject($dcx_api_url, [], $data, $response_body);
+      $http_status = $this->api_client->setObject($dcx_api_url, [], $data, $response_body);
     }
     else {
       $dcx_api_url = 'document';
-      $this->api_client->createObject($dcx_api_url, [], $data, $response_body);
+      $http_status = $this->api_client->createObject($dcx_api_url, [], $data, $response_body);
     }
     $error = FALSE;
 
@@ -565,10 +565,9 @@ class JsonClient implements ClientInterface {
     }
 
     if ($error) {
-      throw new \Exception($this->t('Unable to archive @url, "@message"', [
-        '@url' => $url,
-        '@message' => $message,
-      ]));
+      $exception = new DcxClientException('createObject|setObject', $http_status, $dcx_api_url, [], $data, sprintf('Unable to archive: %s', $message));
+      watchdog_exception(__METHOD__, $exception);
+      throw $exception;
     }
 
     return $dcx_id;
