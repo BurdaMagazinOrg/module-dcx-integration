@@ -1,0 +1,8 @@
+name: DC-X Article Import
+type: module
+description: Allow importing DC-X story object to article nodes.
+core: 8.x
+package: dcx
+
+dependencies:
+  - dcx_integration

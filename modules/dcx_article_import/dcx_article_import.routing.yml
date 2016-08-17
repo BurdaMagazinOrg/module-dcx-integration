@@ -1,0 +1,9 @@
+dcx_article_import.form:
+  path: '/node/add/article/dcx-import'
+  defaults:
+    _form: '\Drupal\dcx_article_import\Form\ArticleImportForm'
+    _title: 'Import articles from DC-X'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'import from dcx'
