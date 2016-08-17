@@ -143,26 +143,23 @@ class JsonClient implements ClientInterface {
   public function getObject($id) {
     $json = $this->getJson($id);
 
-    if (preg_match('/^dcxapi:doc/', $id)) {
-      $type = $this->extractData($json, ['fields', 'Type', 0, '_id']);
+    $type = $this->extractData($json, ['fields', 'Type', 0, '_id']);
 
-      switch ($type) {
-        case "dcxapi:tm_topic/documenttype-story":
-          $asset = $this->buildStoryAsset($json);
-          break;
+    switch ($type) {
+      case "dcxapi:tm_topic/documenttype-story":
+        $asset = $this->buildStoryAsset($json);
+        break;
 
-        case "dcxapi:tm_topic/documenttype-image":
-          // This is the default case as well.
-        default:
-          $asset = $this->buildImageAsset($json);
-          break;
-      }
-      return $asset;
+      case "dcxapi:tm_topic/documenttype-image":
+        $asset = $this->buildImageAsset($json);
+        break;
+
+      default:
+        $exception = new UnknownDocumentTypeException($type, $id);
+        watchdog_exception(__METHOD__, $exception);
+        throw $exception;
     }
-    else {
-      throw new \Exception("No handler for URL type $id.");
-    }
-
+    return $asset;
   }
 
   /**
