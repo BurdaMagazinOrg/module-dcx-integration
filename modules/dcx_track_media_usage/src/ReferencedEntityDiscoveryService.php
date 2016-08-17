@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-
+use Drupal\dcx_track_media_usage\Exception\FoundNonDcxEntityException;
 /**
  * Class ReferencedEntityDiscoveryService.
  *
@@ -52,7 +52,9 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
       $dcx_id = $referencedEntity->field_dcx_id->value;
 
       if (empty($dcx_id)) {
-        throw new \Exception($this->t('Found media:image %id without DC-X ID.', ['%id' => $referencedEntity->id()]));
+        $exception = new FoundNonDcxEntityException('media', 'image', $referencedEntity->id());
+        watchdog_exception(__METHOD__, $exception);
+        throw $exception;
       }
 
       if ($return_entities) {
