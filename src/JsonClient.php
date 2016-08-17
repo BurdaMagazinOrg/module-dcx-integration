@@ -114,7 +114,7 @@ class JsonClient implements ClientInterface {
     $http_status = $this->api_client->getObject($url, $params, $json);
 
     if (200 !== $http_status) {
-      $exception = new DcxClientException($url, $http_status);
+      $exception = new DcxClientException('getObject', $http_status, $url, $params, $json);
       watchdog_exception(__METHOD__, $exception);
       throw $exception;
     }
@@ -403,11 +403,9 @@ class JsonClient implements ClientInterface {
       if (0 == count($pubinfo)) {
         $http_status = $this->api_client->createObject('pubinfo', [], $data, $response_body);
         if (201 !== $http_status) {
-          $message = $this->t('Error creating object %url. Status code was %code.', [
-            '%url' => $pubinfo,
-            '%code' => $http_status,
-          ]);
-          throw new \Exception($message);
+          $exception = new DcxClientException('createObject', $http_status, 'pubinfo', [], $data);
+          watchdog_exception(__METHOD__, $exception);
+          throw $exception;
         }
       }
       // 1 == count($pubinfo)
@@ -421,11 +419,9 @@ class JsonClient implements ClientInterface {
 
         $http_status = $this->api_client->setObject($dcx_api_url, [], $data, $response_body);
         if (200 !== $http_status) {
-          $message = $this->t('Error setting object %url. Status code was %code.', [
-            '%url' => $dcx_api_url,
-            '%code' => $http_status,
-          ]);
-          throw new \Exception($message);
+          $exception = new DcxClientException('createObject', $http_status, $dcx_api_url, [], $data);
+          watchdog_exception(__METHOD__, $exception);
+          throw $exception;
         }
       }
     }
@@ -594,11 +590,9 @@ class JsonClient implements ClientInterface {
 
     $http_status = $this->api_client->getObject('pubinfo', $params, $json);
     if (200 !== $http_status) {
-      $message = $this->t('Error getting object "@url". Status code was @code.', [
-        '@url' => 'pubinfo',
-        '@code' => $http_status,
-      ]);
-      throw new \Exception($message);
+      $exception = new DcxClientException('getObject', $http_status, 'pubinfo', $params, $json);
+      watchdog_exception(__METHOD__, $exception);
+      throw $exception;
     }
 
     $pubinfo = [];
@@ -631,9 +625,9 @@ class JsonClient implements ClientInterface {
       $dcx_api_url = $data['_id_url'];
       $http_status = $this->api_client->deleteObject($dcx_api_url, [], $response_body);
       if (204 != $http_status) {
-        $message = $this->t('Error deleting object %url. Status code was %code.',
-          ['%url' => $dcx_api_url, '%code' => $http_status]);
-        throw new \Exception($message);
+        $exception = new DcxClientException('deleteObject', $http_status, $dcx_api_url);
+        watchdog_exception(__METHOD__, $exception);
+        throw $exception;
       }
     }
   }

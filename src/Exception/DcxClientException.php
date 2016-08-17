@@ -10,8 +10,8 @@ namespace Drupal\dcx_integration\Exception;
  * Throw whenever the DC-X API client returns some status different from 200.
  */
 class DcxClientException extends \Exception {
-  function __construct($url, $code) {
-    $message = sprintf('Error getting "%s". Status code was %s.', $url, $code);
+  function __construct($method, $code, $url, $params = [], $json = []) {
+    $message = sprintf('Error performing %s on url "%s". Status code was %s. Params: %s. JSON: %s', $method, $url, $code, json_encode($params), json_encode($json));
     parent::__construct($message, $code);
   }
 }
