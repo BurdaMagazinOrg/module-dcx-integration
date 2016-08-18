@@ -10,6 +10,8 @@ use Drupal\Core\Url;
  * not possible via *.task.yml, so we need this hack.
  */
 function dcx_article_import_menu_local_tasks_alter(&$data, $route_name) {
+  $node_add_article = FALSE;
+
   if ('node.add' == $route_name) {
     // For page.add we need to turn off caching to allow the tabs to be computed
     // everytime we visit the route, as the tabs should only show up for our
