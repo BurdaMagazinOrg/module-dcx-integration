@@ -2,6 +2,7 @@
 
 namespace Drupal\dcx_migration\Plugin\migrate\source;
 
+use Drupal\dcx_integration\Exception\IllegalAssetTypeException;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\MigrateException;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
@@ -40,7 +41,11 @@ class DcxSource extends SourcePluginBase {
   }
 
   protected function getDcxObject($id) {
-    return $this->dcx_service->getObject($id);
+    $object = $this->dcx_service->getObject($id);
+    if (! $object instanceof \Drupal\dcx_integration\Asset\Image) {
+      throw new IllegalAssetTypeException($id, get_class($object), '\Drupal\dcx_integration\Asset\Image');
+    }
+    return $object;
   }
 
   public function getIDs() {
