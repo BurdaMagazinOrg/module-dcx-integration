@@ -448,7 +448,7 @@ class JsonClient implements ClientInterface {
     $data = [
       '_type' => 'dcx:document',
       'fields' => [
-        'Title' => [
+        'Headline' => [
           0 => [
             'value' => $title,
           ],
