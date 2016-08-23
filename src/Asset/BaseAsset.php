@@ -25,12 +25,12 @@ abstract class BaseAsset {
    * @throws \Drupal\dcx_integration\Exception\MandatoryAttributeException
    *   if mandatory attributes are missing.
    * @throws \Drupal\dcx_integration\Exception\IllegalAttributeException
-   *   if munknown attributes are present.
+   *   if unknown attributes are present.
    */
   public function __construct($data, $mandatory_attributes, $optional_attributes = []) {
     foreach ($mandatory_attributes as $attribute) {
-      if (!isset($data[$attribute])) {
-        $e = new \MandatoryAttributeException($attribute);
+      if (!isset($data[$attribute]) || empty($data[$attribute]) ) {
+        $e = new MandatoryAttributeException($attribute);
         watchdog_exception(__METHOD__, $e);
         throw $e;
       }
@@ -39,7 +39,7 @@ abstract class BaseAsset {
     // Only allow mandatory and optional attributes.
     $unknown_attributes = array_diff(array_keys($data), array_merge($optional_attributes, $mandatory_attributes));
     if (!empty($unknown_attributes)) {
-      $e = new \IllegalAttributeException($unknown_attributes);
+      $e = new IllegalAttributeException($unknown_attributes);
       watchdog_exception(__METHOD__, $e);
       throw $e;
     }

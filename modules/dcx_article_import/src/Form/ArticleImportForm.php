@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\dcx_integration\ClientInterface;
+use Drupal\dcx_integration\Exception\MandatoryAttributeException;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -154,7 +155,13 @@ class ArticleImportForm extends FormBase {
     try {
       $asset = $this->dcx_integration_client->getObject('dcxapi:' . $dcx_id);
       $this->store->set('asset', $asset);
-    } catch (\Exception $e) {
+    }
+    catch (MandatoryAttributeException $e) {
+      $message = $this->t('DC-X Story %id is missing the mandatory attribute %attr. Please fix this in DC-X.', ['%id' => $dcx_id, '%attr' => $e->attribute]);
+      drupal_set_message($message);
+      return;
+    }
+    catch (\Exception $e) {
       $this->store->delete('asset');
       drupal_set_message($e->getMessage());
       return;
