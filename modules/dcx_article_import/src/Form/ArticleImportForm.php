@@ -54,6 +54,7 @@ class ArticleImportForm extends FormBase {
       '#description' => 'Please give a DC-X story document id. Something like "document/doc6p9gtwruht4gze9boxi".',
       '#maxlength' => 64,
       '#size' => 64,
+      '#required' => TRUE,
     );
     $form['actions'] = array(
       '#type' => 'actions',

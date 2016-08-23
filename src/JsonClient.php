@@ -7,6 +7,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\dcx_integration\Asset\Image;
+use Drupal\dcx_integration\Asset\Article;
 
 use Drupal\dcx_integration\Exception\DcxClientException;
 
@@ -147,7 +148,7 @@ class JsonClient implements ClientInterface {
 
     switch ($type) {
       case "dcxapi:tm_topic/documenttype-story":
-        $asset = $this->buildStoryAsset($json);
+        $asset = $this->buildArticleAsset($json);
         break;
 
       case "dcxapi:tm_topic/documenttype-image":
@@ -189,15 +190,7 @@ class JsonClient implements ClientInterface {
       'kill_date' => [[$this, 'computeExpire']],
     ];
 
-    foreach ($attribute_map as $target_key => $source) {
-      if (is_array($source[0]) && method_exists($source[0][0], $source[0][1])) {
-        $callback = array_shift($source);
-        $data[$target_key] = call_user_func($callback, $json, $source);
-      }
-      elseif (is_array($source)) {
-        $data[$target_key] = $this->extractData($json, $source);
-      }
-    }
+    $data = $this->processAttributeMap($attribute_map, $json);
 
     return new Image($data);
   }
@@ -208,9 +201,46 @@ class JsonClient implements ClientInterface {
    * @return Drupal\dcx_integration\Asset\Article
    *   The Article object.
    */
-  protected function buildStoryAsset($json) {
-    // @TODO
-    throw new \Exception(__METHOD__ . " is not implemented yet");
+  protected function buildArticleAsset($json) {
+    $data = [];
+
+    $attribute_map = [
+      'id' => ['_id'],
+      'title' => ['fields', 'Headline', 0, 'value'],
+      'body' => ['fields', 'body', 0, 'value'],
+      'files' => [[$this, 'extractImageIds'], 'fields', 'Image'],
+    ];
+
+    $data = $this->processAttributeMap($attribute_map, $json);
+
+    return new Article($data);
+  }
+
+  /**
+   * Extract data specified in the attribute map on the given source array.
+   *
+   * An attribute map is an associative array.
+   * Keys will be the keys of the resulting data array.
+   * Values are arrays of keys in the source or, if the first element is a
+   * callable [object, method] pair, arguments for further processing in this
+   * very callable.
+   *
+   * @return array of extracted data
+   */
+  protected function processAttributeMap($attribute_map, $source) {
+    $data = [];
+
+    foreach ($attribute_map as $target_key => $source_keys) {
+      if (is_array($source_keys[0]) && method_exists($source_keys[0][0], $source_keys[0][1])) {
+        $callback = array_shift($source_keys);
+        $data[$target_key] = call_user_func($callback, $source, $source_keys);
+      }
+      elseif (is_array($source_keys)) {
+        $data[$target_key] = $this->extractData($source, $source_keys);
+      }
+    }
+
+    return $data;
   }
 
   /**
@@ -252,6 +282,24 @@ class JsonClient implements ClientInterface {
       '_file_url_absolute',
     ]);
     return $file_url;
+  }
+
+  /**
+   * Returns the image IDs nested in a story document.
+   *
+   * This function "knows" where to look for the IDs  in question.
+   *
+   * @param array $keys
+   * @param array $json
+   *
+   * @return array of image IDs
+   */
+  protected function extractImageIds($json, $keys) {
+    $data = $this->extractData($json, $keys);
+    foreach ($data as $image_data) {
+      $images[] = $this->extractData($image_data, ['fields', 'DocumentRef', 0, '_id']);
+    }
+    return $images;
   }
 
   /**
