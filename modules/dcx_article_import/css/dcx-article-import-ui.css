@@ -1,0 +1,16 @@
+.dcx-dropzone {
+  width: 100%;
+  padding: 1em;
+  min-height: 3em;
+  background-color: white;
+  outline: 2px dashed #0074bd;
+  color: #004f80;
+  box-sizing: border-box;
+  margin-bottom: 1em;
+}
+
+.message {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

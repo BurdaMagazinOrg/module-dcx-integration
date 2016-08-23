@@ -90,6 +90,9 @@ class ArticleImportForm extends FormBase {
         '#maxlength' => 64,
         '#size' => 64,
         '#required' => TRUE,
+        '#attached' => [
+          'library' => ['dcx_article_import/dropzone'],
+        ],
       ];
       $form['actions'] = [
         '#type' => 'actions',

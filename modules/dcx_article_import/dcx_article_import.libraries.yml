@@ -1,0 +1,8 @@
+dropzone:
+  version: 0
+  js:
+    js/dcx-article-import-ui.js: {}
+  css:
+    theme:
+      css/dcx-article-import-ui.css: {}
+
