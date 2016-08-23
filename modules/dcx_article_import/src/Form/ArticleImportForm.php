@@ -10,6 +10,7 @@ namespace Drupal\dcx_article_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\dcx_integration\ClientInterface;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Drupal\node\Entity\Node;
@@ -194,6 +195,8 @@ class ArticleImportForm extends FormBase {
     }
 
     $node->save();
-  }
 
+    $this->store->delete('asset');
+    $form_state->setRedirectUrl(Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]));
+  }
 }
