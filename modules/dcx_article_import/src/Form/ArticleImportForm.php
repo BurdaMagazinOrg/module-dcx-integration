@@ -102,12 +102,13 @@ class ArticleImportForm extends FormBase {
       $data = $asset->data();
 
       $form['title'] = [
-        '#markup' => "<h2>" . $data['title'] . "<h2>",
+        '#markup' => "<h2>" . $data['title'] . "</h2>",
       ];
       $form['body'] = array(
         '#type' => 'text_format',
         '#default_value' => isset($data['body']) ? $data['body'] : '',
         '#format' => 'full_html',
+        '#description' => $this->t('Please insert horizontal rule tags to split the text body in separate paragraphs.'),
       );
       $form['actions'] = [
         '#type' => 'actions',
@@ -155,7 +156,6 @@ class ArticleImportForm extends FormBase {
     $data = $this->store->get('asset')->data();
 
     $title = $data['title'];
-    $body = $form_state->getValue('body')['value'];
 
     $node = Node::create([
         'type' => 'article',
@@ -164,16 +164,19 @@ class ArticleImportForm extends FormBase {
         'status' => 0,
     ]);
 
-    $body_paragraph = Paragraph::create([
-      'type' => 'text',
-      'uid' => $uid,
-      'status' => 1,
-      'field_text' => [
-        ['value' => $body, 'format' => 'basic_html'],
-      ]
-    ]);
-    $body_paragraph->save();
-    $node->field_paragraphs->appendItem($body_paragraph);
+    $body = $form_state->getValue('body')['value'];
+    foreach (preg_split('#<hr />#', $body) as $body_part) {
+      $body_paragraph = Paragraph::create([
+        'type' => 'text',
+        'uid' => $uid,
+        'status' => 1,
+        'field_text' => [
+          ['value' => $body_part, 'format' => 'basic_html'],
+        ]
+      ]);
+      $body_paragraph->save();
+      $node->field_paragraphs->appendItem($body_paragraph);
+    }
 
     $files = $data['files'];
     $media_ids = $this->dcx_import_service->getEntityIds($files);
