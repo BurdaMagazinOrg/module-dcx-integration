@@ -166,4 +166,12 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
       ->execute();
   }
 
+  /**
+   * Gets the migration plugin.
+   *
+   * @return \Drupal\migrate\Plugin\MigrationInterface.
+   */
+  public function getMigration() {
+    return $this->migration;
+  }
 }
