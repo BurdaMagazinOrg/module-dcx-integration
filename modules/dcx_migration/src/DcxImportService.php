@@ -130,8 +130,8 @@ class DcxImportService implements DcxImportServiceInterface {
     drupal_set_message($success);
     if (!empty($results['fail'])) {
       $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => join(', ', $results['fail'])]);
+      drupal_set_message($fail);
     }
-    drupal_set_message($fail);
   }
 
   /**
