@@ -109,7 +109,7 @@ class ArticleImportForm extends FormBase {
         '#type' => 'text_format',
         '#default_value' => isset($data['body']) ? $data['body'] : '',
         '#format' => 'full_html',
-        '#description' => $this->t('Please insert horizontal rule tags to split the text body in separate paragraphs.'),
+        '#description' => $this->t('Please insert horizontal rule tags to split the text body into separate paragraphs.'),
       );
       $form['actions'] = [
         '#type' => 'actions',
@@ -131,21 +131,35 @@ class ArticleImportForm extends FormBase {
     return $form;
   }
 
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+
+    // $dcx_id might be NULL in step 2
+    if ($dcx_id = $form_state->getValue('dcx_id')) {
+      if (!preg_match('#^document/doc\w+$#', $dcx_id)) {
+        $form_state->setError($form, $this->t('Please provide a valid DC-X ID.'));
+      }
+    }
+  }
+
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $dcx_id = $form_state->getValue('dcx_id');
+
     try {
       $asset = $this->dcx_integration_client->getObject('dcxapi:' . $dcx_id);
       $this->store->set('asset', $asset);
     } catch (\Exception $e) {
       $this->store->delete('asset');
       drupal_set_message($e->getMessage());
+      return;
     }
 
-    $files = $asset->data()['files'];
-    $this->dcx_import_service->import($files);
+    if ($files = $asset->data()['files']) {
+      $this->dcx_import_service->import($files);
+    }
   }
 
   public function clearTempStore(array &$form, FormStateInterface $form_state) {
