@@ -89,6 +89,11 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
   public function processItem($id) {
     $node = $this->entityTypeManager->getStorage('node')->load($id);
 
+    // The node might not exists anymore because it was deleted.
+    if (!$node) {
+      return;
+    }
+    
     $this->archive($node);
   }
 
