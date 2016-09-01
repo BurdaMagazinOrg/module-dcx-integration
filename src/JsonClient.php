@@ -3,10 +3,14 @@
 namespace Drupal\dcx_integration;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\dcx_integration\Asset\Image;
+
+use Drupal\Core\Utility\Error;
+use Drupal\Core\Logger\RfcLogLevel;
 
 use Drupal\dcx_integration\Exception\DcxClientException;
 
@@ -45,12 +49,18 @@ class JsonClient implements ClientInterface {
   protected $publication_id;
 
   /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AccountProxyInterface $user, TranslationInterface $string_translation, $override_client_class = NULL) {
+  public function __construct(ConfigFactoryInterface $config_factory, AccountProxyInterface $user, TranslationInterface $string_translation, LoggerChannelFactoryInterface $logger_factory, $override_client_class = NULL) {
     $this->stringTranslation = $string_translation;
 
     $this->config = $config_factory->get('dcx_integration.jsonclientsettings');
+    $this->logger = $logger_factory->get(__CLASS__);
 
     if (!$override_client_class) {
       $current_user_email = $user->getEmail();
@@ -115,7 +125,7 @@ class JsonClient implements ClientInterface {
 
     if (200 !== $http_status) {
       $exception = new DcxClientException('getObject', $http_status, $url, $params, $json);
-      watchdog_exception(__METHOD__, $exception);
+      $this->watchdog_exception(__METHOD__, $exception);
       throw $exception;
     }
 
@@ -156,7 +166,7 @@ class JsonClient implements ClientInterface {
 
       default:
         $exception = new UnknownDocumentTypeException($type, $id);
-        watchdog_exception(__METHOD__, $exception);
+        $this->watchdog_exception(__METHOD__, $exception);
         throw $exception;
     }
     return $asset;
@@ -404,7 +414,7 @@ class JsonClient implements ClientInterface {
         $http_status = $this->api_client->createObject('pubinfo', [], $data, $response_body);
         if (201 !== $http_status) {
           $exception = new DcxClientException('createObject', $http_status, 'pubinfo', [], $data);
-          watchdog_exception(__METHOD__, $exception);
+          $this->watchdog_exception(__METHOD__, $exception);
           throw $exception;
         }
       }
@@ -420,7 +430,7 @@ class JsonClient implements ClientInterface {
         $http_status = $this->api_client->setObject($dcx_api_url, [], $data, $response_body);
         if (200 !== $http_status) {
           $exception = new DcxClientException('createObject', $http_status, $dcx_api_url, [], $data);
-          watchdog_exception(__METHOD__, $exception);
+          $this->watchdog_exception(__METHOD__, $exception);
           throw $exception;
         }
       }
@@ -566,7 +576,7 @@ class JsonClient implements ClientInterface {
 
     if ($error) {
       $exception = new DcxClientException('createObject|setObject', $http_status, $dcx_api_url, [], $data, sprintf('Unable to archive: %s', $message));
-      watchdog_exception(__METHOD__, $exception);
+      $this->watchdog_exception(__METHOD__, $exception);
       throw $exception;
     }
 
@@ -590,7 +600,7 @@ class JsonClient implements ClientInterface {
     $http_status = $this->api_client->getObject('pubinfo', $params, $json);
     if (200 !== $http_status) {
       $exception = new DcxClientException('getObject', $http_status, 'pubinfo', $params, $json);
-      watchdog_exception(__METHOD__, $exception);
+      $this->watchdog_exception(__METHOD__, $exception);
       throw $exception;
     }
 
@@ -625,7 +635,7 @@ class JsonClient implements ClientInterface {
       $http_status = $this->api_client->deleteObject($dcx_api_url, [], $response_body);
       if (204 != $http_status) {
         $exception = new DcxClientException('deleteObject', $http_status, $dcx_api_url);
-        watchdog_exception(__METHOD__, $exception);
+        $this->watchdog_exception(__METHOD__, $exception);
         throw $exception;
       }
     }
@@ -652,4 +662,24 @@ class JsonClient implements ClientInterface {
     return $urls;
   }
 
+  /**
+   * Replacement for \watchdog_exception.
+   *
+   * Global watchdog_exception is not unit testable. :( This method is.
+   */
+  protected function watchdog_exception($type, \Exception $exception, $message = NULL, $variables = array(), $severity = RfcLogLevel::ERROR, $link = NULL) {
+    if (empty($message)) {
+      $message = '%type: @message in %function (line %line of %file).';
+    }
+
+    if ($link) {
+      $variables['link'] = $link;
+    }
+
+    $variables += Error::decodeException($exception);
+
+    $this->logger->log($severity, $message, $variables);
+  }
+
+  
 }
