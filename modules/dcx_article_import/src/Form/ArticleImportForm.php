@@ -203,8 +203,11 @@ class ArticleImportForm extends FormBase {
       $node->field_paragraphs->appendItem($body_paragraph);
     }
 
-    $files = $data['files'];
-    $media_ids = $this->dcx_import_service->getEntityIds($files);
+    $media_ids = [];
+    if ($files = $data['files']) {
+      $media_ids = $this->dcx_import_service->getEntityIds($files);
+    }
+
     foreach ($media_ids as $media_id) {
       $media_paragraph = Paragraph::create([
         'type' => 'media',
