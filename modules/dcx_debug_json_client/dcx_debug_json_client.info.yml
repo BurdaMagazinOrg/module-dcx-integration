@@ -6,4 +6,5 @@ package: dcx
 
 dependencies:
   - dcx_integration
+  - devel
 
