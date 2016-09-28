@@ -174,4 +174,9 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
   public function getMigration() {
     return $this->migration;
   }
+
+  public function isReimport($id) {
+    $destids = $this->migration->getIdMap()->lookupDestinationIds(['id' => $id]);
+    return current($destids);
+  }
 }

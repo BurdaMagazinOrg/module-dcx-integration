@@ -2,8 +2,10 @@
 
 namespace Drupal\dcx_migration;
 
+use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
 use Drupal\dcx_migration\DcxMigrateExecutable;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -101,10 +103,15 @@ class DcxImportService implements DcxImportServiceInterface {
       $context['results']['count'] = 0;
       $context['results']['success'] = 0;
       $context['results']['fail'] = [];
+      $context['results']['reimport'] = [];
     }
 
     $context['results']['count']++;
 
+    $re = $executable->isReimport($id);
+    if ($re) {
+      $context['results']['reimport'][$id] = current($re);
+    }
     try {
       $executable->importItemWithUnknownStatus($id);
       $context['results']['success']++;
@@ -128,6 +135,13 @@ class DcxImportService implements DcxImportServiceInterface {
     $t = \Drupal::translation();
     $success = $t->translate('Imported @success of @count items.', ['@success' => $results['success'], '@count' => $results['count']]);
     drupal_set_message($success);
+
+    foreach ($results['reimport'] as $dcxid => $mid) {
+      $url = Url::fromRoute('entity.media.canonical', ['media' => $mid], ['attributes' => ['target' => '_blank']]);
+      $link = Link::fromTextAndUrl('media/' . $mid, $url)->toString();
+      drupal_set_message($t->translate('Item @dcxid was imported before as @link.', ['@dcxid' => $dcxid, '@link' => $link]));
+    }
+
     if (!empty($results['fail'])) {
       $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => join(', ', $results['fail'])]);
       drupal_set_message($fail);
