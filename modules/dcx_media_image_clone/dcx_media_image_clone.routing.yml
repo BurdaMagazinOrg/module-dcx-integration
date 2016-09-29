@@ -1,0 +1,8 @@
+entity.media.clone:
+  path: 'media/{media}/clone'
+  defaults:
+    _form: '\Drupal\dcx_media_image_clone\Form\DcxMediaCloneForm'
+  requirements:
+    _permission: 'create media'
+  options:
+    _admin_route: TRUE

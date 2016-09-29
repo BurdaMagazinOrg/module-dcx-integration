@@ -1,0 +1,5 @@
+name: DC-X media image clone
+type: module
+description: Allow cloning media image entities and keep track of the clones regarding DC-X.
+core: 8.x
+package: dcx

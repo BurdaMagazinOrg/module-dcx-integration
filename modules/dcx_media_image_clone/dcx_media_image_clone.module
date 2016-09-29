@@ -1,0 +1,32 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_form_alter.
+ */
+function dcx_media_image_clone_form_media_image_edit_form_alter(&$form, FormStateInterface $form_state) {
+  // Insert clone button to form
+  $entity = $form_state->getFormObject()->getEntity();
+  $text = \Drupal::translation()->translate('Clone');
+  $form['clone_link'] = Link::createFromRoute($text, 'entity.media.clone', ['media' => $entity->id()])->toRenderable();
+  $form['clone_link']['#attributes'] = ['class' => ['button button']];
+  $form['clone_link']['#weight'] = -10;
+
+  // Suppress or replace output of parent media entitiy reference widget.
+  $parent_media = $entity->field_parent_media->entity;
+
+  if (NULL === $parent_media) {
+    $form['field_parent_media']['#access'] = FALSE;
+  }
+  else {
+    $label = $parent_media->label();
+    $url = Url::fromRoute('entity.media.canonical', ['media' => $parent_media->id()]);
+    $form['field_parent_media']['widget'][0] = [
+      '#markup' => \Drupal::translation()->translate("This is a clone of @link.", ['@link' => Link::fromTextAndUrl($label, $url)->toString()])
+    ];
+  }
+
+}
