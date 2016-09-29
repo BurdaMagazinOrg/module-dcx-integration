@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -28,5 +29,14 @@ function dcx_media_image_clone_form_media_image_edit_form_alter(&$form, FormStat
       '#markup' => \Drupal::translation()->translate("This is a clone of @link.", ['@link' => Link::fromTextAndUrl($label, $url)->toString()])
     ];
   }
+}
 
+/**
+ * Implements hook_ENTITY_TYPE_update.
+ */
+function dcx_media_image_clone_media_update(EntityInterface $entity) {
+  if ('image' === $entity->bundle()
+      && NULL === $entity->field_parent_media->target_id) {
+    \Drupal::service('dcx_media_image_clone.update_clones')->updateClones($entity);
+  }
 }

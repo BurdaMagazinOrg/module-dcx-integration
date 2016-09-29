@@ -1,0 +1,4 @@
+services:
+  dcx_media_image_clone.update_clones:
+    class: '\Drupal\dcx_media_image_clone\UpdateClonedMediaService'
+    arguments: ["@entity_type.manager", "@plugin.manager.migration"]
