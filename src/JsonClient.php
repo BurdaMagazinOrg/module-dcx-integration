@@ -198,7 +198,8 @@ class JsonClient implements ClientInterface {
       'source' => [[$this, 'joinValues'], 'fields', 'Creator'],
       'copyright' => ['fields', 'CopyrightNotice', 0, 'value'],
       'status' => [[$this, 'computeStatus']],
-      'kill_date' => [[$this, 'computeExpire']],
+      // Deliberately disabled. See comment in ::computeExpire
+      //'kill_date' => [[$this, 'computeExpire']],
     ];
 
     $data = $this->processAttributeMap($attribute_map, $json);
@@ -367,6 +368,9 @@ class JsonClient implements ClientInterface {
    *   date string of expired date
    */
   protected function computeExpire($json) {
+    // As it is implemented right now, this returns a DateTime instance
+    // representing the current date if no data is available in $json.
+    // It breaks sites using this.
     $rights_ids = $this->extractData($json, [
       '_rights_effective',
       'rightstype-UsagePermitted',
