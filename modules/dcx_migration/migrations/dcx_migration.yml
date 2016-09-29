@@ -8,6 +8,12 @@ source:
   dcx_service: 'dcx_integration.client'
 destination:
   plugin: 'entity:media'
+  # Important! Theres magic attached to this in module dcx_media_image_clone
+  overwrite_properties:
+    - 'field_dcx_id'
+    - 'field_expires'
+    - 'status'
+    - 'changed'
 process:
   changed: changed
   field_dcx_id: id

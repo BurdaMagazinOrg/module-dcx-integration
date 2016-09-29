@@ -83,12 +83,16 @@ class DcxSource extends SourcePluginBase {
   }
 
   /**
-   * This add the id of the migrated entity to the row, if this is an update.
+   * This adds the id of the migrated entity to the row, if this is an update.
    *
    * We use this in process plugins to prevent some data to be overridden.
    *
    * This only works for a single valued destination id and might break badly
    * otherwise.
+   *
+   * @TODO Possibly obsolete. Field overrides on update are now handled via the
+   * migration configuration, thus the use case for the file URL (see migrate
+   * process plugin FileFromUrl) is given no longer.
    *
    * @param Row $row
    *   The row to prepare.
@@ -98,32 +102,12 @@ class DcxSource extends SourcePluginBase {
    */
   public function prepareRow(Row $row) {
     $exisiting_row = $this->migration->getIdMap()->getRowBySource(['id' => $row->getSourceProperty('id')]);
-
-    if (!$this->originalProcess) {
-      $this->originalProcess = $this->migration->getProcess();
-    }
-
     if ($exisiting_row) {
       $row->isUpdate = TRUE;
       $row->destid1 = $exisiting_row['destid1'];
-
-      // On Update just allow to update to rights fields.
-      $updateFieldWhitlist = [
-        'field_dcx_id',
-        'field_expires',
-        'status',
-        'changed',
-      ];
-
-      $this->migration
-        ->setProcess(array_intersect_key($this->originalProcess, array_combine($updateFieldWhitlist, $updateFieldWhitlist)));
     }
-    else {
-      $this->migration->setProcess($this->originalProcess);
-    }
-
+    // @TODO Should be done by a migrate process plugin.
     $row->setDestinationProperty('changed', time());
-
     return TRUE;
   }
 
