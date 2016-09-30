@@ -69,5 +69,5 @@ function _dcx_track_media_usage_track_media_usage(EntityInterface $entity) {
 
   $queue = $queue_factory->get('dcx_media_usage_worker', TRUE);
 
-  $queue->createItem($entity);
+  $queue->createItem(['entity_id' => $entity->id(), 'entity_type' => $entity->getEntityTypeId()]);
 }

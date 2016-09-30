@@ -7,6 +7,8 @@ namespace Drupal\dcx_track_media_usage\Plugin\QueueWorker;
  * @file
  * A worker that tracks usages on CRON run.
  */
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\dcx_integration\ClientInterface;
@@ -24,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
-  /** 
+  /**
    * The entity discovery service.
    *
    * @var ReferencedEntityDiscoveryServiceInterface
@@ -39,6 +41,14 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
   protected $dcxClient;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+
+  /**
    * Constructs a new LocaleTranslation object.
    *
    * @param array $configuration
@@ -51,12 +61,15 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
    *   The entity discovery service.
    * @param ClientInterface $dcxClient
    *   DCX Client.
+   * @param EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, ReferencedEntityDiscoveryServiceInterface $entityDiscoveryService, ClientInterface $dcxClient) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, ReferencedEntityDiscoveryServiceInterface $entityDiscoveryService, ClientInterface $dcxClient, EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityDiscoveryService = $entityDiscoveryService;
     $this->dcxClient = $dcxClient;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -68,16 +81,18 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
       $plugin_id,
       $plugin_definition,
       $container->get('dcx_track_media_usage.discover_referenced_entities'),
-      $container->get('dcx_integration.client')
+      $container->get('dcx_integration.client'),
+      $container->get('entity_type.manager')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function processItem($entity) {
+  public function processItem($data) {
+    $entity = $this->entityTypeManager->getStorage($data['entity_type'])->load($data['entity_id']);
 
-    $usage = $this->entityDiscoveryService->discover($entity);
+    $usage = $this->entityDiscoveryService->discover($entity, 'return_entities');
 
     $url = $entity->toUrl()->getInternalPath();
 
