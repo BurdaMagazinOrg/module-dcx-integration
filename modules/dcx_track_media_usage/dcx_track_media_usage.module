@@ -17,8 +17,13 @@ function dcx_track_media_usage_media_delete($entity) {
 
   $dcx_id = $entity->field_dcx_id->value;
   try {
-    $urls = Drupal::service('dcx_integration.client')->removeAllUsage($dcx_id);
-
+    // Remove all usage tracking info if this is not a clone
+    if ($entity->field_parent_media && NULL === $entity->field_parent_media->target_id) {
+      $urls = Drupal::service('dcx_integration.client')->removeAllUsage($dcx_id);
+    }
+    else { // It's a clone. Only remove respective pubinfo
+      $pubinfos = Drupal::service('dcx_integration.client')->removeUsageForCertainEntity($dcx_id, $entity->getEntityTypeId(), $entity->id());
+    }
     foreach ($urls as $url) {
       $parts = explode('/', $url);
       $entityId = end($parts);
