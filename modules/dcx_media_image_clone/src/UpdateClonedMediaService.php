@@ -62,6 +62,24 @@ class UpdateClonedMediaService {
   }
 
   /**
+   * Delete clones of the given media:image entity
+   *
+   * @param EntityInterface $media
+   */
+  public function deleteClones(EntityInterface $media) {
+    // Only operate on media:image entities which are not clones themselves.
+    if (!('media' === $media->getEntityTypeId()
+        && 'image' === $media->bundle()
+        && NULL === $media->field_parent_media->target_id)) {
+      return;
+    }
+
+    foreach ($this->getClones($media) as $clone) {
+      $clone->delete();
+    }
+  }
+
+  /**
    * Return all entities which are marked as clone of the given one.
    *
    * @param EntityInterface $media
