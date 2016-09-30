@@ -710,8 +710,8 @@ class JsonClient implements ClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function removeAllUsage($dcx_id) {
-    $pubinfos = getAllUsage($dcx_id);
+  public function removeUsageForCertainEntity($dcx_id, $entity_type, $entity_id) {
+    $pubinfos = $this->getAllUsage($dcx_id, $entity_type, $entity_id);
     $this->removePubinfos($pubinfos);
 
     return array_keys($pubinfos);
@@ -720,7 +720,25 @@ class JsonClient implements ClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAllUsage($dcx_id, $entity_type =  NULL, $entity_id = NULL) {
+  public function removeAllUsage($dcx_id) {
+    $pubinfos = $this->getAllUsage($dcx_id);
+    $this->removePubinfos($pubinfos);
+
+    return array_keys($pubinfos);
+  }
+
+  /**
+   * Retrieve all usage information about the given DC-X ID on the current site.
+   * May be filtered by a certain entity (say media:image) instance.
+   *
+   * @param string $dcx_id
+   *   The DC-X document ID.
+   * @param string $entity_type
+   *   Entity type of the entity representing the dcx_id
+   * @param int $entity_id
+   *   Entity id of the entity representing the dcx_id
+   */
+  protected function getAllUsage($dcx_id, $entity_type =  NULL, $entity_id = NULL) {
     $document = $this->getJson($dcx_id);
     $pubinfos = $document['_referenced']['dcx:pubinfo'];
 

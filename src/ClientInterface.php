@@ -77,8 +77,10 @@ interface ClientInterface {
   public function removeAllUsage($dcx_id);
 
   /**
-   * Retrieve all usage information about the given DC-X ID on the current site.
-   * May be filtered by a certain entity (say media:image) instance.
+   * Removes usage information about the given DC-X ID on the current site, but
+   * only for the given entity.
+   *
+   * The reason for calling this is deleting a cloned media entity.
    *
    * @param string $dcx_id
    *   The DC-X document ID.
@@ -87,5 +89,5 @@ interface ClientInterface {
    * @param int $entity_id
    *   Entity id of the entity representing the dcx_id
    */
-  public function getAllUsage($dcx_id, $entity_type, $entity_id);
+  public function removeUsageForCertainEntity($dcx_id, $entity_type, $entity_id);
 }
