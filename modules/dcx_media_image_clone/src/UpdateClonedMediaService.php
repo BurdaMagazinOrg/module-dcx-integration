@@ -5,7 +5,7 @@ namespace Drupal\dcx_media_image_clone;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
-use Drupal\migrate\Plugin\MigratePluginManager;
+use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 
 class UpdateClonedMediaService {
 
@@ -27,9 +27,9 @@ class UpdateClonedMediaService {
    * Constructor.
    *
    * @param EntityTypeManagerInterface $entityTypeManager
-   * @param MigratePluginManager $migratePluginManager
+   * @param MigrationPluginManagerInterface $migratePluginManager
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, MigratePluginManager $migratePluginManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, MigrationPluginManagerInterface $migratePluginManager) {
     $this->entityTypeManager = $entityTypeManager;
     $this->migration = $migratePluginManager->createInstance('dcx_migration');
   }
