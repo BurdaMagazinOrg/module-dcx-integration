@@ -76,4 +76,16 @@ interface ClientInterface {
    */
   public function removeAllUsage($dcx_id);
 
+  /**
+   * Retrieve all usage information about the given DC-X ID on the current site.
+   * May be filtered by a certain entity (say media:image) instance.
+   *
+   * @param string $dcx_id
+   *   The DC-X document ID.
+   * @param string $entity_type
+   *   Entity type of the entity representing the dcx_id
+   * @param int $entity_id
+   *   Entity id of the entity representing the dcx_id
+   */
+  public function getAllUsage($dcx_id, $entity_type, $entity_id);
 }

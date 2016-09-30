@@ -711,21 +711,37 @@ class JsonClient implements ClientInterface {
    * {@inheritdoc}
    */
   public function removeAllUsage($dcx_id) {
+    $pubinfos = getAllUsage($dcx_id);
+    $this->removePubinfos($pubinfos);
+
+    return array_keys($pubinfos);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllUsage($dcx_id, $entity_type =  NULL, $entity_id = NULL) {
     $document = $this->getJson($dcx_id);
     $pubinfos = $document['_referenced']['dcx:pubinfo'];
 
-    $urls = [];
+    $selected_pubinfos = [];
     foreach ($pubinfos as $key => $pubinfo) {
-      if ("dcxapi:tm_topic/" . $this->publication_id !== $pubinfo['properties']['publication_id']['_id']) {
-        unset($pubinfos[$key]);
-      }
-      else {
-        $urls = $pubinfo['properties']['uri'];
+      if ("dcxapi:tm_topic/" . $this->publication_id === $pubinfo['properties']['publication_id']['_id']) {
+        // If either type or id is not set, find all.
+        if (!$entity_type || !$entity_id) {
+          $selected_pubinfos[$pubinfo['properties']['uri']] = $pubinfo;
+        }
+        // If pubinfo contains type and id both equal to the given one, find it.
+        elseif (isset($pubinfo['info']['entity_type'])
+            && isset($pubinfo['info']['entity_id'])
+            && $pubinfo['info']['entity_type'] == $entity_type
+            && $pubinfo['info']['entity_id'] == $entity_id) {
+          $selected_pubinfos[$pubinfo['properties']['uri']] = $pubinfo;
+        }
       }
     }
-    $this->removePubinfos($pubinfos);
 
-    return $urls;
+    return $selected_pubinfos;
   }
 
   /**
@@ -746,6 +762,4 @@ class JsonClient implements ClientInterface {
 
     $this->logger->log($severity, $message, $variables);
   }
-
-
 }
