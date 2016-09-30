@@ -8,41 +8,52 @@
  * Implement hook_ENTITY_TYPE_update().
  */
 function dcx_unpublish_media_media_update($entity) {
+  // Only care about media images
+  if ('image' !== $entity->bundle()) {
+    return;
+  }
+
+  // Do not care about clones of media:images. Clones have a parent
+  if ($entity->field_parent_media && NULL !== $entity->field_parent_media->target_id) {
+    return;
+  }
 
   $mediaBundleStorage = \Drupal::entityTypeManager()
     ->getStorage('media_bundle');
   $bundle = $mediaBundleStorage->load($entity->bundle());
+  $field = $bundle->get('type_configuration')['source_field'];
 
+  /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $image */
+  $image = $entity->$field->first();
+  $file = file_load($image->target_id);
 
-  if ($bundle->get('type') == 'image') {
-
-    $field = $bundle->get('type_configuration')['source_field'];
-
-    /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $image */
-    $image = $entity->$field->first();
-
-    $file = file_load($image->target_id);
-
-    if (!$entity->status->value && $entity->original->status->value) {
-
-      $imageStyles = \Drupal\image\Entity\ImageStyle::loadMultiple();
-
-      /** @var \Drupal\image\ImageStyleInterface $imageStyle */
-      foreach ($imageStyles as $imageStyle) {
-        $imageStyle->flush($file->getFileUri());
-      }
-      file_move($file, str_replace('public://', 'private://', $file->getFileUri()));
+  if (!$entity->status->value && $entity->original->status->value) {
+    $target_fileuri = str_replace('public://', 'private://', $file->getFileUri());
+    // Remove everything after the last / and itself
+    $target_dir = preg_replace('#' . DIRECTORY_SEPARATOR. '[^' . DIRECTORY_SEPARATOR . ']+$#', '', $target_fileuri);
+    if (!is_dir($target_dir)) {
+      mkdir($target_dir);
     }
-    elseif ($entity->status->value && !$entity->original->status->value) {
-      file_move($file, str_replace('private://', 'public://', $file->getFileUri()));
 
-      /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache */
-      $cache = \Drupal::service('cache_tags.invalidator');
-
-      $setting = \Drupal::config('dcx_unpublish_media.unpublishmediasettings');
-
-      $cache->invalidateTags(['media:' . $setting->get('default_image')]);
+    // Do not care about image styles here. File move takes care of this by
+    // invoking hook image_file_move().
+    file_move($file, $target_fileuri);
+  }
+  elseif ($entity->status->value && !$entity->original->status->value) {
+    $target_fileuri = str_replace('private://', 'public://', $file->getFileUri());
+    // Remove everything after the last / and itself
+    $target_dir = preg_replace('#' . DIRECTORY_SEPARATOR. '[^' . DIRECTORY_SEPARATOR . ']+$#', '', $target_fileuri);
+    if (!is_dir($target_dir)) {
+      mkdir($target_dir);
     }
+    file_move($file, $target_fileuri);
+
+    /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache */
+    $cache = \Drupal::service('cache_tags.invalidator');
+
+    $setting = \Drupal::config('dcx_unpublish_media.unpublishmediasettings');
+
+    $cache->invalidateTags(['media:' . $setting->get('default_image')]);
   }
 }
 
