@@ -413,7 +413,8 @@ class JsonClient implements ClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function trackUsage($usage_list, $path, $published, $type) {
+  public function trackUsage($used_entities, $path, $published, $type) {
+
     $dcx_status = $published ? 'pubstatus-published' : 'pubstatus-unpublished';
 
     $dateTime = new \DateTime();
@@ -427,12 +428,12 @@ class JsonClient implements ClientInterface {
     foreach ($known_publications as $dcx_id => $pubinfos) {
       // If a DC-X ID with a know usage on this $path is not in the usage list
       // anymore.
-      if (!in_array($dcx_id, $usage_list)) {
+      if (!in_array($dcx_id, array_keys($used_entities))) {
         $this->removePubinfos($pubinfos);
       }
     }
 
-    foreach ($usage_list as $id) {
+    foreach ($used_entities as $id => $entity) {
       $data = [
         "_type" => "dcx:pubinfo",
         'info' => [
@@ -440,6 +441,8 @@ class JsonClient implements ClientInterface {
           // we need to make sure that the id is actually encoded in the data,
           // because it's supposed to be called by a http_client.
           'callback_url' => '/dcx-notification?id=' . urlencode($id),
+          'entity_id' => $entity->id(),
+          'entity_type' => $entity->getEntityTypeId(),
         ],
         "properties" => [
           "doc_id" => [
@@ -499,7 +502,6 @@ class JsonClient implements ClientInterface {
         }
       }
     }
-
   }
 
   /**

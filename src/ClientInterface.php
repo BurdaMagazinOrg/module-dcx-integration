@@ -17,8 +17,8 @@ interface ClientInterface {
    * The given URL is expanded to the appropriate public absolute URL
    * on DC-X side.
    *
-   * @param array $dcx_ids
-   *   List of DC-X document IDs.
+   * @param array $used_entities
+   *   List entities keyed by their DC-X document ids.
    * @param string $url
    *   Relative canonical URL where the documents are used.
    * @param bool $published
@@ -29,7 +29,7 @@ interface ClientInterface {
    * @throws \Exception
    *   If something is going wrong.
    */
-  public function trackUsage($dcx_ids, $url, $published, $type);
+  public function trackUsage($used_entities, $url, $published, $type);
 
   /**
    * Archive an article.
