@@ -82,12 +82,12 @@ class UpdateClonedMediaService {
   /**
    * Return all entities which are marked as clone of the given one.
    *
-   * @param EntityInterface $media
+   * @param \Drupal\Core\Entity\EntityInterface $media
    *
    * @return \Drupal\Core\Entity\EntityInterface[]
    *   An array of entity objects indexed by their ids.
    */
-  protected function getClones(EntityInterface $media) {
+  public function getClones(EntityInterface $media) {
     return $this->entityTypeManager->getStorage($media->getEntityTypeId())
       ->loadByProperties(['field_parent_media' => $media->id()]);
   }

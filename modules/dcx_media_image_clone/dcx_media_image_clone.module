@@ -50,3 +50,28 @@ function dcx_media_image_clone_media_delete(EntityInterface $entity) {
     \Drupal::service('dcx_media_image_clone.update_clones')->deleteClones($entity);
   }
 }
+
+/**
+ * Implements hook_form_alter.
+ */
+function dcx_media_image_clone_form_media_image_delete_form_alter(&$form, FormStateInterface $form_state) {
+  if (NULL === $entity->field_parent_media->target_id) {
+    $entity = $form_state->getFormObject()->getEntity();
+    $clones = \Drupal::service('dcx_media_image_clone.update_clones')->getClones($entity);
+    if (!empty($clones)) {
+      $form['clones_notice'] = [
+        '#markup' => \Drupal::translation()->translate('If you delete this entity, all clones of it will be deleted as well.'),
+        '#weight' => -2,
+      ];
+      $items = array_map(function($e) {
+        return Link::createFromRoute($e->label(), 'entity.media.canonical', ['media' => $e->id()])->toRenderable();
+      }, $clones);
+      $form['clones'] = [
+        '#theme' => 'item_list',
+        '#title' => \Drupal::translation()->translate('Clones of this entity'),
+        '#items' => $items,
+        '#weight' => -1,
+      ];
+    }
+  }
+}
