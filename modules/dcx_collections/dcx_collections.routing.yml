@@ -1,0 +1,7 @@
+dcx_collections.preview:
+  path: 'dcx/preview/{id}'
+  defaults:
+    _controller: '\Drupal\dcx_collections\Controller\ImagePreview::preview'
+    _title: 'Preview'
+  requirements:
+    _permission: 'import from dcx'

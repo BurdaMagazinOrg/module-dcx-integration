@@ -1,0 +1,20 @@
+<?php
+
+function dcx_collections_form_entity_browser_image_browser_form_alter(&$form, $form_state, $id) {
+  $form['#attached']['library'][] = 'dcx_collections/dcx_collections';
+  $form['widget']['collections'] = [
+    '#weight' => -1,
+    '#type' => 'container',
+  ];
+  $collections = \Drupal::service('dcx_integration.client')->getCollections();
+  foreach ($collections as $key => $collection) {
+    $form['widget']['collections'][$key] = [
+      '#theme' => 'item_list',
+      '#title' => $collection['name'],
+      '#items' => array_map(function($d) {
+        return ['#markup' => "<span class='dcx-preview' data-id='$d'>$d</span>"];
+      }, $collection['documents']),
+
+    ];
+  }
+}
