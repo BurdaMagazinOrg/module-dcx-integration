@@ -1,4 +1,0 @@
-dcx_collections:
-  version: 0
-  js:
-    js/dcx-collections.js: {}

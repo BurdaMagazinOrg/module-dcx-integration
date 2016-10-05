@@ -90,23 +90,4 @@ interface ClientInterface {
    *   Entity id of the entity representing the dcx_id
    */
   public function removeUsageForCertainEntity($dcx_id, $entity_type, $entity_id);
-
-  /**
-   * Retrieve collections of the current user
-   *
-   * @return array of arrays keyed by collection id.
-   */
-  public function getCollections();
-
-  /**
-   * Return filename and url of a thumbnail for the given (image) document.
-   *
-   * @param string $id
-   *
-   * @return data array containg filename, url and id.
-   *
-   * @throws DcxClientException
-   */
-  public function getPreview($id);
-
 }
