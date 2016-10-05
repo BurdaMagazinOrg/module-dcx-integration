@@ -111,7 +111,7 @@ class UploadController extends ControllerBase {
    *
    * @return JsonResponse
    */
-  public function batchFinish() {
+  public static function batchFinish() {
     $messages = drupal_render(\Drupal\Core\Render\Element\StatusMessages::renderMessages(NULL));
     return new JsonResponse(['markup' => $messages]);
   }
@@ -122,7 +122,7 @@ class UploadController extends ControllerBase {
    * In this case we do not return a redirect response (as it is the default)
    * behaviour, but the id of the batch to be able to process it by AJAX.
    */
-  public function batchRedirectCallback($url, $query_options) {
+  public static function batchRedirectCallback($url, $query_options) {
     return $query_options['query']['id'];
   }
 }
