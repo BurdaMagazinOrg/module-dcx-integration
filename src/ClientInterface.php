@@ -77,6 +77,24 @@ interface ClientInterface {
   public function removeAllUsage($dcx_id);
 
   /**
+   * Retrieve collections of the current user
+   *
+   * @return array of arrays keyed by collection id.
+   */
+  public function getCollections();
+
+  /**
+   * Return filename and url of a thumbnail for the given (image) document.
+   *
+   * @param string $id
+   *
+   * @return data array containg filename, url and id.
+   *
+   * @throws DcxClientException
+   */
+  public function getPreview($id);
+
+  /**
    * Removes usage information about the given DC-X ID on the current site, but
    * only for the given entity.
    *
