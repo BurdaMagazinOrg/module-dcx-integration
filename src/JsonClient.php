@@ -790,8 +790,16 @@ class JsonClient implements ClientInterface {
    */
   public function getCollections() {
     $params = [
-      'q[_mode]' => 'my_usertags',
-      'q[type_id]' => 'usertagtype-default',
+      'q' => [
+        '_mode' => 'my_usertags',
+        'type_id' => 'usertagtype-default',
+        'parent_id#NULL' => '',
+        '_sort' => 'UTAG_VALUE'
+      ],
+      's' => [
+        'properties' => '_label',
+        'children' => '*',
+      ]
     ];
 
     $this->api_client->getObject('usertag', $params, $usertags);
