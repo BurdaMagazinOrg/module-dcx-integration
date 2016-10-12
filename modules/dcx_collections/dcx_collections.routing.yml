@@ -1,7 +1,15 @@
-dcx_collections.preview:
-  path: 'dcx/preview/{id}'
+dcx_collections.imagePreview:
+  path: 'dcx/collection/preview-image/{id}'
   defaults:
-    _controller: '\Drupal\dcx_collections\Controller\ImagePreview::preview'
+    _controller: '\Drupal\dcx_collections\Controller\Collection::imagePreview'
     _title: 'Preview'
+  requirements:
+    _permission: 'import from dcx'
+
+dcx_collections.docsOfCollection:
+  path: 'dcx/collection/{id}'
+  defaults:
+    _controller: '\Drupal\dcx_collections\Controller\Collection::docsOfCollection'
+    _title: 'Doc of collection'
   requirements:
     _permission: 'import from dcx'

@@ -5,26 +5,34 @@ function dcx_collections_form_entity_browser_image_browser_form_alter(&$form, $f
   $form['widget']['collections'] = [
     '#weight' => -1,
     '#type' => 'details',
-    '#collapsible' => TRUE,
+    '#open' => true,
     '#title' => Drupal::translation()->translate('Collections'),
   ];
   $collections = \Drupal::service('dcx_integration.client')->getCollections();
-  foreach ($collections as $key => $collection) {
-    if (empty($collection['documents'])) {
-      continue;
-    }
-    $form['widget']['collections'][$key] = [
-      '#type' => 'details',
-      '#collapsible' => TRUE,
-      '#title' => $collection['name'],
-    ];
 
-    $form['widget']['collections'][$key]['list'] = [
-      '#theme' => 'item_list',
-      '#items' => array_map(function($d) {
-        return ['#markup' => "<span class='dcx-preview' data-id='$d'>$d</span>"];
-      }, $collection['documents']),
-
-    ];
+  $toplevel = array_filter($collections, function ($c) {return $c['parent'] == NULL; });
+  foreach ($toplevel as $collection) {
+    _dcx_collections_build_detail($collection, $form['widget']['collections'], $collections);
   }
+}
+
+function _dcx_collections_build_detail($collection, &$detail, $collections) {
+  $this_detail = [
+    '#type' => 'details',
+    '#open' => false,
+    '#title' => $collection['label'],
+    '#attributes' => [
+      'class' => ['dcx-collection'],
+      'data-id' => $collection['id']
+    ],
+  ];
+
+  foreach ($collection['children'] as $id) {
+    _dcx_collections_build_detail($collections[$id], $this_detail, $collections);
+  }
+
+  // Inject placeholder for image previed loaded by AJAX.
+  $this_detail['images']['#markup'] = '<span id="dcx-preview-' . $collection['id'] . '"></span>';
+
+  $detail[$collection['id']] = $this_detail;
 }

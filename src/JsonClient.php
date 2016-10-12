@@ -799,7 +799,7 @@ class JsonClient implements ClientInterface {
       's' => [
         'properties' => '_label',
         'children' => '*',
-      ]
+      ],
     ];
 
     $this->api_client->getObject('usertag', $params, $usertags);
@@ -807,28 +807,47 @@ class JsonClient implements ClientInterface {
     $collections = [];
     foreach($usertags['entries'] as $usertag) {
       $utag_id = preg_replace('#dcxapi:usertag/#', '', $usertag['_id']);
-
-      $doctoutag_params = [
-        'q[utag_id]' => $utag_id,
-        's[properties]' => '*',
-        's[_referenced][dcx:document][s][files]' => '*',
+      $collections[$usertag['_id']] = [
+        'label' => $usertag['properties']['_label'],
+        'id' => $utag_id,
+        'parent' => NULL,
       ];
 
-      $this->api_client->getObject('doctoutag', $doctoutag_params, $docs);
-
-      $documents = [];
-      foreach($docs['entries'] as $doc) {
-        $documents[] = $doc['properties']['doc_id']['_id'];
+      if (isset($usertag['children'])) {
+        $collections[$usertag['_id']]['children'] = array_map(function($c) { return $c['_id']; }, $usertag['children']);
       }
+      else {
+        $collections[$usertag['_id']]['children'] = [];
+      }
+    }
 
-      $collections[$utag_id] = [
-        'name' => $usertag['properties']['_label'],
-        'documents' => $documents,
-      ];
+    foreach ($collections as $collection) {
+      foreach($collection['children'] as $child_id) {
+        $collections[$child_id]['parent'] = $child_id;
+      }
     }
 
     return $collections;
   }
+
+  public function getDocsOfCollection($utag_id) {
+    $doctoutag_params = [
+      'q[utag_id]' => $utag_id,
+      's[properties]' => '*',
+      's[_referenced][dcx:document][s][files]' => '*',
+    ];
+
+    $this->api_client->getObject('doctoutag', $doctoutag_params, $docs);
+
+    $documents = [];
+
+    foreach($docs['entries'] as $doc) {
+      $documents[] = $doc['properties']['doc_id']['_id'];
+    }
+
+    return $documents;
+  }
+
 
   /**
    * {@inheritdoc}
