@@ -793,7 +793,7 @@ class JsonClient implements ClientInterface {
       'q' => [
         '_mode' => 'my_usertags',
         'type_id' => 'usertagtype-default',
-        'parent_id#NULL' => '',
+        'parent_id' => NULL,
         '_sort' => 'UTAG_VALUE'
       ],
       's' => [

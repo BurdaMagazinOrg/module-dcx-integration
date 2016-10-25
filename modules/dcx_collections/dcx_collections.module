@@ -1,18 +1,21 @@
 <?php
 
-function dcx_collections_form_entity_browser_image_browser_form_alter(&$form, $form_state, $id) {
-  $form['#attached']['library'][] = 'dcx_collections/dcx_collections';
-  $form['widget']['collections'] = [
-    '#weight' => -1,
-    '#type' => 'details',
-    '#open' => true,
-    '#title' => Drupal::translation()->translate('Collections'),
-  ];
-  $collections = \Drupal::service('dcx_integration.client')->getCollections();
+function dcx_collections_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 
-  $toplevel = array_filter($collections, function ($c) {return $c['parent'] == NULL; });
-  foreach ($toplevel as $collection) {
-    _dcx_collections_build_detail($collection, $form['widget']['collections'], $collections);
+  if (!empty($form['widget']['dcx_dropzone_widget'])) {
+    $form['#attached']['library'][] = 'dcx_collections/dcx_collections';
+    $form['widget']['collections'] = [
+      '#weight' => -1,
+      '#type' => 'details',
+      '#open' => true,
+      '#title' => Drupal::translation()->translate('Collections'),
+    ];
+    $collections = \Drupal::service('dcx_integration.client')->getCollections();
+
+    $toplevel = array_filter($collections, function ($c) {return $c['parent'] == NULL; });
+    foreach ($toplevel as $collection) {
+      _dcx_collections_build_detail($collection, $form['widget']['collections'], $collections);
+    }
   }
 }
 
