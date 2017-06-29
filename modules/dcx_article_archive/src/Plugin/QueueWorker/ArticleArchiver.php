@@ -59,7 +59,24 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
   protected $renderer;
 
   /**
+   * ArticleArchiver constructor.
    *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\dcx_track_media_usage\ReferencedEntityDiscoveryServiceInterface $discovery
+   *   Entity type discovery service.
+   * @param \Drupal\dcx_integration\ClientInterface $client
+   *   The dcx client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, ReferencedEntityDiscoveryServiceInterface $discovery, ClientInterface $client, LoggerChannelFactoryInterface $logger_factory, RendererInterface $renderer) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -101,7 +118,10 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
   }
 
   /**
+   * Archives a node.
    *
+   * @param \Drupal\Core\Entity\EntityInterface $node
+   *   Node to archive.
    */
   protected function archive(EntityInterface $node) {
     $data = [];

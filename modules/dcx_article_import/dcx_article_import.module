@@ -2,12 +2,13 @@
 
 /**
  * @file
+ * Contains dcx_article_import.module.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Implement hook_menu_local_tasks_alter.
+ * Implements hook_menu_local_tasks_alter().
  *
  * Add local tasks to dcx_article_import.form and node.add with parameter
  * 'article'. Adding local tasks to a route only for a specific parameter is

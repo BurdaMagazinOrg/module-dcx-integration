@@ -2,14 +2,10 @@
 
 /**
  * @file
+ * Contains dcx_article_archive.module.
  */
 
 use Drupal\Core\Form\FormStateInterface;
-
-/**
- * @file
- * Contains dcx_article_archive.module.
- */
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -64,9 +60,11 @@ function dcx_article_archive_form_node_article_form_alter(&$form, FormStateInter
  * Append additional submission handler to the given form.
  *
  * @param array $form
+ *   Array form.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
  */
-function _dcx_article_archive_form_alter(&$form, FormStateInterface $form_state) {
+function _dcx_article_archive_form_alter(array &$form, FormStateInterface $form_state) {
   // Nobody should be able to access field_dcx_id. It's handle exclusively
   // by the custom submission handler. Nevertheless it might be interesting
   // to know the ID.

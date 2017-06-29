@@ -26,14 +26,14 @@ class ArticleImportForm extends FormBase {
    *
    * @var \Drupal\dcx_integration\ClientInterface
    */
-  protected $dcx_integration_client;
+  protected $dcxIntegrationClient;
 
   /**
    * DC-X Import service.
    *
    * @var \Drupal\dcx_migration\DcxImportServiceInterface
    */
-  protected $dcx_import_service;
+  protected $dcxImportService;
 
   /**
    * Temporary storage.
@@ -47,20 +47,29 @@ class ArticleImportForm extends FormBase {
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
-  protected $user_account;
+  protected $userAccount;
 
   /**
+   * ArticleImportForm constructor.
    *
+   * @param \Drupal\dcx_integration\ClientInterface $dcx_integration_client
+   *   The dcx client service.
+   * @param \Drupal\dcx_migration\DcxImportServiceInterface $dcx_import_service
+   *   The import service.
+   * @param \Drupal\user\PrivateTempStoreFactory $temp_store_factory
+   *   The temp store factory.
+   * @param \Drupal\Core\Session\AccountProxyInterface $user_account
+   *   The current user.
    */
   public function __construct(ClientInterface $dcx_integration_client, DcxImportServiceInterface $dcx_import_service, PrivateTempStoreFactory $temp_store_factory, AccountProxyInterface $user_account) {
-    $this->dcx_integration_client = $dcx_integration_client;
-    $this->dcx_import_service = $dcx_import_service;
+    $this->dcxIntegrationClient = $dcx_integration_client;
+    $this->dcxImportService = $dcx_import_service;
     $this->store = $temp_store_factory->get(__CLASS__);
-    $this->user_account = $user_account;
+    $this->userAccount = $user_account;
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -140,7 +149,7 @@ class ArticleImportForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
@@ -160,7 +169,7 @@ class ArticleImportForm extends FormBase {
     $dcx_id = $form_state->getValue('dcx_id');
 
     try {
-      $asset = $this->dcx_integration_client->getObject('dcxapi:' . $dcx_id);
+      $asset = $this->dcxIntegrationClient->getObject('dcxapi:' . $dcx_id);
       $this->store->set('asset', $asset);
     }
     catch (MandatoryAttributeException $e) {
@@ -175,22 +184,32 @@ class ArticleImportForm extends FormBase {
     }
 
     if ($files = $asset->data()['files']) {
-      $this->dcx_import_service->import($files);
+      $this->dcxImportService->import($files);
     }
   }
 
   /**
+   * Clear the temp store.
    *
+   * @param array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
   public function clearTempStore(array &$form, FormStateInterface $form_state) {
     $this->store->set('asset', NULL);
   }
 
   /**
+   * Save article.
    *
+   * @param array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
   public function saveArticle(array &$form, FormStateInterface $form_state) {
-    $uid = $this->user_account->id();
+    $uid = $this->userAccount->id();
     $data = $this->store->get('asset')->data();
 
     $title = $data['title'];
@@ -218,7 +237,7 @@ class ArticleImportForm extends FormBase {
 
     $media_ids = [];
     if ($files = $data['files']) {
-      $media_ids = $this->dcx_import_service->getEntityIds($files);
+      $media_ids = $this->dcxImportService->getEntityIds($files);
     }
 
     foreach ($media_ids as $media_id) {
