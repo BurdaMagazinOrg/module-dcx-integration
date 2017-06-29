@@ -51,12 +51,12 @@
           dropzone.parent().removeClass('is-uploading');
           dropzone.trigger('dcxDropzone:success');
         }).success(function (data, success, response) {
-            drupalSettings['batch'] = data['settings'];
-            var html = dropzone.html();
-            dropzone.filter(':not(.orig-processed)').addClass('orig-processed').each(function() {
-              dropzone.data('content', html);
-            });
-            dropzone.html(data['markup']);
+          drupalSettings['batch'] = data['settings'];
+          var html = dropzone.html();
+          dropzone.filter(':not(.orig-processed)').addClass('orig-processed').each(function () {
+            dropzone.data('content', html);
+          });
+          dropzone.html(data['markup']);
         });
       });
 

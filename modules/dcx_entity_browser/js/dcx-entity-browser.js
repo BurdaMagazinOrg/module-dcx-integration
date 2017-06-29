@@ -31,12 +31,12 @@
 
         dropArea.removeClass('is-dragover-widget');
         if (!timer) {
-          timer = setInterval(updateView,1500);
+          timer = setInterval(updateView, 1500);
         }
       });
 
-      function updateView () {
-        dropzoneWidget.find('div.view-filters input[type=submit]').click()
+      function updateView() {
+        dropzoneWidget.find('div.view-filters input[type=submit]').click();
       }
     }
   };

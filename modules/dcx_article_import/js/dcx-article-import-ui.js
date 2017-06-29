@@ -26,7 +26,7 @@
         event.preventDefault();
 
         var uris = decodeURIComponent(event.originalEvent.dataTransfer.getData('text/plain')).split('\n');
-        if (uris.length != 1) {
+        if (uris.length !== 1) {
           dropzone.css('backgroundColor', '#FFC0CB');
           message.html(Drupal.t('Please provide exactly one link!'));
           return;

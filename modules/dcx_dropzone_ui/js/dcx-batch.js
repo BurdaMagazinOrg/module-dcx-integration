@@ -23,7 +23,7 @@
         if (progress === '100') {
           pb.stopMonitoring();
           $.ajax({
-            url: batch.uri + '&op=finished',
+            url: batch.uri + '&op=finished'
           }).success(function (data, success, response) {
             $progress.html(data['markup'] + $progress.parent().data('content'));
             $('.view-filters input[type=submit]').click();
