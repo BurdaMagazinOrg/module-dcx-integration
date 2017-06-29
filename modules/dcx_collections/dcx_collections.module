@@ -1,32 +1,54 @@
 <?php
 
-function dcx_collections_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+/**
+ * @file
+ * Contains dcx_collections.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function dcx_collections_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   if (!empty($form['widget']['dcx_dropzone_widget'])) {
     $form['#attached']['library'][] = 'dcx_collections/dcx_collections';
     $form['widget']['collections'] = [
       '#weight' => -1,
       '#type' => 'details',
-      '#open' => true,
+      '#open' => TRUE,
       '#title' => Drupal::translation()->translate('Collections'),
     ];
     $collections = \Drupal::service('dcx_integration.client')->getCollections();
 
-    $toplevel = array_filter($collections, function ($c) {return $c['parent'] == NULL; });
+    $toplevel = array_filter($collections, function ($c) {
+      return $c['parent'] == NULL;
+    });
     foreach ($toplevel as $collection) {
       _dcx_collections_build_detail($collection, $form['widget']['collections'], $collections);
     }
   }
 }
 
-function _dcx_collections_build_detail($collection, &$detail, $collections) {
+/**
+ * Build collections form.
+ *
+ * @param array $collection
+ *   Current collection.
+ * @param array $detail
+ *   The parent widget.
+ * @param array $collections
+ *   All collections.
+ */
+function _dcx_collections_build_detail(array $collection, array &$detail, array $collections) {
   $this_detail = [
     '#type' => 'details',
-    '#open' => false,
+    '#open' => FALSE,
     '#title' => $collection['label'],
     '#attributes' => [
       'class' => ['dcx-collection'],
-      'data-id' => $collection['id']
+      'data-id' => $collection['id'],
     ],
   ];
 

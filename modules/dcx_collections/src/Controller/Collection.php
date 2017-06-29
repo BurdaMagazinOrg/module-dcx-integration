@@ -8,21 +8,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
+ * Class Collection.
  *
+ * @package Drupal\dcx_collections\Controller
  */
 class Collection extends ControllerBase {
 
   protected $dcxClient;
 
   /**
+   * Collection constructor.
    *
+   * @param \Drupal\dcx_integration\ClientInterface $dcxClient
+   *   The dcx client service.
    */
   public function __construct(ClientInterface $dcxClient) {
     $this->dcxClient = $dcxClient;
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -31,7 +36,13 @@ class Collection extends ControllerBase {
   }
 
   /**
+   * Returns all docs of a collection.
    *
+   * @param int $id
+   *   Collection id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response of docs.
    */
   public function docsOfCollection($id) {
     $doc_ids = $this->dcxClient->getDocsOfCollection($id);
@@ -43,7 +54,13 @@ class Collection extends ControllerBase {
   }
 
   /**
+   * Returns an image of a document.
    *
+   * @param int $id
+   *   Document id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json repsonse of preview image.
    */
   public function imagePreview($id) {
     $json = $this->dcxClient->getPreview("dcxapi:document/$id");
