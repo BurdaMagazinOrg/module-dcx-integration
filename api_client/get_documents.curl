@@ -1,4 +1,0 @@
-header = "Accept: application/json; charset=UTF-8"
-user = "testuser:dc"
-globoff
-url = "http://localhost/dcx/api/document?q[pool_id]=native&q[_limit]=2&s[properties]=*"

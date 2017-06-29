@@ -2,6 +2,7 @@
 
 namespace Drupal\dcx_integration;
 
+use Digicol\DcxSdk\DcxApiClient;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -27,9 +28,7 @@ class JsonClient implements ClientInterface {
   /**
    * Instance of the low level PHP JSON API Client provided by digicol.
    *
-   * See file api_client/dcx_api_client.class.php.
-   *
-   * @var \DCX_Api_Client
+   * @var \Digicol\DcxSdk\DcxApiClient
    */
   protected $api_client;
 
@@ -85,8 +84,11 @@ class JsonClient implements ClientInterface {
         'http_useragent' => "DC-X Integration for Drupal (dcx_integration) running on $base_url <$site_mail>",
       ];
 
-      require drupal_get_path('module', 'dcx_integration') . '/api_client/dcx_api_client.class.php';
-      $this->api_client = new \DCX_Api_Client($url, $username, $password, $options);
+      $credentials = [
+        'username' => $username,
+        'password' => $password,
+      ];
+      $this->api_client = new DcxApiClient($url, $credentials, $options);
     }
     else {
       $this->api_client = $override_client_class;

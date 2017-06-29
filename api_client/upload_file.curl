@@ -1,6 +1,0 @@
-header = "Accept: application/json; charset=UTF-8"
-form = "file[input]=@/opt/dcx/static_www/images/dcx-logo.jpg"
-form = "job_metadata[form_data][addtags][Title][][value]=Hello world & thanks for all the fish :-)"
-user = "testuser:dc"
-globoff
-url = "http://localhost/dcx/api/_upload/native_hotfolder"

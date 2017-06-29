@@ -1,6 +1,0 @@
-header = "Accept: application/json; charset=UTF-8"
-header = "Content-Type: application/json; charset=UTF-8"
-upload-file = "/opt/dcx/modules/api_client/update_document.json"
-user = "testuser:dc"
-globoff
-url = "http://localhost/dcx/api/document/doc_api_client_test_01?s[properties]=*&s[fields]=*"

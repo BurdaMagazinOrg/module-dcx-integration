@@ -1,5 +1,0 @@
-header = "Accept: application/json; charset=UTF-8"
-request = DELETE
-user = "testuser:dc"
-globoff
-url = "http://localhost/dcx/api/document/doc_api_client_test_01"
