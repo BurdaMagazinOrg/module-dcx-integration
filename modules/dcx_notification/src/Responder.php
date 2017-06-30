@@ -158,6 +158,11 @@ class Responder extends ControllerBase {
 
       if (0 == count($result)) {
         $this->importService->import([$id]);
+
+        $batch =& batch_get();
+        $batch['progressive'] = FALSE;
+        batch_process();
+
         return new Response('OK', 200);
       }
       else {
@@ -204,6 +209,10 @@ class Responder extends ControllerBase {
     // @TODO ->import() is handling Exceptions. How are we going to handle an
     // error here?
     $this->importService->import([$id]);
+
+    $batch =& batch_get();
+    $batch['progressive'] = FALSE;
+    batch_process();
 
     return new Response('OK', 200);
   }
