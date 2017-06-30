@@ -10,7 +10,22 @@ namespace Drupal\dcx_integration;
 interface ClientInterface {
 
   /**
+   * Retrieve a DC-X object with the given id.
    *
+   * Emits an HTTP request to the DC-X server and evaluates the response.
+   * Depending on the document "Type" (an attribute stored within the fields,
+   * not to be confused with the attribute "type") it returns subclasses of
+   * BaseAsset which encapsulate a flat array representation of the data
+   * retrieved.
+   *
+   * @param string $id
+   *   A dcx object identifier. Something like "dcxapi:document/xyz".
+   *
+   * @return \Drupal\dcx_integration\Asset\BaseAsset
+   *   An instance of BaseAsset depending on the retrieved data.
+   *
+   * @throws \Exception
+   *   Throws exceptions if anything fails.
    */
   public function getObject($id);
 
@@ -22,7 +37,7 @@ interface ClientInterface {
    *
    * @param array $used_entities
    *   List entities keyed by their DC-X document ids.
-   * @param string $url
+   * @param string $path
    *   Relative canonical URL where the documents are used.
    * @param bool $published
    *   Status of the given URL.
@@ -32,7 +47,7 @@ interface ClientInterface {
    * @throws \Exception
    *   If something is going wrong.
    */
-  public function trackUsage($used_entities, $url, $published, $type);
+  public function trackUsage(array $used_entities, $path, $published, $type);
 
   /**
    * Archive an article.
@@ -50,7 +65,7 @@ interface ClientInterface {
    * @throws \Exception
    *   If something is going wrong.
    */
-  public function archiveArticle($url, $data, $dcx_id);
+  public function archiveArticle($url, array $data, $dcx_id);
 
   /**
    * Return all DC-X documents which have a pubinfo referencing the given path.
@@ -82,7 +97,8 @@ interface ClientInterface {
   /**
    * Retrieve collections of the current user.
    *
-   * @return array of arrays keyed by collection id.
+   * @return array
+   *   Of arrays keyed by collection id.
    */
   public function getCollections();
 
@@ -90,16 +106,19 @@ interface ClientInterface {
    * Return filename and url of a thumbnail for the given (image) document.
    *
    * @param string $id
+   *   DC-X document ID.
    *
-   * @return data array containg filename, url and id.
+   * @return array
+   *   Data containg filename, url and id.
    *
-   * @throws DcxClientException
+   * @throws \Drupal\dcx_integration\Exception\DcxClientException
    */
   public function getPreview($id);
 
   /**
-   * Removes usage information about the given DC-X ID on the current site, but
-   * only for the given entity.
+   * Removes usage information about the given DC-X ID on the current site.
+   *
+   * But only for the given entity.
    *
    * The reason for calling this is deleting a cloned media entity.
    *

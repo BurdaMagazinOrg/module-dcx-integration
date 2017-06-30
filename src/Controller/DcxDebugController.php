@@ -18,13 +18,13 @@ class DcxDebugController extends ControllerBase {
    *
    * @var \Drupal\dcx_integration\ClientInterface
    */
-  protected $dcx_integration_client;
+  protected $dcxIntegrationClient;
 
   /**
    * {@inheritdoc}
    */
   public function __construct(ClientInterface $dcx_integration_client) {
-    $this->dcx_integration_client = $dcx_integration_client;
+    $this->dcxIntegrationClient = $dcx_integration_client;
   }
 
   /**
@@ -43,10 +43,10 @@ class DcxDebugController extends ControllerBase {
     $dcxid = "dcxapi:" . $type . '/' . $id;
 
     try {
-      if (method_exists($this->dcx_integration_client, 'getJson')) {
-        $json = $this->dcx_integration_client->getJson($dcxid);
+      if (method_exists($this->dcxIntegrationClient, 'getJson')) {
+        $json = $this->dcxIntegrationClient->getJson($dcxid);
       }
-      $data = $this->dcx_integration_client->getObject($dcxid);
+      $data = $this->dcxIntegrationClient->getObject($dcxid);
     }
     catch (\Exception $e) {
       dpm($e->getMessage(), "Meh :(");
@@ -76,7 +76,7 @@ class DcxDebugController extends ControllerBase {
     $dcx_id = NULL;
 
     try {
-      $dcx_id = $this->dcx_integration_client->archiveArticle($url, $title, $text, $dcx_id);
+      $dcx_id = $this->dcxIntegrationClient->archiveArticle($url, $title, $text, $dcx_id);
     }
     catch (\Exception $e) {
       dpm($e);

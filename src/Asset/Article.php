@@ -8,13 +8,13 @@ namespace Drupal\dcx_integration\Asset;
  * @package Drupal\dcx_integration\Asset
  */
 class Article extends BaseAsset {
-  static $mandatory_attributes = [
+  protected static $mandatoryAttributes = [
     'id',
     'title',
     'body',
   ];
 
-  static $optional_attributes = [
+  protected static $optionalAttributes = [
     'files',
   ];
 
@@ -24,8 +24,8 @@ class Article extends BaseAsset {
    * @param array $data
    *   Data representing this asset.
    */
-  public function __construct($data) {
-    parent::__construct($data, self::$mandatory_attributes, self::$optional_attributes);
+  public function __construct(array $data) {
+    parent::__construct($data, self::$mandatoryAttributes, self::$optionalAttributes);
   }
 
 }

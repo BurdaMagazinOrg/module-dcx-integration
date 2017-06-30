@@ -8,7 +8,7 @@ namespace Drupal\dcx_integration\Exception;
 class DcxClientException extends \Exception {
 
   /**
-   *
+   * Constructs DcxClientException.
    */
   public function __construct($method, $code, $url, $params = [], $json = [], $message = '') {
     $message = sprintf('Error performing %s on url "%s". Status code was %s. Params: %s. JSON: %s. %s', $method, $url, $code, json_encode($params), json_encode($json), $message);

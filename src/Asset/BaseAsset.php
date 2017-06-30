@@ -21,14 +21,16 @@ abstract class BaseAsset {
    * @param array $data
    *   The data representing the asset.
    * @param array $mandatory_attributes
+   *   List of mandatory attributes for this asset.
    * @param array $optional_attributes
+   *   List of optional attributes for this asset.
    *
    * @throws \Drupal\dcx_integration\Exception\MandatoryAttributeException
-   *   if mandatory attributes are missing.
+   *   If mandatory attributes are missing.
    * @throws \Drupal\dcx_integration\Exception\IllegalAttributeException
-   *   if unknown attributes are present.
+   *   If unknown attributes are present.
    */
-  public function __construct($data, $mandatory_attributes, $optional_attributes = []) {
+  public function __construct(array $data, array $mandatory_attributes, array $optional_attributes = []) {
     foreach ($mandatory_attributes as $attribute) {
       if (!isset($data[$attribute]) || empty($data[$attribute])) {
         $e = new MandatoryAttributeException($attribute);
@@ -47,7 +49,10 @@ abstract class BaseAsset {
   }
 
   /**
+   * The data representing the asset.
    *
+   * @return array
+   *   Return the data.
    */
   public function data() {
     return $this->data;
