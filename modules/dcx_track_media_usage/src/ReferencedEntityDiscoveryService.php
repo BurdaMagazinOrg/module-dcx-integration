@@ -4,7 +4,6 @@ namespace Drupal\dcx_track_media_usage;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dcx_track_media_usage\Exception\FoundNonDcxEntityException;
 
@@ -17,35 +16,33 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
   use StringTranslationTrait;
 
   /**
-   * A plugin manager taking care of plugins implementing the
-   * ReferencedEntityDiscoveryPluginInterface.
-   *
-   * @see ReferencedEntityDiscoveryPluginInterface
+   * A plugin manager.
    *
    * @var \Drupal\Component\Plugin\PluginManagerInterface
    */
-  protected $plugin_manager;
+  protected $pluginManager;
 
   /**
+   * ReferencedEntityDiscoveryService constructor.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   The plugin manager service.
    */
-  public function __construct(PluginManagerInterface $plugin_manager, TranslationInterface $string_translation) {
-    $this->stringTranslation = $string_translation;
-    $this->plugin_manager = $plugin_manager;
+  public function __construct(PluginManagerInterface $plugin_manager) {
+    $this->pluginManager = $plugin_manager;
   }
 
   /**
    * {@inheritdoc}
    */
   public function discover(EntityInterface $entity, $return_entities = FALSE) {
-    $plugins = $this->plugin_manager->getDefinitions();
+    $plugins = $this->pluginManager->getDefinitions();
 
     $referencedEntities = [];
 
     foreach ($plugins as $plugin) {
-      $instance = $this->plugin_manager->createInstance($plugin['id']);
-      $referencedEntities += $instance->discover($entity, $this->plugin_manager);
+      $instance = $this->pluginManager->createInstance($plugin['id']);
+      $referencedEntities += $instance->discover($entity, $this->pluginManager);
     }
 
     $usage = [];

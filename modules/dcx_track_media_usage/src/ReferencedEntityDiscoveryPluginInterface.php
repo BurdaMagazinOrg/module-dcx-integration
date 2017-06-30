@@ -17,6 +17,9 @@ interface ReferencedEntityDiscoveryPluginInterface extends PluginInspectionInter
    * Find referenced entities on the given entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   The plugin manager service.
    *
    * @return array
    *   List of referenced entities keyed by entity id

@@ -19,7 +19,7 @@ class RequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events['kernel.request'] = ['kernel_request'];
+    $events['kernel.request'] = ['kernelRequest'];
 
     return $events;
   }
@@ -27,9 +27,10 @@ class RequestSubscriber implements EventSubscriberInterface {
   /**
    * This method is called whenever the kernel.request event is dispatched.
    *
-   * @param GetResponseEvent $event
+   * @param \Symfony\Component\EventDispatcher\Event $event
+   *   Kernel request event.
    */
-  public function kernel_request(Event $event) {
+  public function kernelRequest(Event $event) {
 
     $publicPath = PublicStream::basePath();
 

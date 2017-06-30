@@ -3,7 +3,7 @@
 namespace Drupal\dcx_integration\Exception;
 
 /**
- *
+ * Class UnknownDocumentTypeException.
  */
 class UnknownDocumentTypeException extends \Exception {
 

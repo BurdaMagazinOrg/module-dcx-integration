@@ -10,8 +10,7 @@ use Drupal\dcx_track_media_usage\ReferencedEntityDiscoveryPluginInterface;
 use Drupal\field\Entity\FieldConfig;
 
 /**
- * Returns list of referenced media:image entities on entity reference fields
- * attached to  the given entity.
+ * Returns list of referenced media:image entities on entity reference fields.
  *
  * @TODO Replace hardcoded media:image with argument to make this a bit
  *   more flexible.

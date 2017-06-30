@@ -3,7 +3,7 @@
 namespace Drupal\dcx_integration\Exception;
 
 /**
- *
+ * Class IllegalAttributeException.
  */
 class IllegalAttributeException extends \Exception {
 

@@ -3,7 +3,7 @@
 namespace Drupal\dcx_integration\Exception;
 
 /**
- *
+ * Class MandatoryAttributeException.
  */
 class MandatoryAttributeException extends \Exception {
 
