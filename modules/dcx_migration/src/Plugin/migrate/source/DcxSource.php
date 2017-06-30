@@ -23,7 +23,7 @@ class DcxSource extends SourcePluginBase {
    *
    * @var \Drupal\dcx_integration\ClientInterface
    */
-  protected $dcx_service;
+  protected $dcxService;
 
 
   protected $originalProcess;
@@ -36,16 +36,23 @@ class DcxSource extends SourcePluginBase {
       throw new MigrateException('You must declare the "dcx_service" in your source settings.');
     }
     // @TODO I'd love to inject this service. Or even a custom instance.
-    $this->dcx_service = \Drupal::service($configuration['dcx_service']);
+    $this->dcxService = \Drupal::service($configuration['dcx_service']);
 
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration);
   }
 
   /**
+   * Get dcx object.
    *
+   * @param int $id
+   *   DCX document id.
+   *
+   * @return \Drupal\dcx_integration\Asset\BaseAsset
+   *
+   * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
    */
   protected function getDcxObject($id) {
-    $object = $this->dcx_service->getObject($id);
+    $object = $this->dcxService->getObject($id);
     if (!$object instanceof Image) {
       throw new IllegalAssetTypeException($id, get_class($object), '\Drupal\dcx_integration\Asset\Image');
     }
@@ -53,14 +60,14 @@ class DcxSource extends SourcePluginBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
-  public function getIDs() {
+  public function getIds() {
     return ['id' => ['type' => 'string']];
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   protected function initializeIterator() {
     $map = $this->migration->getIdMap();
@@ -76,21 +83,27 @@ class DcxSource extends SourcePluginBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function fields() {
     return ['id' => 'The unique dcx identifier of this ressource'];
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function __toString() {
     return __METHOD__;
   }
 
   /**
+   * Returns the row object by id.
    *
+   * @param int $id
+   *   DCX document id.
+   *
+   * @return \Drupal\migrate\Row
+   *   Row object.
    */
   public function getRowById($id) {
     $dcx_object = $this->getDcxObject($id);
@@ -109,18 +122,19 @@ class DcxSource extends SourcePluginBase {
    * This only works for a single valued destination id and might break badly
    * otherwise.
    *
+   * @param \Drupal\migrate\Row $row
+   *   The row to prepare.
+   *
    * @TODO Possibly obsolete. Field overrides on update are now handled via the
    * migration configuration, thus the use case for the file URL (see migrate
    * process plugin FileFromUrl) is given no longer.
-   *
-   * @param \Drupal\migrate\Row $row
-   *   The row to prepare.
    *
    * @return bool
    *   TRUE
    */
   public function prepareRow(Row $row) {
-    $exisiting_row = $this->migration->getIdMap()->getRowBySource(['id' => $row->getSourceProperty('id')]);
+    $exisiting_row = $this->migration->getIdMap()
+      ->getRowBySource(['id' => $row->getSourceProperty('id')]);
     if ($exisiting_row) {
       $row->isUpdate = TRUE;
       $row->destid1 = $exisiting_row['destid1'];
