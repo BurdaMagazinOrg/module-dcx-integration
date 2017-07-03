@@ -90,16 +90,18 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
   public function processItem($data) {
     $entity = $this->entityTypeManager->getStorage($data['entity_type'])->load($data['entity_id']);
 
-    $usage = $this->entityDiscoveryService->discover($entity, FALSE);
+    if ($entity) {
+      $usage = $this->entityDiscoveryService->discover($entity, FALSE);
 
-    $url = $entity->toUrl()->getInternalPath();
+      $url = $entity->toUrl()->getInternalPath();
 
-    $status = $entity->status->value;
-    try {
-      $this->dcxClient->trackUsage($usage, $url, $status, 'image');
-    }
-    catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $status = $entity->status->value;
+      try {
+        $this->dcxClient->trackUsage($usage, $url, $status, 'image');
+      }
+      catch (\Exception $e) {
+        drupal_set_message($e->getMessage(), 'error');
+      }
     }
   }
 

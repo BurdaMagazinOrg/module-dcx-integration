@@ -119,7 +119,8 @@ class UploadController extends ControllerBase {
    *   Response object.
    */
   public static function batchFinish() {
-    $messages = drupal_render(StatusMessages::renderMessages(NULL));
+    $status = StatusMessages::renderMessages(NULL);
+    $messages = drupal_render($status);
     return new JsonResponse(['markup' => $messages]);
   }
 
