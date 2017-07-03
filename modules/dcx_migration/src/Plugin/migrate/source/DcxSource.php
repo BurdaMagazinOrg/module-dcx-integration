@@ -48,6 +48,7 @@ class DcxSource extends SourcePluginBase {
    *   DCX document id.
    *
    * @return \Drupal\dcx_integration\Asset\BaseAsset
+   *   DCX object.
    *
    * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
    */

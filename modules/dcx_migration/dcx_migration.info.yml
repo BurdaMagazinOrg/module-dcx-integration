@@ -1,8 +1,6 @@
 name: DC-X Migration
 type: module
 description: 'Migration of data from DC-X digital asset management.'
-
-version: '0'
 core: '8.x'
 package: dcx
 
@@ -11,4 +9,4 @@ dependencies:
   - migrate
   - migrate_plus #MigratePlusEvents::PREPARE_ROW
   - media_entity
-  - thunder_media 
+  - thunder_media

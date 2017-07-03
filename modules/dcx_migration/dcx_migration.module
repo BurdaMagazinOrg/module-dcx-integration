@@ -2,20 +2,19 @@
 
 /**
  * @file
+ * Implements migration hooks.
  */
 
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */use Drupal\Core\Database\Database;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- *
+ * Implements hook_ENTITY_TYPE_delete().
  */
 function dcx_migration_media_delete(EntityInterface $entity) {
   // Remove the migrate map entry for this entity to allow remigration.
   $db = Database::getConnection('default');
-  $query = $db->delete('migrate_map_dcx_migration')
+  $db->delete('migrate_map_dcx_migration')
     ->condition('destid1', $entity->id())
     ->execute();
 }

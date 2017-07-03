@@ -31,21 +31,21 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
    *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
-  protected $entity_field_manager;
+  protected $entityFieldManager;
 
   /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entity_type_manager;
+  protected $entityTypeManager;
 
   /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, EntityFieldManagerInterface $entity_field_manager, EntityTypeManagerInterface $entity_type_manager) {
-    $this->entity_field_manager = $entity_field_manager;
-    $this->entity_type_manager = $entity_type_manager;
+    $this->entityFieldManager = $entity_field_manager;
+    $this->entityTypeManager = $entity_type_manager;
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -83,15 +83,16 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
     // entity.
     if (isset($row->isUpdate) && $row->isUpdate) {
       $entity_id = $row->destid1;
-      $entity = $this->entity_type_manager->getStorage($target_entity)->load($entity_id);
+      $entity = $this->entityTypeManager->getStorage($target_entity)->load($entity_id);
       return $entity->$destination_property->target_id;
     }
 
-    $field_defs = $this->entity_field_manager->getFieldDefinitions($target_entity, $target_bundle);
+    $field_defs = $this->entityFieldManager->getFieldDefinitions($target_entity, $target_bundle);
     $field_image_def = $field_defs[$target_field];
 
     // Construct the file destination.
-    // Basically reimplementing Drupal\file\Plugin\Field\FieldType\FileItem::doGetUploadLocation()
+    // Basically reimplementing
+    // Drupal\file\Plugin\Field\FieldType\FileItem::doGetUploadLocation()
     $file_directory = trim($field_image_def->getSetting('file_directory'), '/');
     $file_directory = PlainTextOutput::renderFromHtml(\Drupal::token()->replace($file_directory));
     $destination_uri = $field_image_def->getSetting('uri_scheme') . '://' . $file_directory;

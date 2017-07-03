@@ -20,33 +20,36 @@ class DcxImportService implements DcxImportServiceInterface {
    *
    * @var \Drupal\dcx_migration\DcxMigrateExecutable
    */
-  protected $migration_executable;
+  protected $migrateExecutable;
 
   /**
    * The migration plugin manager.
    *
    * @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface
    */
-  protected $plugin_mangager;
+  protected $pluginManager;
 
   /**
    * Event dispatcher.
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
-  protected $event_dispatcher;
+  protected $eventDispatcher;
 
   /**
-   * The constructor.
+   * DcxImportService constructor.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+   *   Translation service.
    * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $plugin_manager
+   *   Plugin manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   Event dispatcher service.
    */
   public function __construct(TranslationInterface $string_translation, MigrationPluginManagerInterface $plugin_manager, EventDispatcherInterface $event_dispatcher) {
     $this->stringTranslation = $string_translation;
     $this->plugin_manager = $plugin_manager;
-    $this->event_dispatcher = $event_dispatcher;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -55,24 +58,21 @@ class DcxImportService implements DcxImportServiceInterface {
    * Make sure it is created if not already done.
    *
    * @return \Drupal\dcx_migration\DcxMigrateExecutable
+   *   Migration executable.
    */
   protected function getMigrationExecutable() {
-    if (NULL == $this->migration_executable) {
+    if (NULL == $this->migrateExecutable) {
       $migration = $this->plugin_manager->createInstance('dcx_migration');
-      $this->migration_executable = new DcxMigrateExecutable($migration, $this->event_dispatcher);
+      $this->migrateExecutable = new DcxMigrateExecutable($migration, $this->eventDispatcher);
     }
 
-    return $this->migration_executable;
+    return $this->migrateExecutable;
   }
 
   /**
-   * Import the given DC-X IDs.
-   *
-   * Technically this prepares a batch process. It's either processed by Form
-   * API if we're running in context of a form, or return the batch definition
-   * for further processing.
+   * {@inheritdoc}
    */
-  public function import($ids) {
+  public function import(array $ids) {
     $executable = $this->getMigrationExecutable();
 
     foreach ($ids as $id) {
@@ -97,7 +97,7 @@ class DcxImportService implements DcxImportServiceInterface {
    * @param array|\ArrayAccess $context
    *   The batch context array, passed by reference.
    */
-  public static function batchImport($id, $executable, &$context) {
+  public static function batchImport($id, DcxMigrateExecutable $executable, &$context) {
     if (empty($context['results'])) {
       $context['results']['count'] = 0;
       $context['results']['success'] = 0;
@@ -123,14 +123,14 @@ class DcxImportService implements DcxImportServiceInterface {
   /**
    * Batch finished callback.
    *
-   * @param $success
+   * @param bool $success
    *   A boolean indicating whether the batch has completed successfully.
-   * @param $results
+   * @param array $results
    *   The value set in $context['results'] by callback_batch_operation().
-   * @param $operations
+   * @param array $operations
    *   If $success is FALSE, contains the operations that remained unprocessed.
    */
-  public static function batchFinished($success, $results, $operations) {
+  public static function batchFinished($success, array $results, array $operations) {
     $t = \Drupal::translation();
     $success = $t->translate('Imported @success of @count items.', ['@success' => $results['success'], '@count' => $results['count']]);
     drupal_set_message($success);
@@ -142,7 +142,7 @@ class DcxImportService implements DcxImportServiceInterface {
     }
 
     if (!empty($results['fail'])) {
-      $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => join(', ', $results['fail'])]);
+      $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => implode(', ', $results['fail'])]);
       drupal_set_message($fail);
     }
   }
@@ -150,9 +150,11 @@ class DcxImportService implements DcxImportServiceInterface {
   /**
    * Helper to retrieve entity id for the give DC-X ID, if present.
    *
-   * @param array of DC-X IDs
+   * @param array $dcx_ids
+   *   DC-X IDs.
    *
-   * @return array of entity id or FALSE, keyed by DC-X ID
+   * @return array|bool
+   *   Array of entity id or FALSE, keyed by DC-X ID
    */
   public function getEntityIds(array $dcx_ids) {
     $executable = $this->getMigrationExecutable();

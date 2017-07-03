@@ -3,6 +3,7 @@
 namespace Drupal\dcx_migration;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+use Drupal\migrate\Plugin\migrate\id_map\Sql;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
@@ -16,9 +17,10 @@ use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Custom MigrationExecutable which is able to take an idlist just like the
- * drush migate-import command. Thus heavily inspired by
- * \Drupal\migrate_tools\MigrateExecutable.
+ * Custom MigrationExecutable.
+ *
+ * Which is able to take an idlist just like the drush migate-import command.
+ * Thus heavily inspired by \Drupal\migrate_tools\MigrateExecutable.
  */
 class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageInterface {
   use DependencySerializationTrait;
@@ -77,7 +79,7 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
   }
 
   /**
-   *
+   * Performs an import operation.
    */
   public function importItemWithUnknownStatus($id) {
     $id_map = $this->migration->getIdMap();
@@ -152,17 +154,17 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
   }
 
   /**
-   * Mark the map entry of the given map with the given source id as ready to
-   * be re-imported.
+   * Mark map entry of the map with the source id as ready to be re-imported.
+   *
+   * @param string $id
+   *   Source id.
+   * @param \Drupal\migrate\Plugin\migrate\id_map\Sql $map
+   *   Migrate map.
    *
    * @TODO This depends on a single valued source id and might break badly for
    * multi-valued ones.
-   *
-   * @param string $id
-   *   source_id.
-   * @param \Drupal\migrate\Plugin\migrate\id_map\Sql $map
    */
-  public function prepareUpdate($id, $map) {
+  public function prepareUpdate($id, Sql $map) {
     $map->getDatabase()->update($map->mapTableName())
       ->fields(['source_row_status' => MigrateIdMapInterface::STATUS_NEEDS_UPDATE])
       ->condition('sourceid1', $id)
@@ -173,6 +175,7 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
    * Gets the migration plugin.
    *
    * @return \Drupal\migrate\Plugin\MigrationInterface
+   *   The migration plugin.
    */
   public function getMigration() {
     return $this->migration;
@@ -185,9 +188,10 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
    * multivalued) destination id or NULL.
    *
    * @param string $id
-   *   source_id.
+   *   Source_id.
    *
-   * @return array | NULL
+   * @return array|null
+   *   Destination id.
    */
   public function isReimport($id) {
     $destids = $this->migration->getIdMap()->lookupDestinationIds(['id' => $id]);
