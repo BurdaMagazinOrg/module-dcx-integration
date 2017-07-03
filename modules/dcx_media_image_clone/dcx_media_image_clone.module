@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * Module dcx_media_image_clone hook implementations.
  */
 
 use Drupal\Core\Entity\EntityInterface;
@@ -10,7 +11,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
- * Implements hook_form_alter.
+ * Implements hook_form_alter().
  */
 function dcx_media_image_clone_form_media_image_edit_form_alter(&$form, FormStateInterface $form_state) {
   // Insert clone button to form.
@@ -36,7 +37,7 @@ function dcx_media_image_clone_form_media_image_edit_form_alter(&$form, FormStat
 }
 
 /**
- * Implements hook_ENTITY_TYPE_update.
+ * Implements hook_ENTITY_TYPE_update().
  */
 function dcx_media_image_clone_media_update(EntityInterface $entity) {
   if ('image' === $entity->bundle()
@@ -46,7 +47,7 @@ function dcx_media_image_clone_media_update(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete.
+ * Implements hook_ENTITY_TYPE_delete().
  */
 function dcx_media_image_clone_media_delete(EntityInterface $entity) {
   if ('image' === $entity->bundle()
@@ -56,11 +57,11 @@ function dcx_media_image_clone_media_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_form_alter.
+ * Implements hook_form_alter().
  */
 function dcx_media_image_clone_form_media_image_delete_form_alter(&$form, FormStateInterface $form_state) {
+  $entity = $form_state->getFormObject()->getEntity();
   if (NULL === $entity->field_parent_media->target_id) {
-    $entity = $form_state->getFormObject()->getEntity();
     $clones = \Drupal::service('dcx_media_image_clone.update_clones')->getClones($entity);
     if (!empty($clones)) {
       $form['clones_notice'] = [

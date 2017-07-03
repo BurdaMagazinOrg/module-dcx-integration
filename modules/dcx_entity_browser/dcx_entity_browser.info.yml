@@ -1,8 +1,6 @@
 name: DC-X Entity Browser
 type: module
 description: 'Entity Browser integration for dcx'
-
-version: '0'
 core: '8.x'
 package: dcx
 

@@ -2,10 +2,11 @@
 
 /**
  * @file
+ * Module dcx_dropzone_ui hook implementations.
  */
 
 /**
- *
+ * Implements hook_theme().
  */
 function dcx_dropzone_ui_theme() {
   return [
@@ -24,7 +25,7 @@ function dcx_dropzone_ui_theme() {
  *   An associative array containing:
  *   - element: A render element representing the file.
  */
-function template_preprocess_dcxdropzone(&$variables) {
+function template_preprocess_dcxdropzone(array &$variables) {
   $element = $variables['element'];
 
   $variables['attributes'] = [];

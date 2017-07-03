@@ -92,8 +92,8 @@ class UploadController extends ControllerBase {
 
     require_once 'core/includes/batch.inc';
 
-    $GET = ['id' => $batch_id, 'op' => 'start'];
-    $request = new Request($GET);
+    $getParameter = ['id' => $batch_id, 'op' => 'start'];
+    $request = new Request($getParameter);
 
     $build = _batch_page($request);
 
@@ -110,6 +110,7 @@ class UploadController extends ControllerBase {
    * Renders all status messages and returns them in a JSON Response object.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Response object.
    */
   public static function batchFinish() {
     $messages = drupal_render(StatusMessages::renderMessages(NULL));

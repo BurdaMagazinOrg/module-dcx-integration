@@ -14,7 +14,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
+ * Class Responder.
  *
+ * @package Drupal\dcx_notification
  */
 class Responder extends ControllerBase {
 
@@ -47,7 +49,7 @@ class Responder extends ControllerBase {
   protected $router;
 
   /**
-   * The Constructor.
+   * Responder constructor.
    *
    * @param \Drupal\dcx_migration\DcxImportServiceInterface $importService
    *   The DC-X Client.
@@ -55,12 +57,13 @@ class Responder extends ControllerBase {
    *   Database connection.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
+   * @param \Symfony\Component\Routing\RouterInterface $router
+   *   Router service.
    */
   public function __construct(DcxImportServiceInterface $importService, Connection $connection, Request $request, RouterInterface $router) {
     $this->importService = $importService;
     $this->dbConnection = $connection;
     $this->request = $request;
-    $this->router = $router;
     $this->router = $router;
   }
 
@@ -227,11 +230,11 @@ class Responder extends ControllerBase {
    *
    * @see dcx_track_media_usage_node_update
    *
-   * @return \Symfony\Component\HttpFoundation\Response an empty (204) response.
+   * @throws NotFoundHttpException
+   *   If the path does not represent a valid node.
    *
-   * @throws ResourceNotFoundException If the resource could not be found
-   * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
-   * @throws NotFoundHttpException if the path does not represent a valid node
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   an empty (204) response.
    */
   public function resaveNode($path) {
     // This may trow exceptions, we allow them to bubble up.

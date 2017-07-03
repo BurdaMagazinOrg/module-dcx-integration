@@ -7,7 +7,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 
 /**
+ * Class UpdateClonedMediaService.
  *
+ * @package Drupal\dcx_media_image_clone
  */
 class UpdateClonedMediaService {
 
@@ -29,7 +31,9 @@ class UpdateClonedMediaService {
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager service.
    * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migratePluginManager
+   *   Migrate plugin manager.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, MigrationPluginManagerInterface $migratePluginManager) {
     $this->entityTypeManager = $entityTypeManager;
@@ -37,10 +41,13 @@ class UpdateClonedMediaService {
   }
 
   /**
+   * Update cloned entities.
+   *
    * Propagate the overwrite_properties defined in the DC-X Migration to all
    * clones of the given media.
    *
    * @param \Drupal\Core\Entity\EntityInterface $media
+   *   Media object.
    */
   public function updateClones(EntityInterface $media) {
     // Only operate on media:image entities which are not clones themselves.
@@ -67,6 +74,7 @@ class UpdateClonedMediaService {
    * Delete clones of the given media:image entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $media
+   *   Media object.
    */
   public function deleteClones(EntityInterface $media) {
     // Only operate on media:image entities which are not clones themselves.
@@ -85,6 +93,7 @@ class UpdateClonedMediaService {
    * Return all entities which are marked as clone of the given one.
    *
    * @param \Drupal\Core\Entity\EntityInterface $media
+   *   Media object.
    *
    * @return \Drupal\Core\Entity\EntityInterface[]
    *   An array of entity objects indexed by their ids.
