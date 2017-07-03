@@ -59,7 +59,7 @@ class ReferencedEntityDiscoveryService implements ReferencedEntityDiscoveryServi
         $usage[$dcx_id] = $referencedEntity;
       }
       else {
-        $usage[$dcx_id] = $dcx_id;
+        $usage[$dcx_id] = ['id' => $referencedEntity->id(), 'entity_type_id' => $referencedEntity->getEntityTypeid()];
       }
     }
 

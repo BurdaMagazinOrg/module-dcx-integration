@@ -127,6 +127,8 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     $data = [];
     $data['title'] = $node->title->value;
     $data['status'] = $node->status->value;
+    $data['id'] = $node->id();
+    $data['entity_type_id'] = $node->getEntityTypeId();
 
     // Todo: Should probably use a custom view mode.
     $paragraphs = $node->field_paragraphs->view("default");
@@ -134,7 +136,7 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     $data['body'] = strip_tags($rendered);
 
     // Find attached images.
-    $used_media = $this->discovery->discover($node, 'return_entities');
+    $used_media = $this->discovery->discover($node, TRUE);
 
     foreach ($used_media as $dcx_id => $media_entity) {
       $caption = $media_entity->field_description->value;

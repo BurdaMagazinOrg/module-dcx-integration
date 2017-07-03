@@ -429,8 +429,8 @@ class JsonClient implements ClientInterface {
           // we need to make sure that the id is actually encoded in the data,
           // because it's supposed to be called by a http_client.
           'callback_url' => '/dcx-notification?id=' . urlencode($id),
-          'entity_id' => $entity->id(),
-          'entity_type' => $entity->getEntityTypeId(),
+          'entity_id' => $entity['id'],
+          'entity_type' => $entity['entity_type_id'],
         ],
         "properties" => [
           "doc_id" => [
@@ -497,6 +497,8 @@ class JsonClient implements ClientInterface {
    */
   public function archiveArticle($url, array $info, $dcx_id) {
 
+    $id = isset($info['id']) ? $info['id'] : '';
+    $entity_type_id = isset($info['entity_type_id']) ? $info['entity_type_id'] : '';
     $title = isset($info['title']) ? $info['title'] : '';
     $status = isset($info['status']) ? $info['status'] : FALSE;
     $body = isset($info['body']) ? $info['body'] : '';
@@ -619,7 +621,7 @@ class JsonClient implements ClientInterface {
 
       $url = parse_url($url)['path'];
 
-      $this->trackUsage(["dcxapi:$dcx_id"], ltrim($url, '/'), $status, 'article');
+      $this->trackUsage(["dcxapi:$dcx_id" => ['id' => $id, 'entity_type_id' => $entity_type_id]], ltrim($url, '/'), $status, 'article');
     }
     else {
       if (!$error) {

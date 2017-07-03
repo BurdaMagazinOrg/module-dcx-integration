@@ -8,7 +8,7 @@ namespace Drupal\dcx_integration\Asset;
  * @package Drupal\dcx_integration\Asset
  */
 class Image extends BaseAsset {
-  protected static $mandatoryAttributes = [
+  public static $mandatoryAttributes = [
     'id',
     'filename',
     'title',
@@ -16,7 +16,7 @@ class Image extends BaseAsset {
     'status',
   ];
 
-  protected static $optionalAttributes = [
+  public static $optionalAttributes = [
     'creditor',
     'copyright',
     'fotocredit',

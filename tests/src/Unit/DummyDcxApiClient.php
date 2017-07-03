@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\Tests\dcx_integration;
+namespace Drupal\Tests\dcx_integration\Unit;
 
 /**
  * Dummy API client class.
  *
  * It allows introspection of called methods and arguments for testing.
  */
-class DummyDcxApiClient /* implement DcxApiClientInterface */ {
+class DummyDcxApiClient {
 
   /**
    *
@@ -24,7 +24,7 @@ class DummyDcxApiClient /* implement DcxApiClientInterface */ {
   /**
    *
    */
-  public function getObject($url, array $params, &$data) {
+  public function get($url, array $params, &$data) {
     // __METHOD__ would return namespaced value.
     $this->method = __FUNCTION__;
     return $this->_doit($url, $params, $data, $data);

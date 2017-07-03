@@ -90,7 +90,7 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
   public function processItem($data) {
     $entity = $this->entityTypeManager->getStorage($data['entity_type'])->load($data['entity_id']);
 
-    $usage = $this->entityDiscoveryService->discover($entity, 'return_entities');
+    $usage = $this->entityDiscoveryService->discover($entity, FALSE);
 
     $url = $entity->toUrl()->getInternalPath();
 

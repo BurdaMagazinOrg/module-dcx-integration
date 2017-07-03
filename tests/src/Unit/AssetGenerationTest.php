@@ -3,7 +3,6 @@
 namespace Drupal\Tests\dcx_integration\Unit;
 
 use Drupal\dcx_integration\JsonClient;
-use Drupal\Tests\dcx_integration\DummyDcxApiClient;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -62,7 +61,7 @@ class AssetGenerationTest extends UnitTestCase {
         'dcx:file' => ["test__file" => ['properties' => ['_file_url_absolute' => 'test__url']]],
         'dcx:rights' => ["test__right" => ['properties' => ['topic_id' => ['_id' => 'dcxapi:tm_topic/rightsusage-Online']]]],
       ],
-      '_rights_effective' => ['rightstype-UsagePermitted' => [[["_id" => "test__right"]]]],
+      '_rights_effective' => ['rightstype-UsagePermittedDigital' => [[["_id" => "test__right"]]]],
     ];
 
     $asset = $this->client->getObject('document/xyz');
