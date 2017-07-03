@@ -1,9 +1,0 @@
-name: DC-X Debug JsonClient
-type: module
-description: Swap out the real DcxApiClient of the JsonClient for debugging
-core: 8.x
-package: dcx
-
-dependencies:
-  - dcx_integration
-  - devel

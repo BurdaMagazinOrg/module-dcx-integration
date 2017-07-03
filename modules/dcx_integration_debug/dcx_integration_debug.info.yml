@@ -1,9 +1,0 @@
-name: DC-X integration debug
-type: module
-description: 'Debugging helper for DC-X integration. Mocking DC-X the service.'
-
-core: '8.x'
-package: dcx
-
-dependencies:
-  - dcx_integration

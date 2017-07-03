@@ -1,3 +1,0 @@
-services:
-  dcx_debug_json_client.client:
-    class: Drupal\dcx_debug_json_client\DpmOnScreenClient
