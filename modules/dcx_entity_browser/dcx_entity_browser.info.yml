@@ -5,5 +5,5 @@ core: '8.x'
 package: dcx
 
 dependencies:
-  - dcx_dropzone_ui
-  - entity_browser
+  - dcx_integration:dcx_dropzone_ui
+  - entity_browser:entity_browser

@@ -75,11 +75,12 @@ class DcxImportService implements DcxImportServiceInterface {
   public function import(array $ids) {
     $executable = $this->getMigrationExecutable();
 
+    $operations = [];
     foreach ($ids as $id) {
       $operations[] = [[__CLASS__, 'batchImport'], [$id, $executable]];
     }
     $batch = [
-      'title' => t('Import media from DC-X'),
+      'title' => $this->t('Import media from DC-X'),
       'operations' => $operations,
       'finished' => [__CLASS__, 'batchFinished'],
     ];

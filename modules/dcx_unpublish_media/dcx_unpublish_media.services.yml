@@ -1,6 +1,6 @@
 services:
   dcx_unpublish_media.default:
     class: Drupal\dcx_unpublish_media\EventSubscriber\RequestSubscriber
-    arguments: []
+    arguments: ['@request_stack', '@entity_type.manager']
     tags:
       - { name: event_subscriber }

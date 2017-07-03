@@ -4,4 +4,4 @@ description: Integrates DC-X collections to entity browser
 core: 8.x
 package: Custom
 dependencies:
-  - dcx_migration
+  - dcx_integration:dcx_migration

@@ -2,8 +2,11 @@
 
 namespace Drupal\dcx_unpublish_media\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class JsonClientSettings.
@@ -11,6 +14,32 @@ use Drupal\Core\Form\FormStateInterface;
  * @package Drupal\dcx_integration\Form
  */
 class UnpublishMediaSettings extends ConfigFormBase {
+
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a \Drupal\system\ConfigFormBase object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entityTypeManager) {
+
+    parent::__construct($config_factory);
+    $this->entityTypeManager = $entityTypeManager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -36,7 +65,7 @@ class UnpublishMediaSettings extends ConfigFormBase {
     $config = $this->config('dcx_unpublish_media.unpublishmediasettings');
 
     /** @var MediaBundle[] $bundles */
-    $bundles = \Drupal::entityTypeManager()
+    $bundles = $this->entityTypeManager
       ->getStorage('media_bundle')
       ->loadMultiple();
     $imageBundles = [];
@@ -45,11 +74,15 @@ class UnpublishMediaSettings extends ConfigFormBase {
         $imageBundles[] = $bundle->id();
       }
     }
+    $defaultValue = NULL;
+    if ($config->get('default_image')) {
+      $defaultValue = $this->entityTypeManager->getStorage('media')->load($config->get('default_image'));
+    }
 
     $form['default_image'] = [
       '#type' => 'entity_autocomplete',
-      '#title' => t('Default image'),
-      '#default_value' => ($config->get('default_image')) ? entity_load('media', $config->get('default_image')) : NULL,
+      '#title' => $this->t('Default image'),
+      '#default_value' => $defaultValue,
       '#target_type' => 'media',
       '#selection_settings' => ['target_bundles' => $imageBundles],
     ];

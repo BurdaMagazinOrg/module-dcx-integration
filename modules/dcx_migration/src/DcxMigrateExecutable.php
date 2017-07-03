@@ -145,8 +145,6 @@ class DcxMigrateExecutable extends MigrateExecutable implements MigrateMessageIn
       $this->migration->saveHighWater($row->getSourceProperty($high_water_property['name']));
     }
 
-    // Reset row properties.
-    unset($sourceValues, $destinationValues);
     $this->sourceRowStatus = MigrateIdMapInterface::STATUS_IMPORTED;
 
     $this->getEventDispatcher()->dispatch(MigrateEvents::POST_IMPORT, new MigrateImportEvent($this->migration, $this->message));

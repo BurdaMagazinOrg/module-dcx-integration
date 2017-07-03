@@ -735,7 +735,7 @@ class JsonClient implements ClientInterface {
     $pubinfos = $document['_referenced']['dcx:pubinfo'];
 
     $selected_pubinfos = [];
-    foreach ($pubinfos as $key => $pubinfo) {
+    foreach ($pubinfos as $pubinfo) {
       if ("dcxapi:tm_topic/" . $this->publicationId === $pubinfo['properties']['publication_id']['_id']) {
         // If either type or id is not set, find all.
         if (!$entity_type || !$entity_id) {

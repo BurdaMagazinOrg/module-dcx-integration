@@ -5,8 +5,8 @@ core: '8.x'
 package: dcx
 
 dependencies:
-  - dcx_integration
-  - migrate
-  - migrate_plus #MigratePlusEvents::PREPARE_ROW
-  - media_entity
-  - thunder_media
+  - dcx_integration:dcx_integration
+  - drupal:migrate
+  - migrate_plus:migrate_plus
+  - media_entity:media_entity
+  - thunder:thunder_media

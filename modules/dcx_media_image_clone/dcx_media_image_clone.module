@@ -11,7 +11,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
 function dcx_media_image_clone_form_media_image_edit_form_alter(&$form, FormStateInterface $form_state) {
   // Insert clone button to form.
@@ -57,7 +57,7 @@ function dcx_media_image_clone_media_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
 function dcx_media_image_clone_form_media_image_delete_form_alter(&$form, FormStateInterface $form_state) {
   $entity = $form_state->getFormObject()->getEntity();

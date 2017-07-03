@@ -56,7 +56,7 @@ class AssetTest extends UnitTestCase {
     array_shift($data);
 
     $this->setExpectedException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
-    $asset = new Image($data);
+    new Image($data);
   }
 
   /**
@@ -72,7 +72,7 @@ class AssetTest extends UnitTestCase {
     }
 
     $this->setExpectedException('Drupal\dcx_integration\Exception\IllegalAttributeException');
-    $asset = new Image($data);
+    new Image($data);
   }
 
   /**
@@ -112,7 +112,7 @@ class AssetTest extends UnitTestCase {
     array_shift($data);
 
     $this->setExpectedException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
-    $asset = new Article($data);
+    new Article($data);
   }
 
   /**
@@ -128,7 +128,7 @@ class AssetTest extends UnitTestCase {
     }
 
     $this->setExpectedException('Drupal\dcx_integration\Exception\IllegalAttributeException');
-    $asset = new Article($data);
+    new Article($data);
   }
 
 }

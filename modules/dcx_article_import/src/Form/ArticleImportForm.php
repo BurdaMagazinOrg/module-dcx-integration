@@ -98,7 +98,7 @@ class ArticleImportForm extends FormBase {
       $form['dcx_id'] = [
         '#type' => 'textfield',
         '#title' => $this->t('DC-X ID'),
-        '#description' => 'Please give a DC-X story document id. Something like "document/doc6p9gtwruht4gze9boxi".',
+        '#description' => $this->t('Please give a DC-X story document id. Something like "document/doc6p9gtwruht4gze9boxi".'),
         '#maxlength' => 64,
         '#size' => 64,
         '#required' => TRUE,

@@ -4,4 +4,4 @@ description: Allow cloning media image entities and keep track of the clones reg
 core: 8.x
 package: dcx
 dependencies:
-  - dcx_migration
+  - dcx_integration:dcx_migration

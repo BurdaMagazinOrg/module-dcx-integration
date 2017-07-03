@@ -24,7 +24,7 @@ function dcx_track_media_usage_media_delete($entity) {
     }
     // It's a clone. Only remove respective pubinfo.
     else {
-      $pubinfos = Drupal::service('dcx_integration.client')->removeUsageForCertainEntity($dcx_id, $entity->getEntityTypeId(), $entity->id());
+      Drupal::service('dcx_integration.client')->removeUsageForCertainEntity($dcx_id, $entity->getEntityTypeId(), $entity->id());
     }
     foreach ($urls as $url) {
       $parts = explode('/', $url);

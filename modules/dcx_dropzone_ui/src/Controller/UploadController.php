@@ -4,6 +4,7 @@ namespace Drupal\dcx_dropzone_ui\Controller;
 
 use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,6 +31,8 @@ class UploadController extends ControllerBase {
    */
   protected $request;
 
+  protected $renderer;
+
   /**
    * Constructs dropzone upload controller route controller.
    *
@@ -37,11 +40,13 @@ class UploadController extends ControllerBase {
    *   The DCX Import Service actually processing the input.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request object.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer object.
    */
-  public function __construct(DcxImportServiceInterface $importService, Request $request) {
+  public function __construct(DcxImportServiceInterface $importService, Request $request, RendererInterface $renderer) {
     $this->importService = $importService;
-
     $this->request = $request;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -50,7 +55,8 @@ class UploadController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('dcx_migration.import'),
-      $container->get('request_stack')->getCurrentRequest()
+      $container->get('request_stack')->getCurrentRequest(),
+      $container->get('renderer')
     );
   }
 
@@ -99,7 +105,7 @@ class UploadController extends ControllerBase {
 
     $settings = $build['content']['#attached']['drupalSettings']['batch'];
 
-    $markup = drupal_render($build['content']);
+    $markup = $this->renderer->render($build['content']);
 
     return new JsonResponse(['markup' => $markup, 'settings' => $settings]);
   }

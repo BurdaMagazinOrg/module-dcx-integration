@@ -3,7 +3,6 @@ type: module
 description: Archive Articles to DC-X
 core: 8.x
 package: dcx
-
 dependencies:
-  - dcx_integration
-  - dcx_track_media_usage
+  - dcx_integration:dcx_integration
+  - dcx_integration:dcx_track_media_usage
