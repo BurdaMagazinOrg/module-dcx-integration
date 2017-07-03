@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file Contains the code to generate the custom drush commands.
+ * @file
+ * Contains the code to generate the custom drush commands.
  */
 
 use Drupal\Core\Queue\RequeueException;

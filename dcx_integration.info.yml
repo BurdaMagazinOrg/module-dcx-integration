@@ -1,7 +1,5 @@
 name: DC-X integration
 type: module
 description: 'Integration of DC-X digital asset management.'
-
-version: '0'
 core: '8.x'
 package: dcx

@@ -7,30 +7,3 @@ dcx_integration.json_client_settings:
     _permission: 'access administration pages'
   options:
     _admin_route: TRUE
-
-
-
-# In order to to create pages it is necessary to define routes for them.
-# A route maps a URL path to a controller. It defines with what function
-# or method will be called when a URL is accessed.
-# If the user accesses http://drupal8.dev/dxc-debug/{type}/{id}, the routing
-# system will look for a route with that path. In this case it will find a
-# match, and execute the _controller callback. In this case the callback is
-# defined as a classname
-# ("\Drupal\dcx_integration\Controller\DcxDebugController")
-# and a method ("debug").
-dcx_integration.dcx_debug_controller_debug:
-  path: 'dcx-debug/{type}/{id}'
-  defaults:
-    _controller: '\Drupal\dcx_integration\Controller\DcxDebugController::debug'
-    _title: 'Debug DCX Output'
-  requirements:
-    _permission: 'access administration pages'
-
-dcx_integration.dcx_debug_controller_archive:
-  path: 'dcx-debug/archive'
-  defaults:
-    _controller: '\Drupal\dcx_integration\Controller\DcxDebugController::archive'
-    _title: 'Debug DCX Output'
-  requirements:
-    _permission: 'access administration pages'
