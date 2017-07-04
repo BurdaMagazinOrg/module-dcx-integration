@@ -111,8 +111,8 @@ install:
   - drupal-ti install
 
 before_script:
-  - drupal-ti --include ./scripts/travis/before_script.sh
   - drupal-ti before_script
+  - drupal-ti --include ./scripts/travis/before_script.sh
 
 script:
   - drupal-ti script
