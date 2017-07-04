@@ -98,6 +98,20 @@ class JsonClient implements ClientInterface {
   }
 
   /**
+   * Does a server request on a non existing doc to check the server status.
+   */
+  public function checkServerStatus() {
+
+    $this->dcxApiClient->guzzleClient->request(
+      'GET',
+      $this->dcxApiClient->fullUrl('document/doc123'),
+      $this->dcxApiClient->getRequestOptions([
+        'query' => $this->dcxApiClient->mergeQuery('document/doc123', []),
+      ])
+    );
+  }
+
+  /**
    * This is public only for debugging purposes.
    *
    * It's not part of the interface, it should be protected.
