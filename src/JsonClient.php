@@ -66,6 +66,7 @@ class JsonClient implements ClientInterface {
     if (!$override_client_class) {
       $current_user_email = $user->getEmail();
       $site_mail = $config_factory->get("system.site")->get('mail');
+      $site_name = $config_factory->get("system.site")->get('name');
 
       $url = $this->config->get('url');
       $username = $this->config->get('username');
@@ -78,10 +79,9 @@ class JsonClient implements ClientInterface {
         $current_user_email = "burda_ad/$current_user_email";
       }
 
-      global $base_url;
       $options = [
         'http_headers' => ['X-DCX-Run-As' => "$current_user_email"],
-        'http_useragent' => "DC-X Integration for Drupal (dcx_integration) running on $base_url <$site_mail>",
+        'http_useragent' => "DC-X Integration for Drupal (dcx_integration) running on $site_name <$site_mail>",
       ];
 
       $credentials = [
