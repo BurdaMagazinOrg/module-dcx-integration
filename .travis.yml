@@ -104,7 +104,6 @@ before_install:
   - bash -x -e ./scripts/travis/test-source-code.sh
 
   # Continue with Drupal Tests
-  - cd ./tests
   - composer global require "lionsad/drupal_ti:1.*"
   - drupal-ti before_install
 
