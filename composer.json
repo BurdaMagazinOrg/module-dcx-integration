@@ -9,15 +9,11 @@
 	{
 	  "type": "composer",
 	  "url": "https://packages.drupal.org/8"
-	},
-	{
-	  "type": "git",
-	  "url": "https://github.com/digicol/dcx-sdk-php"
 	}
   ],
   "require": {
 	"drupal/migrate_plus": ">=3.0",
-	"digicol/dcx-sdk-php": "dev-master"
+	"digicol/dcx-sdk-php": "^2.0"
   },
   "require-dev": {
 	"burdamagazinorg/thunder-dev-tools": "dev-master"

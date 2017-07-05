@@ -11,5 +11,4 @@ drupal_ti_ensure_module_linked
 
 # Update composer
 cd "$DRUPAL_TI_DRUPAL_DIR"
-composer config repositories.foo git https://github.com/digicol/dcx-sdk-php
-composer require digicol/dcx-sdk-php:dev-master
+composer require digicol/dcx-sdk-php:^2.0
