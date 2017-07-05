@@ -12,4 +12,6 @@ drupal_ti_ensure_module_linked
 # Update composer
 cd "$DRUPAL_TI_DRUPAL_DIR"
 composer config repositories.foo git https://github.com/digicol/dcx-sdk-php
-composer require digicol/dcx-sdk-php:dev-master guzzlehttp/guzzle:^6.2.3
+composer require digicol/dcx-sdk-php:dev-master guzzlehttp/psr7:^1.4
+composer why guzzlehttp/guzzle
+composer why guzzlehttp/psr7
