@@ -5,7 +5,6 @@ namespace Drupal\dcx_track_media_usage;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\dcx_track_media_usage\Exception\FoundNonDcxEntityException;
 
 /**
  * Class ReferencedEntityDiscoveryService.
