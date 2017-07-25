@@ -10,7 +10,7 @@ use Drupal\Tests\UnitTestCase;
 /**
  * Class DcxJsonClientIntegrationTest.
  *
- * @group dcx
+ * @group dcx_integration
  */
 class DcxJsonClientIntegrationTest extends UnitTestCase {
 

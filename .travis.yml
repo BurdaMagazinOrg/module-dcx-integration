@@ -67,7 +67,7 @@ env:
     - DRUPAL_TI_BEHAT_BROWSER="firefox"
 
     # PHPUnit specific commandline arguments.
-    - DRUPAL_TI_PHPUNIT_ARGS="--verbose --debug"
+    - DRUPAL_TI_PHPUNIT_ARGS="--group dcx --verbose --debug"
     # Specifying the phpunit-core src/ directory is useful when e.g. a vendor/
     # directory is present in the module directory, which phpunit would then
     # try to find tests in. This option is relative to $TRAVIS_BUILD_DIR.
@@ -117,6 +117,10 @@ before_script:
 
 script:
   - drupal-ti script
+  - if [ -z "$DCX_SETTINGS" ]; then
+    export DRUPAL_TI_PHPUNIT_ARGS="--group dcx_integration --verbose --debug"
+    drupal-ti script
+    fi
 
 after_script:
   - drupal-ti after_script
