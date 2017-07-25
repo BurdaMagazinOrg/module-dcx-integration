@@ -117,7 +117,7 @@ before_script:
 
 script:
   - drupal-ti script
-  - if [ -z "$DCX_SETTINGS" ]; then
+  - if [ -n "$DCX_SETTINGS" ]; then
     export DRUPAL_TI_PHPUNIT_ARGS="--group dcx_integration --verbose --debug"
     drupal-ti script
     fi
