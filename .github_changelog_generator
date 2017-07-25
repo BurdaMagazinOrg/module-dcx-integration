@@ -1,0 +1,3 @@
+unreleased=false
+exclude-tags=2.0-beta1,2.0-beta2,2.0-beta3
+future-release=8.x-2.0-beta4
