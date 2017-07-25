@@ -23,6 +23,12 @@ function dcx_integration_requirements($phase) {
       $config = \Drupal::configFactory()
         ->get('dcx_integration.jsonclientsettings');
 
+      $requirements['dcx_integration'] = [
+        'title' => t('DCX Integration'),
+        'value' => t('Installed correctly'),
+        'description' => t('DCX Integration module has been installed and configured correctly.'),
+      ];
+
       if (
         empty($config->get('url')) ||
         empty($config->get('username')) ||
@@ -63,6 +69,12 @@ function dcx_integration_requirements($phase) {
           ];
         }
         catch (ClientException $clientException) {
+          $requirements['dcx_integration'] = [
+            'title' => t('DCX Integration'),
+            'value' => t("There is a server error."),
+            'description' => $clientException->getMessage(),
+            'severity' => REQUIREMENT_ERROR,
+          ];
         }
         catch (\Exception $exception) {
           $requirements['dcx_integration'] = [

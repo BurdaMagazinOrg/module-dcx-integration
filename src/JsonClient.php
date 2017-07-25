@@ -104,9 +104,9 @@ class JsonClient implements ClientInterface {
 
     $this->dcxApiClient->guzzleClient->request(
       'GET',
-      $this->dcxApiClient->fullUrl('document/doc123'),
+      $this->dcxApiClient->fullUrl('document'),
       $this->dcxApiClient->getRequestOptions([
-        'query' => $this->dcxApiClient->mergeQuery('document/doc123', []),
+        'query' => $this->dcxApiClient->mergeQuery('document', []),
       ])
     );
   }
