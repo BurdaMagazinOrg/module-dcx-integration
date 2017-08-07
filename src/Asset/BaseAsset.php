@@ -32,7 +32,7 @@ abstract class BaseAsset {
    */
   public function __construct(array $data, array $mandatory_attributes, array $optional_attributes = []) {
     foreach ($mandatory_attributes as $attribute) {
-      if (!isset($data[$attribute]) || empty($data[$attribute])) {
+      if (!isset($data[$attribute])) {
         $e = new MandatoryAttributeException($attribute);
         throw $e;
       }
