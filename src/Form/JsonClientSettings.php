@@ -46,6 +46,7 @@ class JsonClientSettings extends ConfigFormBase {
       '#title' => $this->t('Username'),
       '#maxlength' => 64,
       '#size' => 64,
+      '#required' => TRUE,
       '#default_value' => $config->get('username'),
     ];
     $form['password'] = [
@@ -73,6 +74,7 @@ class JsonClientSettings extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('DCX notification access key'),
       '#default_value' => $config->get('notification_access_key'),
+      '#required' => TRUE,
       '#size' => 25,
     ];
     // Add a submit handler function for the key generation.
