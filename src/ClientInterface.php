@@ -103,6 +103,17 @@ interface ClientInterface {
   public function getCollections();
 
   /**
+   * Retrieve all docs of a collection.
+   *
+   * @param string $utag_id
+   *   Id of a collection.
+   *
+   * @return array
+   *   Documents of the given collection.
+   */
+  public function getDocsOfCollection($utag_id);
+
+  /**
    * Return filename and url of a thumbnail for the given (image) document.
    *
    * @param string $id

@@ -841,27 +841,30 @@ class JsonClient implements ClientInterface {
   }
 
   /**
-   * Retrieve all docs of a collection.
-   *
-   * @param string $utag_id
-   *   Id of a collection.
-   *
-   * @return array
-   *   Documents of the given collection.
+   * {@inheritdoc}
    */
   public function getDocsOfCollection($utag_id) {
     $doctoutag_params = [
       'q[utag_id]' => $utag_id,
       's[properties]' => '*',
+      's[_referenced][dcx:document][s][_rights_effective]' => '*',
       's[_referenced][dcx:document][s][files]' => '*',
+      's[_referenced][dcx:document][s][_referenced][dcx:rights][s][properties]' => '*',
     ];
 
     $this->dcxApiClient->get('doctoutag', $doctoutag_params, $docs);
 
     $documents = [];
-
     foreach ($docs['entries'] as $doc) {
-      $documents[] = $doc['properties']['doc_id']['_id'];
+
+      $document = reset($this->extractData($doc, ['_referenced', 'dcx:document']));
+      $rights = $this->extractData($doc, ['_referenced', 'dcx:rights']);
+
+      $document['_referenced']['dcx:rights'] = $rights;
+
+      if ($this->computeStatus($document)) {
+        $documents[] = $doc['properties']['doc_id']['_id'];
+      }
     }
 
     return $documents;
