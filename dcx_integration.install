@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Install file of the dcx module.
+ */
+
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ClientException;
+
+/**
+ * Implements hook_requirements().
+ */
+function dcx_integration_requirements($phase) {
+  $requirements = [];
+  switch ($phase) {
+    // At runtime, make sure that we have a publisher ID.
+    case 'runtime':
+
+      $config = \Drupal::configFactory()
+        ->get('dcx_integration.jsonclientsettings');
+
+      $requirements['dcx_integration'] = [
+        'title' => t('DCX Integration'),
+        'value' => t('Installed correctly'),
+        'description' => t('DCX Integration module has been installed and configured correctly.'),
+      ];
+
+      if (
+        empty($config->get('url')) ||
+        empty($config->get('username')) ||
+        empty($config->get('password')) ||
+        empty($config->get('publication'))) {
+
+        $url = Url::fromRoute('dcx_integration.json_client_settings');
+        $page = Link::fromTextAndUrl(t('DCX settings page'), $url)->toString();
+
+        $requirements['dcx_integration'] = [
+          'title' => t('DCX Integration'),
+          'value' => t("DCX module is not configured properly."),
+          'description' => t('Please configure it in the @page.', ['@page' => $page]),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+      else {
+        /** @var \Drupal\dcx_integration\JsonClient $client */
+        $client = \Drupal::service('dcx_integration.client');
+
+        try {
+          $client->checkServerStatus();
+        }
+        catch (ConnectException $connectException) {
+          $requirements['dcx_integration'] = [
+            'title' => t('DCX Integration'),
+            'value' => t("Can't connect to dcx server."),
+            'description' => t('Please check that your server is allowed to connect to the DCX'),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+        catch (ServerException $serverException) {
+          $requirements['dcx_integration'] = [
+            'title' => t('DCX Integration'),
+            'value' => t("There is a server error."),
+            'description' => t('Please contact the administrator.'),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+        catch (ClientException $clientException) {
+          $requirements['dcx_integration'] = [
+            'title' => t('DCX Integration'),
+            'value' => t("There is a server error."),
+            'description' => $clientException->getMessage(),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+        catch (\Exception $exception) {
+          $requirements['dcx_integration'] = [
+            'title' => t('DCX Integration'),
+            'value' => t("There is a server error."),
+            'description' => $exception->getMessage(),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+
+      }
+
+      break;
+  }
+  return $requirements;
+}

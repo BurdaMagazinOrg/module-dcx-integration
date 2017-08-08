@@ -98,6 +98,20 @@ class JsonClient implements ClientInterface {
   }
 
   /**
+   * Does a server request on a non existing doc to check the server status.
+   */
+  public function checkServerStatus() {
+
+    $this->dcxApiClient->guzzleClient->request(
+      'GET',
+      $this->dcxApiClient->fullUrl('document'),
+      $this->dcxApiClient->getRequestOptions([
+        'query' => $this->dcxApiClient->mergeQuery('document', []),
+      ])
+    );
+  }
+
+  /**
    * This is public only for debugging purposes.
    *
    * It's not part of the interface, it should be protected.
@@ -364,13 +378,16 @@ class JsonClient implements ClientInterface {
       '_rights_effective',
       'rightstype-UsagePermittedDigital',
     ]);
-    foreach (current($rights_ids) as $right) {
-      $right_id = $right['_id'];
-      $dereferenced_right_id = $json['_referenced']['dcx:rights'][$right_id]['properties']['topic_id']['_id'];
-      if ('dcxapi:tm_topic/rightsusage-Online' == $dereferenced_right_id) {
-        return TRUE;
+    if (is_array($rights_ids)) {
+      foreach (current($rights_ids) as $right) {
+        $right_id = $right['_id'];
+        $dereferenced_right_id = $json['_referenced']['dcx:rights'][$right_id]['properties']['topic_id']['_id'];
+        if ('dcxapi:tm_topic/rightsusage-Online' == $dereferenced_right_id) {
+          return TRUE;
+        }
       }
     }
+
     return FALSE;
   }
 
@@ -535,7 +552,7 @@ class JsonClient implements ClientInterface {
       ],
       'properties' => [
         'pool_id' => [
-          '_id' => '/dcx/api/pool/native',
+          '_id' => '/dcx/api/pool/story',
           '_type' => 'dcx:pool',
         ],
       ],
