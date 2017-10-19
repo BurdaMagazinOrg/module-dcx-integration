@@ -419,6 +419,10 @@ class JsonClient implements ClientInterface {
    * {@inheritdoc}
    */
   public function trackUsage(array $used_entities, $path, $published, $type) {
+    if (empty($used_entities)) {
+      // No need to fetch publications, if we don't have entities to track.
+      return;
+    }
 
     $dcx_status = $published ? 'pubstatus-published' : 'pubstatus-unpublished';
 
