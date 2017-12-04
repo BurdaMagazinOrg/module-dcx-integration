@@ -2,7 +2,7 @@
 phpenv config-rm xdebug.ini
 
 # globally require drupal coder for code tests
-composer global require drupal/coder
+composer global require drupal/coder symfony/yaml:^3.0
 
 # run phpcs
 phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
