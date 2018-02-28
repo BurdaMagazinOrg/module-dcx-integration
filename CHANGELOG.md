@@ -1,5 +1,17 @@
 # Change Log
 
+## [8.x-2.0-beta5](https://github.com/BurdaMagazinOrg/module-dcx-integration/tree/8.x-2.0-beta5) (2018-02-28)
+[Full Changelog](https://github.com/BurdaMagazinOrg/module-dcx-integration/compare/8.x-2.0-beta4...8.x-2.0-beta5)
+
+**Closed issues:**
+
+- Uncaught TypeError: $.ajax\(...\).complete is not a function dcx-dropzone-ui.js : 50 [\#70](https://github.com/BurdaMagazinOrg/module-dcx-integration/issues/70)
+
+**Merged pull requests:**
+
+- \#70 use new jquery syntax [\#71](https://github.com/BurdaMagazinOrg/module-dcx-integration/pull/71) ([Insasse](https://github.com/Insasse))
+- Fix symfony yaml version [\#69](https://github.com/BurdaMagazinOrg/module-dcx-integration/pull/69) ([chrfritsch](https://github.com/chrfritsch))
+
 ## [8.x-2.0-beta4](https://github.com/BurdaMagazinOrg/module-dcx-integration/tree/8.x-2.0-beta4) (2017-10-23)
 [Full Changelog](https://github.com/BurdaMagazinOrg/module-dcx-integration/compare/8.x-2.0-beta3...8.x-2.0-beta4)
 
