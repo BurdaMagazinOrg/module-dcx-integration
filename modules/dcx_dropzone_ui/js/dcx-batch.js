@@ -23,14 +23,14 @@
         if (progress === '100') {
           pb.stopMonitoring();
           $.ajax({
-            url: batch.uri + '&op=finished'
-          }).success(function (data, success, response) {
-            $progress.html(data['markup'] + $progress.parent().data('content'));
-            $('.view-filters input[type=submit]').click();
+            url: batch.uri + '&op=finished',
+            success: function (data, success, response) {
+              $progress.html(data['markup'] + $progress.parent().data('content'));
+              $('.view-filters input[type=submit]').click();
+            }
           });
         }
       }
-
       function errorCallback(pb) {
         $progress.prepend($('<p class="error"></p>').html(batch.errorMessage));
         $('#wait').hide();
