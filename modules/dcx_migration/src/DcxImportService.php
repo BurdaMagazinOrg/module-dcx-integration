@@ -7,7 +7,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\dcx_integration\Exception\NoOnlinePermissionException;
-use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
