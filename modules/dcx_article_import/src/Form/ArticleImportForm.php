@@ -242,7 +242,7 @@ class ArticleImportForm extends FormBase {
 
     foreach ($media_ids as $media_id) {
       $media_paragraph = Paragraph::create([
-        'type' => 'media',
+        'type' => 'image',
         'uid' => $uid,
         'status' => 1,
         'field_media' => [

@@ -6,6 +6,8 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\dcx_integration\Exception\NoOnlinePermissionException;
+use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -103,6 +105,7 @@ class DcxImportService implements DcxImportServiceInterface {
       $context['results']['count'] = 0;
       $context['results']['success'] = 0;
       $context['results']['fail'] = [];
+      $context['results']['no_rights'] = [];
       $context['results']['reimport'] = [];
     }
 
@@ -115,6 +118,9 @@ class DcxImportService implements DcxImportServiceInterface {
     try {
       $executable->importItemWithUnknownStatus($id);
       $context['results']['success']++;
+    }
+    catch (NoOnlinePermissionException $e) {
+      $context['results']['no_rights'][] = $id;
     }
     catch (\Exception $e) {
       $context['results']['fail'][] = $id;
@@ -149,6 +155,10 @@ class DcxImportService implements DcxImportServiceInterface {
     if (!empty($results['fail'])) {
       $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => implode(', ', $results['fail'])]);
       drupal_set_message($fail, 'error');
+    }
+    if (!empty($results['no_rights'])) {
+      $fail = $t->translate('The following item(s) failed to import, because there are no online permissions: @items', ['@items' => implode(', ', $results['no_rights'])]);
+      drupal_set_message($fail, 'warning');
     }
   }
 
