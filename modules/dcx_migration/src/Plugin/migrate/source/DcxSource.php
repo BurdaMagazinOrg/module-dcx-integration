@@ -53,6 +53,7 @@ class DcxSource extends SourcePluginBase {
    *
    * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
    * @throws \Drupal\dcx_integration\Exception\NoOnlinePermissionException
+   * @throws \Exception
    */
   protected function getDcxObject($id) {
     $object = $this->dcxService->getObject($id);
@@ -110,6 +111,10 @@ class DcxSource extends SourcePluginBase {
    *
    * @return \Drupal\migrate\Row
    *   Row object.
+   *
+   * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
+   * @throws \Drupal\dcx_integration\Exception\NoOnlinePermissionException
+   * @throws \Exception
    */
   public function getRowById($id) {
     $dcx_object = $this->getDcxObject($id);

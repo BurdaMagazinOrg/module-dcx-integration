@@ -49,7 +49,7 @@ class DcxImportService implements DcxImportServiceInterface {
    */
   public function __construct(TranslationInterface $string_translation, MigrationPluginManagerInterface $plugin_manager, EventDispatcherInterface $event_dispatcher) {
     $this->stringTranslation = $string_translation;
-    $this->plugin_manager = $plugin_manager;
+    $this->pluginManager = $plugin_manager;
     $this->eventDispatcher = $event_dispatcher;
   }
 
@@ -60,10 +60,12 @@ class DcxImportService implements DcxImportServiceInterface {
    *
    * @return \Drupal\dcx_migration\DcxMigrateExecutable
    *   Migration executable.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   protected function getMigrationExecutable() {
     if (NULL == $this->migrateExecutable) {
-      $migration = $this->plugin_manager->createInstance('dcx_migration');
+      $migration = $this->pluginManager->createInstance('dcx_migration');
       $this->migrateExecutable = new DcxMigrateExecutable($migration, $this->eventDispatcher);
     }
 
@@ -178,7 +180,7 @@ class DcxImportService implements DcxImportServiceInterface {
 
     foreach ($dcx_ids as $i) {
       $destid = $map->lookupDestinationIds([$i]);
-      $entity_ids[$i] = $destid[0][0];
+      $entity_ids[$i] = !empty($destid[0][0]) ? $destid[0][0] : FALSE;
     };
 
     return $entity_ids;
