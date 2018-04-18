@@ -6,3 +6,4 @@ package: dcx
 dependencies:
   - dcx_integration:dcx_integration
   - dcx_integration:dcx_migration
+  - paragraphs:paragraphs

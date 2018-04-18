@@ -1,0 +1,19 @@
+uuid: 5af4128c-f300-442e-a7ce-45879b1ee82b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_copyright
+    - media_entity.bundle.image
+id: media.image.field_copyright
+field_name: field_copyright
+entity_type: media
+bundle: image
+label: Copyright
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
