@@ -3,10 +3,8 @@ type: module
 description: 'Migration of data from DC-X digital asset management.'
 core: '8.x'
 package: dcx
-
 dependencies:
   - dcx_integration:dcx_integration
   - drupal:migrate
   - migrate_plus:migrate_plus
   - media_entity:media_entity
-  - thunder:thunder_media
