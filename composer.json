@@ -12,7 +12,7 @@
 	}
   ],
   "require": {
-	"drupal/migrate_plus": ">=4.0",
+	"drupal/migrate_plus": ">=3.0",
 	"digicol/dcx-sdk-php": "^2.0"
   },
   "require-dev": {

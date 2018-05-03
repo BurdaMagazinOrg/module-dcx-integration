@@ -5,8 +5,3 @@ dropzone:
   css:
     theme:
       css/dcx-article-import-ui.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings
-    - core/jquery.once
