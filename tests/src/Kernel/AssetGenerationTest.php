@@ -1,14 +1,15 @@
 <?php
 
-namespace Drupal\Tests\dcx_integration\Unit;
+namespace Drupal\Tests\dcx_integration\Kernel;
 
 use Drupal\dcx_integration\JsonClient;
-use Drupal\Tests\UnitTestCase;
+use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\dcx_integration\Unit\DummyDcxApiClient;
 
 /**
  * @group dcx
  */
-class AssetGenerationTest extends UnitTestCase {
+class AssetGenerationTest extends KernelTestBase {
   protected $client;
 
   protected $api_client;
@@ -17,8 +18,7 @@ class AssetGenerationTest extends UnitTestCase {
    *
    */
   public function setUp() {
-    $jsonclientsettings = ['publication' => 'dummy_publication'];
-    $config_factory = $this->getConfigFactoryStub(['dcx_integration.jsonclientsettings' => $jsonclientsettings]);
+    parent::setUp();
     $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
 
     $logger = $this->getMock('\Psr\Log\LoggerInterface');
@@ -27,9 +27,8 @@ class AssetGenerationTest extends UnitTestCase {
       ->method('get')
       ->will($this->returnValue($logger));
 
-    $stringTranslation = $this->getStringTranslationStub();
     $this->api_client = new DummyDcxApiClient();
-    $this->client = new JsonClient($config_factory, $user, $stringTranslation, $loggerFactory, $this->api_client);
+    $this->client = new JsonClient($this->container->get('config.factory'), $user, $this->container->get('string_translation'), $loggerFactory, $this->api_client);
   }
 
   /**
@@ -58,7 +57,7 @@ class AssetGenerationTest extends UnitTestCase {
       ],
       "files" => [["_id" => "test__file"]],
       '_referenced' => [
-        'dcx:file' => ["test__file" => ['properties' => ['_file_url_absolute' => 'test__url']]],
+        'dcx:file' => ["test__file" => ['properties' => ['_file_url_absolute' => 'test__url.jpg']]],
         'dcx:rights' => ["test__right" => ['properties' => ['topic_id' => ['_id' => 'dcxapi:tm_topic/rightsusage-Online']]]],
       ],
       '_rights_effective' => ['rightstype-UsagePermittedDigital' => [[["_id" => "test__right"]]]],
