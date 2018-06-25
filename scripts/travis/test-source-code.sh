@@ -10,14 +10,9 @@ phpcs --standard=Drupal --report=summary -p . --ignore=tests,README.md,CHANGELOG
 phpcs --standard=DrupalPractice --report=summary -p .
 
 # JS ESLint checking
-mv ~/.nvm ~/.nvm-backup
-git clone https://github.com/creationix/nvm.git ~/.nvm
-(cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`)
 set -x
 source ~/.nvm/nvm.sh
 set +x
-nvm install 4
+nvm install 6
 npm install -g eslint
 eslint .
-rm -rf ~/.nvm
-mv ~/.nvm-backup ~/.nvm
