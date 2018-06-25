@@ -240,7 +240,7 @@ class ArticleImportForm extends FormBase {
       $media_ids = $this->dcxImportService->getEntityIds($files);
     }
 
-    foreach (array_filter($media_ids) as $media_id) {
+    foreach ($media_ids as $media_id) {
       $media_paragraph = Paragraph::create([
         'type' => 'image',
         'uid' => $uid,

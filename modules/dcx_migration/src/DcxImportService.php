@@ -171,6 +171,9 @@ class DcxImportService implements DcxImportServiceInterface {
    *
    * @return array|bool
    *   Array of entity id or FALSE, keyed by DC-X ID
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   * @throws \Drupal\migrate\MigrateException
    */
   public function getEntityIds(array $dcx_ids) {
     $executable = $this->getMigrationExecutable();
@@ -180,7 +183,9 @@ class DcxImportService implements DcxImportServiceInterface {
 
     foreach ($dcx_ids as $i) {
       $destid = $map->lookupDestinationIds([$i]);
-      $entity_ids[$i] = !empty($destid[0][0]) ? $destid[0][0] : FALSE;
+      if (!empty($destid[0][0])) {
+        $entity_ids[$i] = $destid[0][0];
+      }
     };
 
     return $entity_ids;
