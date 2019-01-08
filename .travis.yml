@@ -18,6 +18,7 @@ branches:
 env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
+    - DRUPAL_TRAVIS_TEST_CODING_STYLES=false
 
 before_install:
   - composer global require thunder/travis @beta
