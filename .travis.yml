@@ -25,7 +25,7 @@ before_install:
 
 install:
   - test-drupal-module prepare_build
-  - composer require digicol/dcx-sdk-php:^2.0 --working-dir=/tmp/test/module-dcx-integration/install
+  - composer require digicol/dcx-sdk-php:^2.0 --working-dir=/tmp/test/dcx_integration/install
 
 script:
   - test-drupal-module
