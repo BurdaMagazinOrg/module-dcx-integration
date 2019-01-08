@@ -22,6 +22,10 @@ env:
 before_install:
   - composer global require thunder/travis @beta
 
+install:
+  - test-drupal-module prepare_build
+  - composer require digicol/dcx-sdk-php:^2.0 --working-dir=/tmp/test/module-dcx-integration/install
+
 script:
   - test-drupal-module
 
