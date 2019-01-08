@@ -19,16 +19,21 @@ env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
     - DRUPAL_TRAVIS_TEST_CODING_STYLES=false
+    - DRUPAL_TRAVIS_TEST_GROUP="dcx"
 
 before_install:
   - composer global require thunder/travis @beta
 
 install:
   - test-drupal-module prepare_build
-  - composer require digicol/dcx-sdk-php:^2.0 --working-dir=/tmp/test/dcx_integration/install
+  - composer require digicol/dcx-sdk-php:^2.0 --no-update --working-dir=${DRUPAL_TRAVIS_DRUPAL_INSTALLATION_DIRECTORY}
 
 script:
   - test-drupal-module
+  - if [ -n "$DCX_SETTINGS" ]; then
+    export DRUPAL_TRAVIS_TEST_GROUP="dcx_integration";
+    test-drupal-module
+    fi
 
 notifications:
   email: false
