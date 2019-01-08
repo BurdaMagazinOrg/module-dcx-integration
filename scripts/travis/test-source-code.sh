@@ -7,7 +7,7 @@ composer global require "symfony/yaml:^3.4" "drupal/coder"
 
 # run phpcs
 phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
-phpcs --standard=Drupal --ignore=README.md -p .
+phpcs --standard=Drupal --ignore=tests,README.md,CHANGELOG.md -p .
 phpcs --standard=DrupalPractice -p .
 
 # JS ESLint checking
