@@ -61,7 +61,7 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testGetJson_exception_on_non_200_response() {
     $this->api_client->expected_return_value = 23;
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing get on url "id"\. Status code was 23\./');
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing get on url "id"\. Status code was 23\./');
     $this->client->getJson('dcxapi:id');
   }
 
@@ -71,7 +71,7 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_emptyResponse() {
     // Expect empty response -> Exception.
     $this->api_client->expected_response_body = NULL;
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', '/The operation yielded no result/');
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', '/The operation yielded no result/');
     $this->client->archiveArticle('node/1', [], NULL);
 
   }
@@ -82,7 +82,7 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_invalidResponse() {
     // Expect invalid response -> Exception.
     $this->api_client->expected_response_body = 'invalid';
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', '/Unable to archive: The result operation has no type/');
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', '/Unable to archive: The result operation has no type/');
     $this->client->archiveArticle('node/1', [], NULL);
 
   }
@@ -93,7 +93,7 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_noSuccess() {
     // Expect response without _type == success -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'no success'];
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing createObject|setObject on url "document"\. Status code was 200\."/');
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing createObject|setObject on url "document"\. Status code was 200\."/');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -103,7 +103,7 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_noLocation() {
     // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success'];
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', "/The operation was successful, but key location was not found/");
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', "/The operation was successful, but key location was not found/");
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -113,7 +113,7 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_invalidLocation() {
     // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success', 'location' => 'invalid'];
-    $this->setExpectedExceptionRegExp('Exception', '/The operation was successful, but the location was not parseable/');
+    $this->setExpectedException('Exception', '/The operation was successful, but the location was not parseable/');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -204,7 +204,7 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testPubinfoOnPath_exception_on_non_200_response() {
     $this->api_client->expected_return_value = 23;
-    $this->setExpectedExceptionRegExp('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing get on url "pubinfo"\. Status code was 23/');
+    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', '/Error performing get on url "pubinfo"\. Status code was 23/');
     $this->client->pubinfoOnPath('node/1', 'article');
   }
 

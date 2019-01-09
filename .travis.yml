@@ -32,7 +32,7 @@ script:
   - test-drupal-module
   - if [ -n "$DCX_SETTINGS" ]; then
     export DRUPAL_TRAVIS_TEST_GROUP="dcx_integration";
-    test-drupal-module
+    test-drupal-module;
     fi
 
 notifications:
