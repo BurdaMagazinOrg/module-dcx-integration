@@ -29,12 +29,16 @@ class DcxJsonClientIntegrationTest extends UnitTestCase {
    */
   public function setUp() {
 
-    $jsonclientsettings = json_decode(getenv('DCX_SETTINGS'), 1);
-
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];
 
     $config_factory = $this->getConfigFactoryStub([
-      'dcx_integration.jsonclientsettings' => $jsonclientsettings,
+      'dcx_integration.jsonclientsettings' => [
+        'url' => getenv('DCX_URL'),
+        'username' => getenv('DCX_USER'),
+        'password' => getenv('DCX_PASS'),
+        'publication' => getenv('DCX_PUBLICATION'),
+        'notification_access_key' => getenv('DCX_NOTIFICATION_KEY'),
+      ],
       'system.site' => $siteSettings,
     ]);
     $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
