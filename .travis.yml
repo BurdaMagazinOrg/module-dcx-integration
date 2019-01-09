@@ -34,5 +34,8 @@ install:
   - test-drupal-module prepare_build
   - composer require digicol/dcx-sdk-php:^2.0 --no-update --working-dir=/tmp/test/dcx_integration/install
 
+script:
+  - test-drupal-module
+
 notifications:
   email: false
