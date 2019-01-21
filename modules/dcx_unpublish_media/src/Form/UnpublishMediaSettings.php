@@ -64,13 +64,13 @@ class UnpublishMediaSettings extends ConfigFormBase {
 
     $config = $this->config('dcx_unpublish_media.unpublishmediasettings');
 
-    /** @var MediaBundle[] $bundles */
+    /** @var \Drupal\media\MediaTypeInterface[] $bundles */
     $bundles = $this->entityTypeManager
-      ->getStorage('media_bundle')
+      ->getStorage('media_type')
       ->loadMultiple();
     $imageBundles = [];
     foreach ($bundles as $bundle) {
-      if ($bundle->get('type') == 'image') {
+      if ($bundle->get('source') == 'image') {
         $imageBundles[] = $bundle->id();
       }
     }

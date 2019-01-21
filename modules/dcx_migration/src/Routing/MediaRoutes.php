@@ -14,14 +14,14 @@ class MediaRoutes {
    */
   public function routes() {
 
-    /** @var \Drupal\media_entity\Entity\MediaBundle[] $bundles */
-    $bundles = \Drupal::entityTypeManager()->getStorage('media_bundle')->loadMultiple();
+    /** @var \Drupal\media\Entity\MediaType[] $bundles */
+    $bundles = \Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple();
 
     $routes = [];
 
     foreach ($bundles as $bundle) {
 
-      if ($bundle->get('type') == 'image') {
+      if ($bundle->get('source') == 'image') {
         $routes['dcx_migration.form.' . $bundle->id()] = new Route(
         // Path to attach this route to:
           'media/add/' . $bundle->id(),

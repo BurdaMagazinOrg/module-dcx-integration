@@ -64,9 +64,9 @@ class RequestSubscriber implements EventSubscriberInterface {
       $fids = $query->execute();
 
       if ($fids) {
-        $bundles = $this->entityTypeManager->getStorage('media_bundle')->loadMultiple();
+        $bundles = $this->entityTypeManager->getStorage('media_type')->loadMultiple();
         foreach ($bundles as $bundle) {
-          if ($bundle->get('type') == 'image') {
+          if ($bundle->get('source') == 'image') {
 
             $field = $bundle->get('type_configuration')['source_field'];
 

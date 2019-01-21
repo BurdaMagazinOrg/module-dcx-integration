@@ -4,4 +4,4 @@ description: 'Handels the behavior if a media is unpublished'
 core: '8.x'
 package: dcx
 dependencies:
-  - media_entity:media_entity
+  - drupal:media (>= 8.4)

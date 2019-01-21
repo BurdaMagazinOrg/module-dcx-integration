@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function dcx_unpublish_media_media_update($entity) {
+function dcx_unpublish_media_media_update(\Drupal\media\MediaInterface $entity) {
   // Only care about media images.
   if ('image' !== $entity->bundle()) {
     return;
@@ -21,14 +21,7 @@ function dcx_unpublish_media_media_update($entity) {
     return;
   }
 
-  $mediaBundleStorage = \Drupal::entityTypeManager()
-    ->getStorage('media_bundle');
-  $bundle = $mediaBundleStorage->load($entity->bundle());
-  $field = $bundle->get('type_configuration')['source_field'];
-
-  /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $image */
-  $image = $entity->$field->first();
-  $file = file_load($image->target_id);
+  $file = file_load($entity->getSource()->getSourceFieldValue($entity));
 
   if (!$entity->status->value && $entity->original->status->value) {
     $target_fileuri = str_replace('public://', 'private://', $file->getFileUri());
@@ -66,10 +59,10 @@ function dcx_unpublish_media_media_update($entity) {
 function dcx_unpublish_media_media_build_defaults_alter(array &$build, EntityInterface $entity, $view_mode) {
 
   $mediaBundleStorage = \Drupal::entityTypeManager()
-    ->getStorage('media_bundle');
+    ->getStorage('media_type');
   $bundle = $mediaBundleStorage->load($entity->bundle());
 
-  if ($bundle->get('type') == 'image' && !$entity->status->value) {
+  if ($bundle->get('source') == 'image' && !$entity->status->value) {
 
     $setting = \Drupal::config('dcx_unpublish_media.unpublishmediasettings');
 

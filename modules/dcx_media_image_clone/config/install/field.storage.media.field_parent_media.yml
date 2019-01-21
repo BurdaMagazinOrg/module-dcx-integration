@@ -2,7 +2,7 @@ langcode: de
 status: true
 dependencies:
   module:
-    - media_entity
+    - media
 id: media.field_parent_media
 field_name: field_parent_media
 entity_type: media
