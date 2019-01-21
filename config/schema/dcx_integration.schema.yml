@@ -1,0 +1,19 @@
+dcx_integration.jsonclientsettings:
+  type: config_object
+  label: 'DCX integration'
+  mapping:
+    url:
+      type: string
+      label: 'url'
+    username:
+      type: string
+      label: 'username'
+    password:
+      type: string
+      label: 'password'
+    publication:
+      type: string
+      label: 'publication'
+    notification_access_key:
+      type: string
+      label: 'notification_access_key'

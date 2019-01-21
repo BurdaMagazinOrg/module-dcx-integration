@@ -17,6 +17,8 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
   const DCX_IMAGE_ID = 'dcxapi:document/doc6vkgudvfik99vei734v';
   const DCX_ARTICLE_ID = 'dcxapi:document/doc6u9t0hf7jf99jzteot4';
 
+  protected static $modules = ['dcx_integration', 'system'];
+
   /**
    * Client class.
    *
@@ -32,16 +34,15 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
 
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];
 
-    $config_factory = $this->getConfigFactoryStub([
-      'dcx_integration.jsonclientsettings' => [
-        'url' => getenv('DCX_URL'),
-        'username' => getenv('DCX_USER'),
-        'password' => getenv('DCX_PASS'),
-        'publication' => getenv('DCX_PUBLICATION'),
-        'notification_access_key' => getenv('DCX_NOTIFICATION_KEY'),
-      ],
-      'system.site' => $siteSettings,
-    ]);
+    $config_factory = $this->config('dcx_integration.jsonclientsettings')->setData([
+      'url' => getenv('DCX_URL'),
+      'username' => getenv('DCX_USER'),
+      'password' => getenv('DCX_PASS'),
+      'publication' => getenv('DCX_PUBLICATION'),
+      'notification_access_key' => getenv('DCX_NOTIFICATION_KEY'),
+    ])->save();
+
+    $this->config('system.site')->setData($siteSettings)->save();
     $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
     $user->method('getEmail')->willReturn(getenv('DCX_USER_MAIL'));
 
@@ -51,7 +52,7 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
       ->method('get')
       ->will($this->returnValue($logger));
 
-    $this->client = new JsonClient($config_factory, $user, $this->container->get('string_translation'), $loggerFactory);
+    $this->client = new JsonClient($this->container->get('config.factory'), $user, $this->container->get('string_translation'), $loggerFactory);
 
   }
 
