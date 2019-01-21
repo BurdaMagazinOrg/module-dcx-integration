@@ -1,18 +1,18 @@
 <?php
 
-namespace Drupal\Tests\dcx_integration\Unit;
+namespace Drupal\Tests\dcx_integration\Kernel;
 
 use Drupal\dcx_integration\Asset\Article;
 use Drupal\dcx_integration\Asset\Image;
 use Drupal\dcx_integration\JsonClient;
-use Drupal\Tests\UnitTestCase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Class DcxJsonClientIntegrationTest.
  *
  * @group dcx_integration
  */
-class DcxJsonClientIntegrationTest extends UnitTestCase {
+class DcxJsonClientIntegrationTest extends KernelTestBase {
 
   const DCX_IMAGE_ID = 'dcxapi:document/doc6vkgudvfik99vei734v';
   const DCX_ARTICLE_ID = 'dcxapi:document/doc6u9t0hf7jf99jzteot4';
@@ -28,6 +28,7 @@ class DcxJsonClientIntegrationTest extends UnitTestCase {
    * {@inheritdoc}
    */
   public function setUp() {
+    parent::setUp();
 
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];
 
@@ -50,8 +51,7 @@ class DcxJsonClientIntegrationTest extends UnitTestCase {
       ->method('get')
       ->will($this->returnValue($logger));
 
-    $stringTranslation = $this->getStringTranslationStub();
-    $this->client = new JsonClient($config_factory, $user, $stringTranslation, $loggerFactory);
+    $this->client = new JsonClient($config_factory, $user, $this->container->get('string_translation'), $loggerFactory);
 
   }
 
