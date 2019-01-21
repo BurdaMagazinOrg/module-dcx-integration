@@ -27,7 +27,7 @@ matrix:
     - env: DRUPAL_TRAVIS_TEST_GROUP="dcx_integration" DCX_URL=""
 
 before_install:
-  - composer global require thunder/travis @beta
+  - composer global require thunder/travis
 
 install:
   - test-drupal-module prepare_build
