@@ -1,21 +1,23 @@
 <?php
 
-namespace Drupal\Tests\dcx_integration\Unit;
+namespace Drupal\Tests\dcx_integration\Kernel;
 
 use Drupal\dcx_integration\Asset\Article;
 use Drupal\dcx_integration\Asset\Image;
 use Drupal\dcx_integration\JsonClient;
-use Drupal\Tests\UnitTestCase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Class DcxJsonClientIntegrationTest.
  *
  * @group dcx_integration
  */
-class DcxJsonClientIntegrationTest extends UnitTestCase {
+class DcxJsonClientIntegrationTest extends KernelTestBase {
 
   const DCX_IMAGE_ID = 'dcxapi:document/doc6vkgudvfik99vei734v';
   const DCX_ARTICLE_ID = 'dcxapi:document/doc6u9t0hf7jf99jzteot4';
+
+  protected static $modules = ['dcx_integration', 'system'];
 
   /**
    * Client class.
@@ -28,15 +30,19 @@ class DcxJsonClientIntegrationTest extends UnitTestCase {
    * {@inheritdoc}
    */
   public function setUp() {
-
-    $jsonclientsettings = json_decode(getenv('DCX_SETTINGS'), 1);
+    parent::setUp();
 
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];
 
-    $config_factory = $this->getConfigFactoryStub([
-      'dcx_integration.jsonclientsettings' => $jsonclientsettings,
-      'system.site' => $siteSettings,
-    ]);
+    $this->config('dcx_integration.jsonclientsettings')->setData([
+      'url' => getenv('DCX_URL'),
+      'username' => getenv('DCX_USER'),
+      'password' => getenv('DCX_PASS'),
+      'publication' => getenv('DCX_PUBLICATION'),
+      'notification_access_key' => getenv('DCX_NOTIFICATION_KEY'),
+    ])->save();
+
+    $this->config('system.site')->setData($siteSettings)->save();
     $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
     $user->method('getEmail')->willReturn(getenv('DCX_USER_MAIL'));
 
@@ -46,8 +52,7 @@ class DcxJsonClientIntegrationTest extends UnitTestCase {
       ->method('get')
       ->will($this->returnValue($logger));
 
-    $stringTranslation = $this->getStringTranslationStub();
-    $this->client = new JsonClient($config_factory, $user, $stringTranslation, $loggerFactory);
+    $this->client = new JsonClient($this->container->get('config.factory'), $user, $this->container->get('string_translation'), $loggerFactory);
 
   }
 

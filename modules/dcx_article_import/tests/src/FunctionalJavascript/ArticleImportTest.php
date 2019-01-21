@@ -20,20 +20,22 @@ class ArticleImportTest extends JavascriptTestBase {
   ];
 
   /**
-   *
+   * Test article import.
    */
   public function testArticleImport() {
 
-    $jsonclientsettings = json_decode(getenv('DCX_SETTINGS'), 1);
-    $this->config('dcx_integration.jsonclientsettings')->setData($jsonclientsettings)->save();
+    $this->config('dcx_integration.jsonclientsettings')->setData([
+      'url' => getenv('DCX_URL'),
+      'username' => getenv('DCX_USER'),
+      'password' => getenv('DCX_PASS'),
+      'publication' => getenv('DCX_PUBLICATION'),
+      'notification_access_key' => getenv('DCX_NOTIFICATION_KEY'),
+    ])->save();
     $this->config('system.site')->setData(['mail' => 'admin@admin.de', 'name' => 'Integration Test'])->save();
 
     $this->drupalLogin($this->createUser(['import from dcx']));
 
     $this->drupalGet('node/add/article/dcx-import');
-
-#    $this->getSession()->getPage()->fillField()
-
   }
 
 }

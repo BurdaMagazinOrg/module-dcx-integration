@@ -32,7 +32,7 @@ class JsonClientSettings extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('dcx_integration.jsonclientsettings');
+    $config = $this->comodules/dcx_article_import/js/dcx-article-import-ui.jsnfig('dcx_integration.jsonclientsettings');
     $form['url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('URL'),

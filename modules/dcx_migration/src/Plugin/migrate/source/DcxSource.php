@@ -4,6 +4,7 @@ namespace Drupal\dcx_migration\Plugin\migrate\source;
 
 use Drupal\dcx_integration\Asset\Image;
 use Drupal\dcx_integration\Exception\IllegalAssetTypeException;
+use Drupal\dcx_integration\Exception\NoOnlinePermissionException;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\MigrateException;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
@@ -51,11 +52,16 @@ class DcxSource extends SourcePluginBase {
    *   DCX object.
    *
    * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
+   * @throws \Drupal\dcx_integration\Exception\NoOnlinePermissionException
+   * @throws \Exception
    */
   protected function getDcxObject($id) {
     $object = $this->dcxService->getObject($id);
     if (!$object instanceof Image) {
       throw new IllegalAssetTypeException($id, get_class($object), '\Drupal\dcx_integration\Asset\Image');
+    }
+    if (!$object->data()['status']) {
+      throw new NoOnlinePermissionException($id);
     }
     return $object;
   }
@@ -105,6 +111,10 @@ class DcxSource extends SourcePluginBase {
    *
    * @return \Drupal\migrate\Row
    *   Row object.
+   *
+   * @throws \Drupal\dcx_integration\Exception\IllegalAssetTypeException
+   * @throws \Drupal\dcx_integration\Exception\NoOnlinePermissionException
+   * @throws \Exception
    */
   public function getRowById($id) {
     $dcx_object = $this->getDcxObject($id);
