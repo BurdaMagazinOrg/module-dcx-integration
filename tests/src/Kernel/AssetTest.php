@@ -11,6 +11,7 @@ use Drupal\Tests\UnitTestCase;
  * Description of AssetTest.
  *
  * @group dcx
+ * @codingStandardsIgnoreFile
  */
 class AssetTest extends KernelTestBase {
 

@@ -8,6 +8,7 @@ use Drupal\Tests\dcx_integration\Unit\DummyDcxApiClient;
 
 /**
  * @group dcx
+ * @codingStandardsIgnoreFile
  */
 class AssetGenerationTest extends KernelTestBase {
   protected $client;
