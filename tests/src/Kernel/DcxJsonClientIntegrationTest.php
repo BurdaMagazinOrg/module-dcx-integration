@@ -34,7 +34,7 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
 
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];
 
-    $config_factory = $this->config('dcx_integration.jsonclientsettings')->setData([
+    $this->config('dcx_integration.jsonclientsettings')->setData([
       'url' => getenv('DCX_URL'),
       'username' => getenv('DCX_USER'),
       'password' => getenv('DCX_PASS'),
