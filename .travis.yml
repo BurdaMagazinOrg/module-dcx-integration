@@ -18,14 +18,13 @@ branches:
 env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
-    - DRUPAL_TRAVIS_TEST_CODING_STYLES=false
   matrix:
     - DRUPAL_TRAVIS_TEST_GROUP="dcx"
     - DRUPAL_TRAVIS_TEST_GROUP="dcx_integration"
 
 matrix:
   exclude:
-    - env: DRUPAL_TRAVIS_TEST_GROUP="dcx_integration" DCX_SETTINGS=""
+    - env: DRUPAL_TRAVIS_TEST_GROUP="dcx_integration" DCX_URL=""
 
 before_install:
   - composer global require thunder/travis @beta

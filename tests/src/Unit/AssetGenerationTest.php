@@ -7,6 +7,7 @@ use Drupal\Tests\UnitTestCase;
 
 /**
  * @group dcx
+ * @codingStandardsIgnoreFile
  */
 class AssetGenerationTest extends UnitTestCase {
   protected $client;
