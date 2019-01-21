@@ -96,7 +96,7 @@ class ArticleImportForm extends FormBase {
     // Step 1.
     if (!$asset) {
       $form['dcx_id'] = [
-        '#type' => 'textfield',
+        '#type' => 'hidden',
         '#title' => $this->t('DC-X ID'),
         '#description' => $this->t('Please give a DC-X story document id. Something like "document/doc6p9gtwruht4gze9boxi".'),
         '#maxlength' => 64,
@@ -242,10 +242,10 @@ class ArticleImportForm extends FormBase {
 
     foreach ($media_ids as $media_id) {
       $media_paragraph = Paragraph::create([
-        'type' => 'media',
+        'type' => 'image',
         'uid' => $uid,
         'status' => 1,
-        'field_media' => [
+        'field_image' => [
           ['target_id' => $media_id],
         ],
       ]);

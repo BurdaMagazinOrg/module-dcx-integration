@@ -2,12 +2,20 @@
 
 namespace Drupal\dcx_integration\Asset;
 
+use Drupal\dcx_integration\Exception\IllegalAttributeException;
+
 /**
  * Class Image.
  *
  * @package Drupal\dcx_integration\Asset
  */
 class Image extends BaseAsset {
+
+  protected static $allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+  ];
+
   public static $mandatoryAttributes = [
     'id',
     'filename',
@@ -33,6 +41,10 @@ class Image extends BaseAsset {
    */
   public function __construct(array $data) {
     parent::__construct($data, self::$mandatoryAttributes, self::$optionalAttributes);
+    $mimeType = \Drupal::service('file.mime_type.guesser')->guess($data['url']);
+    if (!in_array($mimeType, static::$allowedMimeTypes)) {
+      throw new IllegalAttributeException($data['url']);
+    }
   }
 
 }
