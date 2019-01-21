@@ -6,6 +6,7 @@ namespace Drupal\Tests\dcx_integration\Unit;
  * Dummy API client class.
  *
  * It allows introspection of called methods and arguments for testing.
+ * @codingStandardsIgnoreFile
  */
 class DummyDcxApiClient {
 
