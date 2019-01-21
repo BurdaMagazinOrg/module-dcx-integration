@@ -6,11 +6,12 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\media\MediaInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function dcx_unpublish_media_media_update(\Drupal\media\MediaInterface $entity) {
+function dcx_unpublish_media_media_update(MediaInterface $entity) {
   // Only care about media images.
   if ('image' !== $entity->bundle()) {
     return;
