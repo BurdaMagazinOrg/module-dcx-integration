@@ -1,5 +1,0 @@
-dcx_unpublish_media.unpublish_media_settings:
-  title: Unpublish Media
-  route_name: dcx_unpublish_media.unpublish_media_settings
-  base_route: dcx_integration.json_client_settings
-  weight: 1
