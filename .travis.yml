@@ -30,11 +30,11 @@ before_install:
   - composer global require thunder/travis
 
 install:
-  - test-drupal-module prepare_build
+  - test-drupal-project prepare_build
   - composer require digicol/dcx-sdk-php:^2.0 --no-update --working-dir=/tmp/test/dcx_integration/install
 
 script:
-  - test-drupal-module
+  - test-drupal-project
 
 notifications:
   email: false
