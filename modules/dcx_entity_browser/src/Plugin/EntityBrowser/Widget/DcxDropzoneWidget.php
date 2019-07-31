@@ -23,7 +23,7 @@ class DcxDropzoneWidget extends View {
    */
   public function defaultConfiguration() {
     return [
-      'dropzone_description' => t('Drop DCX images here to upload them'),
+      'dropzone_description' => $this->t('Drop DCX images here to upload them'),
     ] + parent::defaultConfiguration();
   }
 

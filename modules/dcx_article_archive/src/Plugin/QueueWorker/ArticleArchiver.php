@@ -160,7 +160,7 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     // If a non-null id has changed while archiving something is severly wrong.
     // Yet another case of "this should never happen".
     if (NULL !== $existing_dcx_id && $existing_dcx_id != $dcx_id) {
-      $message = t('Node %url changed its DC-X ID from %from to %to while archiving to DC-X.', [
+      $message = $this->t('Node %url changed its DC-X ID from %from to %to while archiving to DC-X.', [
         '%url' => $url,
         '%from' => $existing_dcx_id,
         '%to' => $dcx_id,
