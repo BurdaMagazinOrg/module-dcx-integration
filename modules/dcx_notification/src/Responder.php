@@ -88,7 +88,7 @@ class Responder extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\Response
    *   An appropriate Response depending on parameters.
    *
-   * @throws NotAcceptableHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException
    */
   public function trigger() {
 
@@ -135,7 +135,7 @@ class Responder extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\Response
    *   An appropriate Response depending on parameters.
    *
-   * @throws NotAcceptableHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException
    */
   public function import() {
 
@@ -189,9 +189,9 @@ class Responder extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\Response
    *   OK 200 if success.
    *
-   * @throws NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If Drupal does not know this ID.
-   * @throws NotAcceptableHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException
    *   If The ID is ambiguous.
    */
   protected function reimportId($id) {
@@ -230,7 +230,7 @@ class Responder extends ControllerBase {
    *
    * @see dcx_track_media_usage_node_update
    *
-   * @throws NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If the path does not represent a valid node.
    *
    * @return \Symfony\Component\HttpFoundation\Response
