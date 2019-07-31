@@ -24,6 +24,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DcxLinkFieldWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $configFactory;
 
   /**

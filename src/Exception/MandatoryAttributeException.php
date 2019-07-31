@@ -7,6 +7,11 @@ namespace Drupal\dcx_integration\Exception;
  */
 class MandatoryAttributeException extends \Exception {
 
+  /**
+   * The mandatory attribute.
+   *
+   * @var string
+   */
   public $attribute;
 
   /**

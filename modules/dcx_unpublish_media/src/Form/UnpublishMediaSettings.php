@@ -15,6 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UnpublishMediaSettings extends ConfigFormBase {
 
+  /**
+   * The Entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
   protected $entityTypeManager;
 
   /**

@@ -14,6 +14,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DcxImportForm extends FormBase {
 
+  /**
+   * The import service.
+   *
+   * @var \Drupal\dcx_migration\DcxImportServiceInterface
+   */
   protected $importService;
 
   /**

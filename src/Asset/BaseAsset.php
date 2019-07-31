@@ -10,6 +10,11 @@ use Drupal\dcx_integration\Exception\IllegalAttributeException;
  */
 abstract class BaseAsset {
 
+  /**
+   * The asset data.
+   *
+   * @var array
+   */
   protected $data;
 
   /**
