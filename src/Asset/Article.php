@@ -8,12 +8,23 @@ namespace Drupal\dcx_integration\Asset;
  * @package Drupal\dcx_integration\Asset
  */
 class Article extends BaseAsset {
+
+  /**
+   * Mandatory attributes.
+   *
+   * @var array
+   */
   public static $mandatoryAttributes = [
     'id',
     'title',
     'body',
   ];
 
+  /**
+   * Optional attributes.
+   *
+   * @var array
+   */
   public static $optionalAttributes = [
     'files',
   ];

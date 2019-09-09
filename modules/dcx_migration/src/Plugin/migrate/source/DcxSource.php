@@ -26,9 +26,6 @@ class DcxSource extends SourcePluginBase {
    */
   protected $dcxService;
 
-
-  protected $originalProcess;
-
   /**
    * {@inheritdoc}
    */
