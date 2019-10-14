@@ -145,21 +145,21 @@ class DcxImportService implements DcxImportServiceInterface {
       $status = 'status';
     }
     $success = $t->translate('Imported @success of @count items.', ['@success' => $results['success'], '@count' => $results['count']]);
-    drupal_set_message($success, $status);
+    \Drupal::messenger()->addMessage($success, $status);
 
     foreach ($results['reimport'] as $dcxid => $mid) {
       $url = Url::fromRoute('entity.media.canonical', ['media' => $mid], ['attributes' => ['target' => '_blank']]);
       $link = Link::fromTextAndUrl('media/' . $mid, $url)->toString();
-      drupal_set_message($t->translate('Item @dcxid was imported before as @link.', ['@dcxid' => $dcxid, '@link' => $link]), 'warning');
+      \Drupal::messenger()->addWarning($t->translate('Item @dcxid was imported before as @link.', ['@dcxid' => $dcxid, '@link' => $link]));
     }
 
     if (!empty($results['fail'])) {
       $fail = $t->translate('The following item(s) failed to import: @items', ['@items' => implode(', ', $results['fail'])]);
-      drupal_set_message($fail, 'error');
+      \Drupal::messenger()->addError($fail);
     }
     if (!empty($results['no_rights'])) {
       $fail = $t->translate('The following item(s) failed to import, because there are no online permissions: @items', ['@items' => implode(', ', $results['no_rights'])]);
-      drupal_set_message($fail, 'warning');
+      \Drupal::messenger()->addWarning($fail);
     }
   }
 

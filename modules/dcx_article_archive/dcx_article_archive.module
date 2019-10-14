@@ -37,7 +37,7 @@ function _dcx_article_archive_queue_article($node) {
     $queue->createItem($node->id());
   }
   catch (\Exception $e) {
-    drupal_set_message($e->getMessage(), 'error');
+    \Drupal::messenger()->addError($e->getMessage());
   }
 
 }

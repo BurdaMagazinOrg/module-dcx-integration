@@ -5,13 +5,13 @@ namespace Drupal\dcx_article_import\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\dcx_integration\ClientInterface;
 use Drupal\dcx_integration\Exception\MandatoryAttributeException;
 use Drupal\dcx_migration\DcxImportServiceInterface;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -75,7 +75,7 @@ class ArticleImportForm extends FormBase {
     return new static(
       $container->get('dcx_integration.client'),
       $container->get('dcx_migration.import'),
-      $container->get('user.private_tempstore'),
+      $container->get('tempstore.private'),
       $container->get('current_user')
     );
   }
@@ -174,12 +174,12 @@ class ArticleImportForm extends FormBase {
     }
     catch (MandatoryAttributeException $e) {
       $message = $this->t('DC-X Story %id is missing the mandatory attribute %attr. Please fix this in DC-X.', ['%id' => $dcx_id, '%attr' => $e->attribute]);
-      drupal_set_message($message);
+      $this->messenger()->addStatus($message);
       return;
     }
     catch (\Exception $e) {
       $this->store->delete('asset');
-      drupal_set_message($e->getMessage());
+      $this->messenger()->addStatus($e->getMessage());
       return;
     }
 

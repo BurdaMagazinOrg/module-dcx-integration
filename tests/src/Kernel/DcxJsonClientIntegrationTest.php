@@ -43,11 +43,11 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
     ])->save();
 
     $this->config('system.site')->setData($siteSettings)->save();
-    $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
+    $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
     $user->method('getEmail')->willReturn(getenv('DCX_USER_MAIL'));
 
-    $logger = $this->getMock('\Psr\Log\LoggerInterface');
-    $loggerFactory = $this->getMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
+    $logger = $this->createMock('\Psr\Log\LoggerInterface');
+    $loggerFactory = $this->createMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
     $loggerFactory->expects($this->any())
       ->method('get')
       ->will($this->returnValue($logger));

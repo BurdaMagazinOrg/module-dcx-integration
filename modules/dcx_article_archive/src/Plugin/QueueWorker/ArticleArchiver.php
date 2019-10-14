@@ -2,6 +2,7 @@
 
 namespace Drupal\dcx_article_archive\Plugin\QueueWorker;
 
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\dcx_integration\ClientInterface;
 use Drupal\dcx_track_media_usage\ReferencedEntityDiscoveryServiceInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -59,6 +60,13 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
   protected $renderer;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * ArticleArchiver constructor.
    *
    * @param array $configuration
@@ -77,14 +85,17 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
    *   The logger factory.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, ReferencedEntityDiscoveryServiceInterface $discovery, ClientInterface $client, LoggerChannelFactoryInterface $logger_factory, RendererInterface $renderer) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, ReferencedEntityDiscoveryServiceInterface $discovery, ClientInterface $client, LoggerChannelFactoryInterface $logger_factory, RendererInterface $renderer, MessengerInterface $messenger) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->discovery = $discovery;
     $this->client = $client;
     $this->logger = $logger_factory->get('dcx_article_archive');
     $this->renderer = $renderer;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -99,7 +110,8 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
       $container->get('dcx_track_media_usage.discover_referenced_entities'),
       $container->get('dcx_integration.client'),
       $container->get('logger.factory'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('messenger')
     );
   }
 
@@ -153,7 +165,7 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
     }
     catch (\Exception $e) {
       $this->logger->error($e->getMessage());
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger->addError($e->getMessage());
       return;
     }
 
@@ -166,7 +178,7 @@ class ArticleArchiver extends QueueWorkerBase implements ContainerFactoryPluginI
         '%to' => $dcx_id,
       ]);
       $this->logger->error($message);
-      drupal_set_message($message, 'error');
+      $this->messenger->addError($message);
       return;
     }
 

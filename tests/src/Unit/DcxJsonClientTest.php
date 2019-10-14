@@ -24,10 +24,10 @@ class DcxJsonClientTest extends UnitTestCase {
   public function setUp() {
     $jsonclientsettings = ['publication' => 'dummy_publication'];
     $config_factory = $this->getConfigFactoryStub(['dcx_integration.jsonclientsettings' => $jsonclientsettings]);
-    $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
+    $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
 
-    $logger = $this->getMock('\Psr\Log\LoggerInterface');
-    $loggerFactory = $this->getMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
+    $logger = $this->createMock('\Psr\Log\LoggerInterface');
+    $loggerFactory = $this->createMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
     $loggerFactory->expects($this->any())
       ->method('get')
       ->will($this->returnValue($logger));

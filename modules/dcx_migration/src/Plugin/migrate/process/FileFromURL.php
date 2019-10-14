@@ -5,6 +5,7 @@ namespace Drupal\dcx_migration\Plugin\migrate\process;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\file\Entity\File;
 use Drupal\migrate\Plugin\MigrationInterface;
@@ -41,11 +42,20 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
   protected $entityTypeManager;
 
   /**
+   * The filesystem service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, EntityFieldManagerInterface $entity_field_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, EntityFieldManagerInterface $entity_field_manager, EntityTypeManagerInterface $entity_type_manager, FileSystemInterface $fileSystem) {
     $this->entityFieldManager = $entity_field_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->fileSystem = $fileSystem;
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -59,7 +69,8 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
       $plugin_definition,
       $migration,
       $container->get('entity_field.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('file_system')
     );
   }
 
@@ -116,10 +127,10 @@ class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInt
     file_put_contents($tmp_name, $file_data);
 
     // Copy tempfile to destination, make sure to use canonical file uri.
-    $uri = file_unmanaged_copy(
+    $uri = $this->fileSystem->copy(
       $tmp_name,
       file_stream_wrapper_uri_normalize($destination_uri . DIRECTORY_SEPARATOR . $file_name),
-      FILE_EXISTS_RENAME
+      FileSystemInterface::EXISTS_RENAME
     );
 
     // Remove.
