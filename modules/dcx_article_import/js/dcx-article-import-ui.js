@@ -8,7 +8,10 @@
   Drupal.behaviors.dcxArticleImportUi = {
     attach: function (context, settings) {
       var submitButton = $('#edit-submit');
-      var textfield = $('input[data-drupal-selector=edit-dcx-id]');
+      var textfield = $('input[data-drupal-selector=edit-dcx-id]').once('dcx_dropzone_init');
+      if (textfield.length === 0) {
+        return;
+      }
 
       var dropzone = $('<div></div>').addClass('dcx-dropzone');
       var message = $('<div>' + Drupal.t('Drop DC-X story link here!') + '</div>').addClass('message').appendTo(dropzone);
