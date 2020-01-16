@@ -14,23 +14,30 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DcxImportForm extends FormBase {
 
-  protected $importService;
-
   /**
-   * Constructor.
+   * The DCX Import Service actually processing the input.
    *
-   * @param \Drupal\dcx_migration\DcxImportServiceInterface $importService
-   *   The DCX Import Service actually processing the input.
+   * @var \Drupal\dcx_migration\DcxImportServiceInterface
    */
-  public function __construct(DcxImportServiceInterface $importService) {
-    $this->importService = $importService;
-  }
+  protected $importService;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('dcx_migration.import'));
+    $form = parent::create($container);
+    $form->setDcxImportService($container->get('dcx_migration.import'));
+    return $form;
+  }
+
+  /**
+   * Set the import service.
+   *
+   * @param \Drupal\dcx_migration\DcxImportServiceInterface $importService
+   *   The DCX Import Service actually processing the input.
+   */
+  protected function setDcxImportService(DcxImportServiceInterface $importService) {
+    $this->importService = $importService;
   }
 
   /**

@@ -10,7 +10,26 @@ use Drupal\dcx_integration\Exception\IllegalAttributeException;
  */
 abstract class BaseAsset {
 
+  /**
+   * The asset data.
+   *
+   * @var array
+   */
   protected $data;
+
+  /**
+   * Mandatory asset attributes.
+   *
+   * @var array
+   */
+  public static $mandatoryAttributes = [];
+
+  /**
+   * Optional asset attributes.
+   *
+   * @var array
+   */
+  public static $optionalAttributes = [];
 
   /**
    * Constructor.

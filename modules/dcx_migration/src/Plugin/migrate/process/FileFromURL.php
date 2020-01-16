@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "file_from_url"
  * )
  */
-class FileFromUrl extends ProcessPluginBase implements ContainerFactoryPluginInterface {
+class FileFromURL extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * The entity field manager.

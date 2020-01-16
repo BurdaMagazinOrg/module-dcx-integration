@@ -11,11 +11,19 @@ use Drupal\dcx_integration\Exception\IllegalAttributeException;
  */
 class Image extends BaseAsset {
 
+  /**
+   * Allowed MIME types.
+   *
+   * @var array
+   */
   protected static $allowedMimeTypes = [
     'image/jpeg',
     'image/png',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   public static $mandatoryAttributes = [
     'id',
     'filename',
@@ -24,6 +32,9 @@ class Image extends BaseAsset {
     'status',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   public static $optionalAttributes = [
     'creditor',
     'copyright',
