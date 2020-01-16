@@ -51,7 +51,7 @@ class AssetTest extends KernelTestBase {
     }
     array_shift($data);
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
+    $this->expectException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
     new Image($data);
   }
 
@@ -67,7 +67,7 @@ class AssetTest extends KernelTestBase {
       $data[$attr] = 'test__' . $attr;
     }
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\IllegalAttributeException');
+    $this->expectException('Drupal\dcx_integration\Exception\IllegalAttributeException');
     new Image($data);
   }
 
@@ -107,7 +107,7 @@ class AssetTest extends KernelTestBase {
     }
     array_shift($data);
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
+    $this->expectException('Drupal\dcx_integration\Exception\MandatoryAttributeException');
     new Article($data);
   }
 
@@ -123,7 +123,7 @@ class AssetTest extends KernelTestBase {
       $data[$attr] = 'test__' . $attr;
     }
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\IllegalAttributeException');
+    $this->expectException('Drupal\dcx_integration\Exception\IllegalAttributeException');
     new Article($data);
   }
 

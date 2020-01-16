@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\file\Entity\File;
 use Drupal\media\MediaInterface;
 
 /**
@@ -22,7 +23,7 @@ function dcx_unpublish_media_media_update(MediaInterface $entity) {
     return;
   }
 
-  $file = file_load($entity->getSource()->getSourceFieldValue($entity));
+  $file = File::load($entity->getSource()->getSourceFieldValue($entity));
 
   if (!$entity->status->value && $entity->original->status->value) {
     $target_fileuri = str_replace('public://', 'private://', $file->getFileUri());

@@ -1,7 +1,7 @@
 name: DC-X Collections
 type: module
 description: Integrates DC-X collections to entity browser
-core: 8.x
+core_version_requirement: ^8.7.7 || ^9
 package: Custom
 dependencies:
   - dcx_integration:dcx_migration

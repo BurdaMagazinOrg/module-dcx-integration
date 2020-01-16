@@ -2,10 +2,11 @@
 
 namespace Drupal\dcx_media_image_clone\Form;
 
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,20 +16,31 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DcxMediaCloneForm extends FormBase {
 
   /**
-   * The entity manager.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityManager;
+  protected $entityTypeManager;
+
+  /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
 
   /**
    * Constructs a ContentEntityForm object.
    *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   The entity manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(EntityManagerInterface $entity_manager) {
-    $this->entityManager = $entity_manager;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MessengerInterface $messenger) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->messenger = $messenger;
+
   }
 
   /**
@@ -36,7 +48,8 @@ class DcxMediaCloneForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager')
+      $container->get('entity_type.manager'),
+      $container->get('messenger')
     );
   }
 
@@ -53,7 +66,7 @@ class DcxMediaCloneForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $media = NULL) {
     // Meh.. this should make use of Paramconverter or EntityBaseForm, but I
     // cannot figure out how either of them works atm :(.
-    $media = $this->entityManager->getStorage('media')->load($media);
+    $media = $this->entityTypeManager->getStorage('media')->load($media);
     $form_state->set('media', $media);
 
     $form['notice']['#markup'] = $this->t('<p>Do you want to clone this media entity?</p>');
@@ -80,7 +93,7 @@ class DcxMediaCloneForm extends FormBase {
 
     $label = $media->label();
     $url = Url::fromRoute('entity.media.canonical', ['media' => $media->id()]);
-    drupal_set_message($this->t('Media @label was cloned.', ['@label' => Link::fromTextAndUrl($label, $url)->toString()]));
+    $this->messenger->addStatus($this->t('Media @label was cloned.', ['@label' => Link::fromTextAndUrl($label, $url)->toString()]));
     $form_state->setRedirect('entity.media.edit_form', ['media' => $clone->id()]);
   }
 

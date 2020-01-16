@@ -8,6 +8,7 @@ namespace Drupal\dcx_track_media_usage\Plugin\QueueWorker;
  */
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\dcx_integration\ClientInterface;
@@ -47,6 +48,13 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
   protected $entityTypeManager;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new LocaleTranslation object.
    *
    * @param array $configuration
@@ -61,13 +69,16 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
    *   DCX Client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, ReferencedEntityDiscoveryServiceInterface $entityDiscoveryService, ClientInterface $dcxClient, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, ReferencedEntityDiscoveryServiceInterface $entityDiscoveryService, ClientInterface $dcxClient, EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->entityDiscoveryService = $entityDiscoveryService;
     $this->dcxClient = $dcxClient;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -80,7 +91,8 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
       $plugin_definition,
       $container->get('dcx_track_media_usage.discover_referenced_entities'),
       $container->get('dcx_integration.client'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('messenger')
     );
   }
 
@@ -100,7 +112,7 @@ class MediaUsageWorker extends QueueWorkerBase implements ContainerFactoryPlugin
         $this->dcxClient->trackUsage($usage, $url, $status, 'image');
       }
       catch (\Exception $e) {
-        drupal_set_message($e->getMessage(), 'error');
+        $this->messenger->addError($e->getMessage());
       }
     }
   }

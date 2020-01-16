@@ -20,10 +20,10 @@ class AssetGenerationTest extends KernelTestBase {
    */
   public function setUp() {
     parent::setUp();
-    $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
+    $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
 
-    $logger = $this->getMock('\Psr\Log\LoggerInterface');
-    $loggerFactory = $this->getMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
+    $logger = $this->createMock('\Psr\Log\LoggerInterface');
+    $loggerFactory = $this->createMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
     $loggerFactory->expects($this->any())
       ->method('get')
       ->will($this->returnValue($logger));
@@ -40,7 +40,8 @@ class AssetGenerationTest extends KernelTestBase {
       'fields' => ['Type' => [0 => ['_id' => 'unknown']]],
     ];
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\UnknownDocumentTypeException', "DC-X object idOfUnknownType has unknown type 'unknown'.");
+    $this->expectException('Drupal\dcx_integration\Exception\UnknownDocumentTypeException');
+    $this->expectExceptionMessage("DC-X object idOfUnknownType has unknown type 'unknown'.");
     $this->client->getObject('idOfUnknownType');
   }
 

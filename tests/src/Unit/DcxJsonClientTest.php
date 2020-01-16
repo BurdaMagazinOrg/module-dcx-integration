@@ -24,10 +24,10 @@ class DcxJsonClientTest extends UnitTestCase {
   public function setUp() {
     $jsonclientsettings = ['publication' => 'dummy_publication'];
     $config_factory = $this->getConfigFactoryStub(['dcx_integration.jsonclientsettings' => $jsonclientsettings]);
-    $user = $this->getMock('\Drupal\Core\Session\AccountProxyInterface');
+    $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
 
-    $logger = $this->getMock('\Psr\Log\LoggerInterface');
-    $loggerFactory = $this->getMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
+    $logger = $this->createMock('\Psr\Log\LoggerInterface');
+    $loggerFactory = $this->createMock('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
     $loggerFactory->expects($this->any())
       ->method('get')
       ->will($this->returnValue($logger));
@@ -62,7 +62,8 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testGetJson_exception_on_non_200_response() {
     $this->api_client->expected_return_value = 23;
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', 'Error performing get on url "id". Status code was 23.');
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage('Error performing get on url "id". Status code was 23.');
     $this->client->getJson('dcxapi:id');
   }
 
@@ -72,7 +73,8 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_emptyResponse() {
     // Expect empty response -> Exception.
     $this->api_client->expected_response_body = NULL;
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', 'The operation yielded no result');
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage('The operation yielded no result');
     $this->client->archiveArticle('node/1', [], NULL);
 
   }
@@ -83,7 +85,8 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_invalidResponse() {
     // Expect invalid response -> Exception.
     $this->api_client->expected_response_body = 'invalid';
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', 'Unable to archive: The result operation has no type');
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage('Unable to archive: The result operation has no type');
     $this->client->archiveArticle('node/1', [], NULL);
 
   }
@@ -94,7 +97,8 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_noSuccess() {
     // Expect response without _type == success -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'no success'];
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', 'Error performing createObject|setObject on url "document". Status code was 200.');
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage('Error performing createObject|setObject on url "document". Status code was 200.');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -104,7 +108,8 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_noLocation() {
     // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success'];
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', "The operation was successful, but key location was not found");
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage("The operation was successful, but key location was not found");
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -114,7 +119,8 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testArchiveArticle_invalidLocation() {
     // Expect response without key location -> Exception.
     $this->api_client->expected_response_body = ['_type' => 'dcx:success', 'location' => 'invalid'];
-    $this->setExpectedException('Exception', 'The operation was successful, but the location was not parseable');
+    $this->expectException('Exception');
+    $this->expectExceptionMessage('The operation was successful, but the location was not parseable');
     $this->client->archiveArticle('node/1', [], NULL);
   }
 
@@ -205,7 +211,8 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testPubinfoOnPath_exception_on_non_200_response() {
     $this->api_client->expected_return_value = 23;
-    $this->setExpectedException('Drupal\dcx_integration\Exception\DcxClientException', 'Error performing get on url "pubinfo". Status code was 23');
+    $this->expectException('Drupal\dcx_integration\Exception\DcxClientException');
+    $this->expectExceptionMessage('Error performing get on url "pubinfo". Status code was 23');
     $this->client->pubinfoOnPath('node/1', 'article');
   }
 

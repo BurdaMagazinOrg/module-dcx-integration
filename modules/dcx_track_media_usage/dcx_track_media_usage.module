@@ -40,7 +40,7 @@ function dcx_track_media_usage_media_delete($entity) {
 
   }
   catch (\Exception $e) {
-    drupal_set_message($e->getMessage(), 'error');
+    \Drupal::messenger()->addError($e->getMessage());
   }
 }
 
