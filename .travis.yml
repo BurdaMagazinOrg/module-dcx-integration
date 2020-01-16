@@ -1,5 +1,5 @@
 language: php
-sudo: required
+dist: xenial
 
 cache:
   apt: true
