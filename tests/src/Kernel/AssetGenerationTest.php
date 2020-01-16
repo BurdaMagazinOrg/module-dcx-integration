@@ -40,7 +40,8 @@ class AssetGenerationTest extends KernelTestBase {
       'fields' => ['Type' => [0 => ['_id' => 'unknown']]],
     ];
 
-    $this->setExpectedException('Drupal\dcx_integration\Exception\UnknownDocumentTypeException', "DC-X object idOfUnknownType has unknown type 'unknown'.");
+    $this->expectException('Drupal\dcx_integration\Exception\UnknownDocumentTypeException');
+    $this->expectExceptionMessage("DC-X object idOfUnknownType has unknown type 'unknown'.");
     $this->client->getObject('idOfUnknownType');
   }
 

@@ -1,7 +1,7 @@
 name: DC-X Article Archive
 type: module
 description: Archive Articles to DC-X
-core: 8.x
+core_version_requirement: ^8.7.7 || ^9
 package: dcx
 dependencies:
   - dcx_integration:dcx_integration

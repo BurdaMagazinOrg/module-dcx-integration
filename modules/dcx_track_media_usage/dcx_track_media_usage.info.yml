@@ -1,7 +1,7 @@
 name: DC-X Track Media Usage
 type: module
 description: Provides usage tracking of DC-X media an nodes
-core: 8.x
+core_version_requirement: ^8.7.7 || ^9
 package: dcx
 dependencies:
   - dcx_integration:dcx_integration
