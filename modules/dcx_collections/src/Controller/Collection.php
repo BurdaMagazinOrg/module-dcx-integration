@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class Collection extends ControllerBase {
 
+  /**
+   * The dcx client service.
+   *
+   * @var \Drupal\dcx_integration\ClientInterface
+   */
   protected $dcxClient;
 
   /**

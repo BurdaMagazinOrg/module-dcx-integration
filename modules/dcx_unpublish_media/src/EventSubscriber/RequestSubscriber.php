@@ -16,8 +16,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RequestSubscriber implements EventSubscriberInterface {
 
+  /**
+   * The request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
   protected $request;
 
+  /**
+   * The entity manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
   protected $entityTypeManager;
 
   /**

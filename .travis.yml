@@ -1,5 +1,8 @@
 language: php
-sudo: required
+dist: xenial
+
+services:
+  - mysql
 
 cache:
   apt: true

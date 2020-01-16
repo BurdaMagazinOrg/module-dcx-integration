@@ -17,6 +17,9 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
   const DCX_IMAGE_ID = 'dcxapi:document/doc6vkgudvfik99vei734v';
   const DCX_ARTICLE_ID = 'dcxapi:document/doc6u9t0hf7jf99jzteot4';
 
+  /**
+   * {@inheritdoc}
+   */
   protected static $modules = ['dcx_integration', 'system'];
 
   /**

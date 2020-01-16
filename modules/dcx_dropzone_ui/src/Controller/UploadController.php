@@ -21,16 +21,25 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UploadController extends ControllerBase {
 
+  /**
+   * The DCX Import Service actually processing the input.
+   *
+   * @var \Drupal\dcx_migration\DcxImportServiceInterface
+   */
   protected $importService;
 
   /**
    * The current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
-   *   The HTTP request object.
    */
   protected $request;
 
+  /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
   protected $renderer;
 
   /**

@@ -2,7 +2,6 @@
 
 namespace Drupal\dcx_unpublish_media\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,30 +14,30 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class UnpublishMediaSettings extends ConfigFormBase {
 
-  protected $entityTypeManager;
-
   /**
-   * Constructs a \Drupal\system\ConfigFormBase object.
+   * The entity manager service.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entityTypeManager) {
-
-    parent::__construct($config_factory);
-    $this->entityTypeManager = $entityTypeManager;
-  }
+  protected $entityTypeManager;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_type.manager')
-    );
+    $form = parent::create($container);
+    $form->setEntityTypeManager($container->get('entity_type.manager'));
+    return $form;
+  }
+
+  /**
+   * Set the entity type manager service.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   */
+  protected function setEntityTypeManager(EntityTypeManagerInterface $entityTypeManager) {
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
