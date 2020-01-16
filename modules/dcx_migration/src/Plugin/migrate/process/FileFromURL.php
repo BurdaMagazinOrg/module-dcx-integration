@@ -48,7 +48,6 @@ class FileFromURL extends ProcessPluginBase implements ContainerFactoryPluginInt
    */
   protected $fileSystem;
 
-
   /**
    * {@inheritdoc}
    */
