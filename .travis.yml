@@ -12,7 +12,7 @@ cache:
     - "$HOME/.npm"
 
 php:
-  - 7.2
+  - 7.3
 
 branches:
   only:
@@ -22,19 +22,22 @@ env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
   matrix:
-    - DRUPAL_TRAVIS_TEST_GROUP="dcx"
-    - DRUPAL_TRAVIS_TEST_GROUP="dcx_integration"
+    - DRUPAL_TESTING_TEST_GROUP="dcx"
+    - DRUPAL_TESTING_TEST_GROUP="dcx_integration"
 
 matrix:
   exclude:
-    - env: DRUPAL_TRAVIS_TEST_GROUP="dcx_integration" DCX_URL=""
+    - env: DRUPAL_TESTING_TEST_GROUP="dcx_integration" DCX_URL=""
 
 before_install:
-  - composer global require thunder/travis
+  - composer global require thunder/drupal-testing
 
 install:
   - test-drupal-project prepare_build
   - composer require digicol/dcx-sdk-php:^2.0 --no-update --working-dir=/tmp/test/dcx_integration/install
+
+before_script:
+  - phpenv config-rm xdebug.ini
 
 script:
   - test-drupal-project
