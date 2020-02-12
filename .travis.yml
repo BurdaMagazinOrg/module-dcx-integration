@@ -22,12 +22,12 @@ env:
   global:
     - PATH="$PATH:$HOME/.composer/vendor/bin"
   matrix:
-    - DRUPAL_TRAVIS_TEST_GROUP="dcx"
-    - DRUPAL_TRAVIS_TEST_GROUP="dcx_integration"
+    - DRUPAL_TESTING_TEST_GROUP="dcx"
+    - DRUPAL_TESTING_TEST_GROUP="dcx_integration"
 
 matrix:
   exclude:
-    - env: DRUPAL_TRAVIS_TEST_GROUP="dcx_integration" DCX_URL=""
+    - env: DRUPAL_TESTING_TEST_GROUP="dcx_integration" DCX_URL=""
 
 before_install:
   - composer global require thunder/drupal-testing
