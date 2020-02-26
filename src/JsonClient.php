@@ -195,11 +195,22 @@ class JsonClient implements ClientInterface {
      *    processing. The callback method called like like this:
      *    call_user_func($callback, $json, $arguments)
      */
+
+    $variant_types = $this->processAttributeMap([
+      'variants' => [
+        '_files_index',
+        'variant_type',
+        'master',
+      ],
+    ], $json);
+
+    $hires_image = $variant_types['variants']['minihires'];
+
     $attribute_map = [
       'id' => ['_id'],
       'filename' => ['fields', 'Filename', 0, 'value'],
       'title' => ['fields', 'Filename', 0, 'value'],
-      'url' => [[$this, 'extractUrl'], 'files', 0, '_id'],
+      'url' => [[$this, 'extractUrl'], 'files', $hires_image, '_id'],
       'source' => [[$this, 'joinValues'], 'fields', 'Creator'],
       'copyright' => ['fields', 'CopyrightNotice', 0, 'value'],
       'status' => [[$this, 'computeStatus']],
