@@ -13,33 +13,33 @@ class MediaRoutes {
    * {@inheritdoc}
    */
   public function routes() {
-
-    /** @var \Drupal\media\Entity\MediaType[] $bundles */
-    $bundles = \Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple();
-
     $routes = [];
 
-    foreach ($bundles as $bundle) {
+    if (\Drupal::moduleHandler()->moduleExists('media')) {
+      /** @var \Drupal\media\Entity\MediaType[] $bundles */
+      $bundles = \Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple();
 
-      if ($bundle->get('source') == 'image') {
-        $routes['dcx_migration.form.' . $bundle->id()] = new Route(
-        // Path to attach this route to:
-          'media/add/' . $bundle->id(),
-          // Route defaults:
-          [
-            '_form' => '\Drupal\dcx_migration\Form\DcxImportForm',
-            '_title' => 'Import Image from DC-X',
-          ],
-          // Route requirements:
-          [
-            '_entity_create_access' => 'media:' . $bundle->id(),
-          ],
-          [
-            '_admin_route' => TRUE,
-          ]
-        );
+      foreach ($bundles as $bundle) {
+
+        if ($bundle->get('source') == 'image') {
+          $routes['dcx_migration.form.' . $bundle->id()] = new Route(
+          // Path to attach this route to:
+            'media/add/' . $bundle->id(),
+            // Route defaults:
+            [
+              '_form' => '\Drupal\dcx_migration\Form\DcxImportForm',
+              '_title' => 'Import Image from DC-X',
+            ],
+            // Route requirements:
+            [
+              '_entity_create_access' => 'media:' . $bundle->id(),
+            ],
+            [
+              '_admin_route' => TRUE,
+            ]
+          );
+        }
       }
-
     }
 
     return $routes;
