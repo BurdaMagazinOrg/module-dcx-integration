@@ -1,7 +1,7 @@
 name: DC-X Migration
 type: module
 description: 'Migration of data from DC-X digital asset management.'
-core: '8.x'
+core_version_requirement: ^8 || ^9
 package: dcx
 dependencies:
   - dcx_integration:dcx_integration

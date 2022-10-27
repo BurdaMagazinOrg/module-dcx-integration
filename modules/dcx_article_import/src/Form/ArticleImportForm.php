@@ -56,7 +56,7 @@ class ArticleImportForm extends FormBase {
    *   The dcx client service.
    * @param \Drupal\dcx_migration\DcxImportServiceInterface $dcx_import_service
    *   The import service.
-   * @param \Drupal\user\PrivateTempStoreFactory $temp_store_factory
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
    *   The temp store factory.
    * @param \Drupal\Core\Session\AccountProxyInterface $user_account
    *   The current user.

@@ -125,10 +125,13 @@ class FileFromURL extends ProcessPluginBase implements ContainerFactoryPluginInt
     $tmp_name = tempnam('temp://', 'dcx-');
     file_put_contents($tmp_name, $file_data);
 
+    /** @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager */
+    $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+
     // Copy tempfile to destination, make sure to use canonical file uri.
     $uri = $this->fileSystem->copy(
       $tmp_name,
-      file_stream_wrapper_uri_normalize($destination_uri . DIRECTORY_SEPARATOR . $file_name),
+      $stream_wrapper_manager->normalizeUri($destination_uri . DIRECTORY_SEPARATOR . $file_name),
       FileSystemInterface::EXISTS_RENAME
     );
 

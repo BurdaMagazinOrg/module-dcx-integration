@@ -55,7 +55,7 @@ class RequestSubscriber implements EventSubscriberInterface {
   /**
    * This method is called whenever the kernel.request event is dispatched.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Contracts\EventDispatcher\Event $event
    *   Kernel request event.
    */
   public function kernelRequest(Event $event) {

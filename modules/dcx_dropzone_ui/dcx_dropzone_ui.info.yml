@@ -1,7 +1,7 @@
 name: DC-X Dropzone UI
 type: module
 description: 'Dropzone Element for DCX DnD'
-core: '8.x'
+core_version_requirement: ^8 || ^9
 package: dcx
 dependencies:
   - dcx_integration:dcx_migration
