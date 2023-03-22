@@ -18,7 +18,7 @@ class AssetGenerationTest extends KernelTestBase {
   /**
    *
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
 

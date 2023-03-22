@@ -5,7 +5,6 @@ namespace Drupal\Tests\dcx_integration\Kernel;
 use Drupal\dcx_integration\Asset\Image;
 use Drupal\dcx_integration\Asset\Article;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * Description of AssetTest.
@@ -25,7 +24,7 @@ class AssetTest extends KernelTestBase {
     }
     $asset = new Image($data);
 
-    $this->assertArraySubset($data, $asset->data(), "Mandatory attributes suffice to create an Image");
+    $this->assertEquals($data, $asset->data(), "Mandatory attributes suffice to create an Image");
   }
 
   /**
@@ -38,7 +37,7 @@ class AssetTest extends KernelTestBase {
     }
     $asset = new Image($data);
 
-    $this->assertArraySubset($data, $asset->data(), "Mandatory and optional attributes are able to create an Image");
+    $this->assertEquals($data, $asset->data(), "Mandatory and optional attributes are able to create an Image");
   }
 
   /**
@@ -81,7 +80,7 @@ class AssetTest extends KernelTestBase {
     }
     $asset = new Article($data);
 
-    $this->assertArraySubset($data, $asset->data(), "Mandatory attributes suffice to create an Article");
+    $this->assertEquals($data, $asset->data(), "Mandatory attributes suffice to create an Article");
   }
 
   /**
@@ -94,7 +93,7 @@ class AssetTest extends KernelTestBase {
     }
     $asset = new Article($data);
 
-    $this->assertArraySubset($data, $asset->data(), "Mandatory and optional attributes are able to create an Article");
+    $this->assertEquals($data, $asset->data(), "Mandatory and optional attributes are able to create an Article");
   }
 
   /**

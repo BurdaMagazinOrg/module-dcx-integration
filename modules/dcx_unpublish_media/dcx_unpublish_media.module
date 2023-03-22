@@ -35,7 +35,7 @@ function dcx_unpublish_media_media_update(MediaInterface $entity) {
 
     // Do not care about image styles here. File move takes care of this by
     // invoking hook image_file_move().
-    file_move($file, $target_fileuri);
+    \Drupal::service('file.repository')->move($file, $target_fileuri);
   }
   elseif ($entity->status->value && !$entity->original->status->value) {
     $target_fileuri = str_replace('private://', 'public://', $file->getFileUri());
@@ -44,7 +44,7 @@ function dcx_unpublish_media_media_update(MediaInterface $entity) {
     if (!is_dir($target_dir)) {
       mkdir($target_dir);
     }
-    file_move($file, $target_fileuri);
+    \Drupal::service('file.repository')->move($file, $target_fileuri);
 
     /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache */
     $cache = \Drupal::service('cache_tags.invalidator');

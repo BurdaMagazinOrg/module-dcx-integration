@@ -32,7 +32,7 @@ class DcxJsonClientIntegrationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $siteSettings = ['mail' => 'admin@admin.de', 'name' => 'Integration Test'];

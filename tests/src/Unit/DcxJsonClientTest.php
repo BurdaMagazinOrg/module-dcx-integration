@@ -21,7 +21,7 @@ class DcxJsonClientTest extends UnitTestCase {
   /**
    *
    */
-  public function setUp() {
+  public function setUp(): void {
     $jsonclientsettings = ['publication' => 'dummy_publication'];
     $config_factory = $this->getConfigFactoryStub(['dcx_integration.jsonclientsettings' => $jsonclientsettings]);
     $user = $this->createMock('\Drupal\Core\Session\AccountProxyInterface');
@@ -42,7 +42,7 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testGetJson_noparams() {
     $this->client->getJson('dcxapi:id');
-    list($url, $params,) = $this->api_client->args;
+    [$url, $params,] = $this->api_client->args;
     $this->assertEquals($this->api_client->method, 'get', 'getObject method of API client is called.');
     $this->assertEquals($url, 'id', 'Client disposes "dcxapi:" part of the id.');
     $this->assertNotEmpty($params, 'If no params are given, default params are passed to the API client.');
@@ -53,8 +53,8 @@ class DcxJsonClientTest extends UnitTestCase {
    */
   public function testGetJson_custom_params() {
     $this->client->getJson('dcxapi:id', ['params']);
-    list(, $params,) = $this->api_client->args;
-    $this->assertArrayEquals(['params'], $params, 'If params are given, they are passed to the API client');
+    [, $params,] = $this->api_client->args;
+    $this->assertEquals(['params'], $params, 'If params are given, they are passed to the API client');
   }
 
   /**
@@ -200,9 +200,9 @@ class DcxJsonClientTest extends UnitTestCase {
   public function testPubinfoOnPath_noResults() {
     $this->api_client->expected_response_body = ['entries' => []];
     $pubinfos = $this->client->pubinfoOnPath('node/1', 'article');
-    $this->assertArrayEquals([], $pubinfos);
+    $this->assertEquals([], $pubinfos);
     $this->assertEquals($this->api_client->method, 'get', 'getObject is called when retrieving pubinfo data');
-    list($url) = $this->api_client->args;
+    [$url] = $this->api_client->args;
     $this->assertEquals($url, 'pubinfo', 'url "pubinfo is requested"');
   }
 
