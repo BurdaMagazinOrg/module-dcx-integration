@@ -52,7 +52,7 @@ class Image extends BaseAsset {
    */
   public function __construct(array $data) {
     parent::__construct($data, self::$mandatoryAttributes, self::$optionalAttributes);
-    $mimeType = \Drupal::service('file.mime_type.guesser')->guess($data['url']);
+    $mimeType = \Drupal::service('file.mime_type.guesser')->guessMimeType($data['url']);
     if (!in_array($mimeType, static::$allowedMimeTypes)) {
       throw new IllegalAttributeException($data['url']);
     }

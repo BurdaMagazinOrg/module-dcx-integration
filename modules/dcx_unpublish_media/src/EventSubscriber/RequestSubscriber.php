@@ -5,7 +5,7 @@ namespace Drupal\dcx_unpublish_media\EventSubscriber;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -71,6 +71,7 @@ class RequestSubscriber implements EventSubscriberInterface {
 
       $query = $this->entityTypeManager->getStorage('file')->getQuery();
       $query->condition('filename', $filename);
+      $query->accessCheck(FALSE);
       $fids = $query->execute();
 
       if ($fids) {
@@ -82,6 +83,7 @@ class RequestSubscriber implements EventSubscriberInterface {
 
             $query = $this->entityTypeManager->getStorage('media')->getQuery();
             $query->condition("$field.target_id", current($fids));
+            $query->accessCheck(FALSE);
             $mids = $query->execute();
 
             if ($mids) {

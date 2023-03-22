@@ -1,7 +1,7 @@
 name: DC-X Unpublish Media
 type: module
 description: 'Handels the behavior if a media is unpublished'
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.7.7 || ^9 || ^10
 package: dcx
 dependencies:
   - drupal:media (>= 8.4)
